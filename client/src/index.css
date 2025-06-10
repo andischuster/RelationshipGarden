@@ -213,7 +213,6 @@
 
   .section-divider-icon {
     background: var(--warm-white);
-    border: 2px solid var(--deep-teal);
     border-radius: 50%;
     width: 48px;
     height: 48px;
