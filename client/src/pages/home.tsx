@@ -407,7 +407,7 @@ export default function Home() {
                     <Check className="w-6 h-6 text-deep-teal" />
                   </div>
                   <p className="text-lg text-deep-green/80 leading-relaxed">
-                    50 beautifully illustrated prompt cards
+                    50 beautifully illustrated cards
                   </p>
                 </div>
                 
@@ -416,7 +416,7 @@ export default function Home() {
                     <Check className="w-6 h-6 text-deep-teal" />
                   </div>
                   <p className="text-lg text-deep-green/80 leading-relaxed">
-                    5 instruction cards with gameplay rules
+                    5 instruction cards
                   </p>
                 </div>
                 
@@ -425,7 +425,7 @@ export default function Home() {
                     <Check className="w-6 h-6 text-deep-teal" />
                   </div>
                   <p className="text-lg text-deep-green/80 leading-relaxed">
-                    3 bonus "Magic Bean" cards for special moments
+                    3 bonus cards for special moments
                   </p>
                 </div>
                 
