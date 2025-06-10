@@ -465,7 +465,7 @@ export default function Home() {
                     width: '320px',
                     height: 'auto'
                   }}
-                  className="rounded-2xl border-4 border-deep-black shadow-2xl transform rotate-3 hover:rotate-12 hover:scale-105 transition-all duration-300 animate-float"
+                  className="rounded-2xl border-4 border-deep-black shadow-2xl transform rotate-3 hover:rotate-[20deg] hover:scale-105 transition-all duration-300 animate-float"
                 />
               </div>
             </div>
