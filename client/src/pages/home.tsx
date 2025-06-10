@@ -132,30 +132,19 @@ export default function Home() {
         <div className="container mx-auto max-w-6xl text-center">
           
           {/* Main Title */}
-          <h1 className={`font-serif text-6xl md:text-8xl font-bold text-deep-green mb-6 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
+          <h1 className={`font-serif text-6xl md:text-8xl font-bold text-deep-green mb-5 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
             Growing Us
           </h1>
           
           {/* Tagline */}
-          <p className={`text-lg md:text-xl text-deep-green/70 mb-12 max-w-4xl mx-auto leading-relaxed ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.2s'}}>
+          <p className={`text-lg md:text-xl text-deep-green/70 mb-9 max-w-4xl mx-auto leading-relaxed ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.2s'}}>
             Every connection needs care, space, and warmth. These prompts help you nurture your relationship garden.
           </p>
           
           {/* Interactive Card Carousel */}
-          <div className={`mb-6 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
-            {/* Card Description */}
-            <div className="text-center max-w-md mx-auto mb-1">
-              <p className="text-xl md:text-2xl text-deep-green/90 font-medium italic">
-                {cardData[currentCard].hasUnderline ? (
-                  <span className="squiggly-underline">{cardData[currentCard].description}</span>
-                ) : (
-                  cardData[currentCard].description
-                )}
-              </p>
-            </div>
-            
+          <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
             {/* Stacked Card Carousel */}
-            <div className="relative mb-1 flex justify-center">
+            <div className="relative mb-3 flex justify-center">
               <div className="relative w-96 h-[500px] sm:w-[500px] sm:h-[600px] md:w-[600px] md:h-[700px]">
                 {cardData.map((card, index) => {
                   const isSelected = index === currentCard;
@@ -199,7 +188,7 @@ export default function Home() {
             </div>
             
             {/* Carousel Navigation */}
-            <div className="flex justify-center space-x-3">
+            <div className="flex justify-center space-x-3 mb-4">
               {cardData.map((card, index) => (
                 <button 
                   key={index}
@@ -210,6 +199,17 @@ export default function Home() {
                   aria-label={`View ${card.title} card`}
                 />
               ))}
+            </div>
+            
+            {/* Card Description */}
+            <div className="text-center max-w-md mx-auto">
+              <p className="text-xl md:text-2xl text-deep-green/90 font-medium italic">
+                {cardData[currentCard].hasUnderline ? (
+                  <span className="squiggly-underline">{cardData[currentCard].description}</span>
+                ) : (
+                  cardData[currentCard].description
+                )}
+              </p>
             </div>
           </div>
           
@@ -235,10 +235,10 @@ export default function Home() {
         </div>
       </div>
       {/* How To Play Section */}
-      <section id="section-howto" className="py-20 px-4 bg-gradient-to-b from-warm-white to-soft-tangerine/10">
+      <section id="section-howto" className="py-15 px-4 bg-gradient-to-b from-warm-white to-soft-tangerine/10">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className={`font-serif text-4xl md:text-5xl font-bold text-deep-green mb-6 ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
+          <div className="text-center mb-12">
+            <h2 className={`font-serif text-4xl md:text-5xl font-bold text-deep-green mb-5 ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               How To Play
             </h2>
             <p className={`text-lg text-deep-green/80 max-w-2xl mx-auto ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
@@ -246,7 +246,7 @@ export default function Home() {
             </p>
           </div>
           
-          <div className={`grid gap-8 max-w-4xl mx-auto ${isIntersecting['section-howto'] ? 'staggered-animation' : ''}`}>
+          <div className={`grid gap-6 max-w-4xl mx-auto ${isIntersecting['section-howto'] ? 'staggered-animation' : ''}`}>
             {/* Step 1 */}
             <div className={`flex items-start space-x-4 hover-lift bg-sunflower/5 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               <div className="flex-shrink-0 w-16 h-16 bg-sunflower rounded-full border-4 border-deep-black flex items-center justify-center">
