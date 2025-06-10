@@ -137,66 +137,52 @@ export default function Home() {
           
           {/* Interactive Card Carousel */}
           <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
-            {/* Test Card - Direct 320px implementation */}
-            <div className="flex justify-center mb-8">
-              <img 
-                src={cardData[currentCard].image} 
-                alt={`${cardData[currentCard].title} card test`} 
-                style={{
-                  width: '320px',
-                  height: 'auto'
-                }}
-                className="rounded-2xl border-4 border-deep-black shadow-2xl"
-              />
-            </div>
-            
+
             {/* Stacked Card Carousel */}
-            <div className="relative mb-3 flex justify-center overflow-visible">
-              <div 
-                className="relative cursor-pointer" 
-                style={{ minWidth: '400px', minHeight: '600px' }}
-                onClick={() => setCurrentCard((currentCard + 1) % cardData.length)}
-              >
-                {cardData.map((card, index) => {
-                  const isActive = index === currentCard;
-                  const horizontalOffset = (index - currentCard) * 8;
-                  const verticalOffset = (index - currentCard) * 0.5 * 8;
-                  const rotationOffset = (index - currentCard) * 3;
-                  const zIndex = isActive ? 50 : 40 - Math.abs(index - currentCard);
-                  
-                  return (
-                    <div 
-                      key={card.id}
-                      className="absolute transition-all duration-1000 ease-out"
-                      style={{ 
-                        left: '50%',
-                        top: '50%',
-                        transform: `
-                          translate(-50%, -50%) 
-                          translateX(${horizontalOffset}px) 
-                          translateY(${verticalOffset}px)
-                          rotate(${isActive ? 0 : rotationOffset}deg)
-                        `,
-                        zIndex: zIndex,
-                        transformOrigin: 'center center'
-                      }}
-                    >
-                      <div className="carousel-card-hover">
-                        <img 
-                          src={card.image} 
-                          alt={`${card.title} card`} 
-                          style={{
-                            width: '320px',
-                            height: 'auto',
-                            filter: isActive ? 'none' : 'brightness(0.8)'
-                          }}
-                          className="rounded-2xl border-4 border-deep-black shadow-2xl transition-all duration-300"
-                        />
-                      </div>
+            <div 
+              className="relative mb-3 flex justify-center cursor-pointer"
+              style={{ height: '600px' }}
+              onClick={() => setCurrentCard((currentCard + 1) % cardData.length)}
+            >
+              {cardData.map((card, index) => {
+                const isActive = index === currentCard;
+                const horizontalOffset = (index - currentCard) * 8;
+                const verticalOffset = (index - currentCard) * 0.5 * 8;
+                const rotationOffset = (index - currentCard) * 3;
+                const zIndex = isActive ? 50 : 40 - Math.abs(index - currentCard);
+                
+                return (
+                  <div 
+                    key={card.id}
+                    className="absolute transition-all duration-1000 ease-out"
+                    style={{ 
+                      left: '50%',
+                      top: '50%',
+                      transform: `
+                        translate(-50%, -50%) 
+                        translateX(${horizontalOffset}px) 
+                        translateY(${verticalOffset}px)
+                        rotate(${isActive ? 0 : rotationOffset}deg)
+                      `,
+                      zIndex: zIndex,
+                      transformOrigin: 'center center'
+                    }}
+                  >
+                    <div className="carousel-card-hover">
+                      <img 
+                        src={card.image} 
+                        alt={`${card.title} card`} 
+                        style={{
+                          width: '320px',
+                          height: 'auto',
+                          filter: isActive ? 'none' : 'brightness(0.8)'
+                        }}
+                        className="rounded-2xl border-4 border-deep-black shadow-2xl transition-all duration-300"
+                      />
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
             
             {/* Carousel Navigation */}
