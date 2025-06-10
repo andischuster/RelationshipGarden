@@ -223,7 +223,7 @@ export default function Home() {
         </div>
       </div>
       {/* How To Play Section */}
-      <section id="section-howto" className="py-20 px-4 bg-warm-white">
+      <section id="section-howto" className="py-20 px-4 bg-gradient-to-b from-warm-white to-soft-tangerine/10">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className={`font-serif text-4xl md:text-5xl font-bold text-deep-green mb-6 ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
@@ -236,7 +236,7 @@ export default function Home() {
           
           <div className={`grid gap-8 max-w-4xl mx-auto ${isIntersecting['section-howto'] ? 'staggered-animation' : ''}`}>
             {/* Step 1 */}
-            <div className={`flex items-start space-x-4 hover-lift ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
+            <div className={`flex items-start space-x-4 hover-lift bg-sunflower/5 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               <div className="flex-shrink-0 w-16 h-16 bg-sunflower rounded-full border-4 border-deep-black flex items-center justify-center">
                 <span className="font-serif text-2xl font-bold text-deep-green">1</span>
               </div>
@@ -252,7 +252,7 @@ export default function Home() {
             </div>
             
             {/* Step 2 */}
-            <div className={`flex items-start space-x-4 hover-lift ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
+            <div className={`flex items-start space-x-4 hover-lift bg-soft-tangerine/8 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               <div className="flex-shrink-0 w-16 h-16 bg-soft-tangerine rounded-full border-4 border-deep-black flex items-center justify-center">
                 <span className="font-serif text-2xl font-bold text-deep-green">2</span>
               </div>
@@ -268,7 +268,7 @@ export default function Home() {
             </div>
             
             {/* Step 3 */}
-            <div className={`flex items-start space-x-4 hover-lift ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
+            <div className={`flex items-start space-x-4 hover-lift bg-deep-teal/8 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               <div className="flex-shrink-0 w-16 h-16 bg-deep-teal rounded-full border-4 border-deep-black flex items-center justify-center">
                 <span className="font-serif text-2xl font-bold text-warm-white">3</span>
               </div>
@@ -284,7 +284,7 @@ export default function Home() {
             </div>
             
             {/* Step 4 */}
-            <div className={`flex items-start space-x-4 hover-lift ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
+            <div className={`flex items-start space-x-4 hover-lift bg-sunflower/8 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               <div className="flex-shrink-0 w-16 h-16 bg-sunflower rounded-full border-4 border-deep-black flex items-center justify-center">
                 <span className="font-serif text-2xl font-bold text-deep-green">4</span>
               </div>
@@ -300,7 +300,7 @@ export default function Home() {
             </div>
             
             {/* Step 5 */}
-            <div className={`flex items-start space-x-4 hover-lift ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
+            <div className={`flex items-start space-x-4 hover-lift bg-soft-tangerine/5 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               <div className="flex-shrink-0 w-16 h-16 bg-soft-tangerine rounded-full border-4 border-deep-black flex items-center justify-center">
                 <span className="font-serif text-2xl font-bold text-deep-green">5</span>
               </div>
@@ -370,7 +370,7 @@ export default function Home() {
         </div>
       </div>
       {/* Testimonials Section */}
-      <section id="section-testimonials" className="py-20 px-4 bg-warm-white">
+      <section id="section-testimonials" className="py-20 px-4 bg-gradient-to-b from-deep-teal/5 to-warm-white">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className={`font-serif text-4xl md:text-5xl font-bold text-deep-green mb-6 ${isIntersecting['section-testimonials'] ? 'fade-in' : ''}`}>
