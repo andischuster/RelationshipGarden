@@ -129,7 +129,7 @@ export default function Home() {
         </header>
       {/* Hero Section */}
       <section id="section-hero" className="min-h-screen flex flex-col justify-center items-center px-2 sm:px-4 py-8 pt-20 sm:pt-24 relative overflow-hidden">
-        <div className="container mx-auto max-w-6xl text-center">
+        <div className="container mx-auto text-center">
           
           {/* Main Title */}
           <h1 className={`font-serif text-5xl sm:text-6xl md:text-8xl font-bold text-deep-green mb-5 whitespace-nowrap ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
@@ -144,48 +144,13 @@ export default function Home() {
           {/* Interactive Card Carousel */}
           <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
             {/* Stacked Card Carousel */}
-            <div className="relative mb-3 flex justify-center overflow-visible">
-              <div className="relative w-[100vw] h-[720px] sm:w-[500px] sm:h-[600px] md:w-[600px] md:h-[700px] overflow-visible">
-                {cardData.map((card, index) => {
-                  const isSelected = index === currentCard;
-                  const stackOffset = (index - currentCard) * 8;
-                  const rotationOffset = (index - currentCard) * 3;
-                  const zIndex = isSelected ? 50 : 40 - Math.abs(index - currentCard);
-                  
-                  return (
-                    <div 
-                      key={card.id}
-                      onClick={() => setCurrentCard(index)}
-                      className="absolute cursor-pointer transition-all duration-1000 ease-out"
-                      style={{ 
-                        left: '50%',
-                        top: '50%',
-                        transform: `
-                          translate(-50%, -50%) 
-                          translateX(${stackOffset}px) 
-                          translateY(${stackOffset * 0.5}px)
-                          rotate(${isSelected ? 0 : rotationOffset}deg)
-                        `,
-                        zIndex: zIndex,
-                        transformOrigin: 'center center'
-                      }}
-                    >
-                      <div className="card-wobble-container">
-                        <img 
-                          src={card.image} 
-                          alt={`${card.title} card`} 
-                          className="rounded-2xl border-4 border-deep-black shadow-2xl object-cover transition-all duration-300"
-                          style={{
-                            width: '320px',
-                            height: 'auto',
-                            aspectRatio: '2/3',
-                            filter: isSelected ? 'none' : 'brightness(0.8)'
-                          }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+            <div className="relative mb-3 flex justify-center">
+              <div className="relative">
+                <img 
+                  src={cardData[currentCard].image} 
+                  alt={`${cardData[currentCard].title} card`} 
+                  className="w-80 h-auto rounded-2xl border-4 border-deep-black shadow-2xl"
+                />
               </div>
             </div>
             
