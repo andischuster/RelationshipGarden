@@ -23,7 +23,7 @@
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
   --ring: hsl(199, 30%, 27%);
   --radius: 0.5rem;
-  
+
   /* Custom colors for Growing Us */
   --warm-white: hsl(44, 68%, 98%);
   --deep-green: hsl(199, 30%, 27%);
@@ -80,18 +80,18 @@
     transform: scale(0.9);
     transition: all 0.5s ease;
   }
-  
+
   .card-active {
     filter: none;
     opacity: 1;
     transform: scale(1);
     transition: all 0.5s ease;
   }
-  
+
   .fade-in {
     animation: fadeIn 1.2s ease-out;
   }
-  
+
   @keyframes fadeIn {
     from { 
       opacity: 0; 
@@ -102,16 +102,16 @@
       transform: translateY(0); 
     }
   }
-  
+
   .hover-lift {
     transition: transform 0.6s ease, box-shadow 0.6s ease;
   }
-  
+
   .hover-lift:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(47, 72, 88, 0.08);
   }
-  
+
   .btn-primary {
     background: linear-gradient(135deg, var(--sunflower) 0%, var(--soft-tangerine) 100%);
     transition: all 0.6s ease;
@@ -120,7 +120,7 @@
     font-weight: 600;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   }
-  
+
   .btn-primary:hover {
     background: linear-gradient(135deg, var(--soft-tangerine) 0%, var(--sunflower) 100%);
     transform: translateY(-0.5px);
@@ -146,21 +146,26 @@
   .staggered-animation > *:nth-child(3) { animation-delay: 0.6s; }
   .staggered-animation > *:nth-child(4) { animation-delay: 0.8s; }
   .staggered-animation > *:nth-child(5) { animation-delay: 1.0s; }
-  
+
   .card-wobble-container {
     transition: transform 0.8s ease;
   }
-  
+
   .card-wobble-container:hover {
     animation: gentleFloat 1.5s ease-in-out;
   }
-  
+
   @keyframes gentleFloat {
     0% { transform: translateY(0px) scale(1); }
     50% { transform: translateY(-2px) scale(1.02); }
     100% { transform: translateY(0px) scale(1); }
   }
-  
+
+  .carousel-card {
+    width: 320px;
+    height: auto;
+  }
+
 
 }
 
@@ -374,7 +379,7 @@
   .squiggle {
     position: relative;
   }
-  
+
   .squiggle:after {
     content: '';
     position: absolute;

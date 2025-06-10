@@ -68,13 +68,7 @@ export default function Home() {
   const [isIntersecting, setIsIntersecting] = useState<{ [key: string]: boolean }>({});
   const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentCard((prev) => (prev + 1) % cardData.length);
-    }, 8000);
-
-    return () => clearInterval(interval);
-  }, []);
+  // Removed auto-cycling - cards now change only on click
 
   useEffect(() => {
     const handleScroll = () => {
