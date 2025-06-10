@@ -93,26 +93,40 @@ export default function Home() {
 
   return (
     <div className="bg-warm-white text-deep-green font-sans leading-relaxed">
+      {/* Navigation Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-warm-white/90 backdrop-blur-sm border-b border-deep-green/10">
+        <div className="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-deep-teal to-sunflower rounded-lg flex items-center justify-center">
+              <div className="w-4 h-4 bg-warm-white rounded-sm"></div>
+            </div>
+            <h1 className="font-serif text-2xl font-bold text-deep-green">Growing Us</h1>
+          </div>
+          <div className="flex items-center space-x-4">
+            <button className="btn-outline px-6 py-2">
+              About
+            </button>
+            <Button 
+              onClick={handlePurchase}
+              className="btn-primary text-deep-green font-semibold px-6 py-2 rounded-full"
+            >
+              Buy Now
+            </Button>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <section id="section-hero" className="min-h-screen flex flex-col justify-center items-center px-4 py-8 relative overflow-hidden">
+      <section id="section-hero" className="min-h-screen flex flex-col justify-center items-center px-4 py-8 pt-24 relative overflow-hidden">
         <div className="container mx-auto max-w-6xl text-center">
           
-          {/* Hero Cards Background */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-10 -z-10">
-            <div className="grid grid-cols-3 gap-8 transform rotate-12 scale-150">
-              <div className="w-32 h-48 bg-sunflower rounded-lg border-4 border-deep-black"></div>
-              <div className="w-32 h-48 bg-soft-tangerine rounded-lg border-4 border-deep-black"></div>
-              <div className="w-32 h-48 bg-deep-teal rounded-lg border-4 border-deep-black"></div>
-            </div>
-          </div>
-          
           {/* Main Title */}
-          <h1 className={`font-serif text-5xl md:text-7xl font-bold text-deep-green mb-4 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
+          <h1 className={`font-serif text-6xl md:text-8xl font-bold text-deep-green mb-6 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
             Growing Us
           </h1>
           
           {/* Tagline */}
-          <p className={`text-xl md:text-2xl text-deep-green/80 mb-8 max-w-3xl mx-auto ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.2s'}}>
+          <p className={`text-lg md:text-xl text-deep-green/70 mb-12 max-w-4xl mx-auto leading-relaxed ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.2s'}}>
             Every connection needs care, space, and warmth. These prompts help you nurture your relationship garden.
           </p>
           
