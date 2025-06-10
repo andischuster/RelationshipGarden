@@ -204,8 +204,8 @@ export default function Home() {
                 <button 
                   key={index}
                   onClick={() => setCurrentCard(index)}
-                  className={`w-4 h-4 rounded-full border-2 border-deep-black transition-all duration-300 hover:scale-110 ${
-                    index === currentCard ? 'bg-sunflower scale-110' : 'bg-deep-green/30 hover:bg-deep-green/50'
+                  className={`w-4 h-4 rounded-full border-2 border-deep-teal transition-all duration-300 hover:scale-110 ${
+                    index === currentCard ? 'bg-sunflower scale-110' : 'bg-deep-teal/30 hover:bg-deep-teal/50'
                   }`}
                   aria-label={`View ${card.title} card`}
                 />
