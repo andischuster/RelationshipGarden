@@ -165,7 +165,7 @@ export default function Home() {
                           translateX(${stackOffset}px) 
                           translateY(${stackOffset * 0.5}px)
                           rotate(${isSelected ? 0 : rotationOffset}deg) 
-                          scale(${isSelected ? 1.1 : 1})
+                          scale(${isSelected ? 1 : 0.9})
                         `,
                         zIndex: zIndex,
                         transformOrigin: 'center center'
@@ -175,7 +175,7 @@ export default function Home() {
                         <img 
                           src={card.image} 
                           alt={`${card.title} card`} 
-                          className="carousel-card card-outline card-shadow object-cover transition-all duration-300"
+                          className="w-80 h-auto rounded-2xl border-4 border-deep-black shadow-2xl object-cover transition-all duration-300"
                           style={{
                             filter: isSelected ? 'none' : 'brightness(0.8)'
                           }}
