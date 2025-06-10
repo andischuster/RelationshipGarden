@@ -144,8 +144,8 @@ export default function Home() {
           {/* Interactive Card Carousel */}
           <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
             {/* Stacked Card Carousel */}
-            <div className="relative mb-3 flex justify-center">
-              <div className="relative w-[480px] h-[720px] sm:w-[500px] sm:h-[600px] md:w-[600px] md:h-[700px]">
+            <div className="relative mb-3 flex justify-center overflow-visible">
+              <div className="relative w-[100vw] h-[720px] sm:w-[500px] sm:h-[600px] md:w-[600px] md:h-[700px] overflow-visible">
                 {cardData.map((card, index) => {
                   const isSelected = index === currentCard;
                   const stackOffset = (index - currentCard) * 8;
@@ -174,8 +174,11 @@ export default function Home() {
                         <img 
                           src={card.image} 
                           alt={`${card.title} card`} 
-                          className="w-80 h-auto rounded-2xl border-4 border-deep-black shadow-2xl object-cover transition-all duration-300"
+                          className="rounded-2xl border-4 border-deep-black shadow-2xl object-cover transition-all duration-300"
                           style={{
+                            width: '320px',
+                            height: 'auto',
+                            aspectRatio: '2/3',
                             filter: isSelected ? 'none' : 'brightness(0.8)'
                           }}
                         />
