@@ -125,7 +125,6 @@ export default function Home() {
             <h1 className="font-serif text-2xl sm:text-3xl font-bold text-deep-green">Growing Us</h1>
           </div>
           <div className="flex gap-4">
-            <button className="secondary-button">About</button>
             <button className="cta-button" onClick={handlePurchase}>Buy Now</button>
           </div>
         </header>
@@ -233,7 +232,7 @@ export default function Home() {
       {/* Section Divider */}
       <div className="section-divider">
         <div className="section-divider-icon">
-          <Flower className="w-6 h-6 text-sunflower" />
+          <Flower className="w-6 h-6 text-deep-green" />
         </div>
       </div>
       {/* How To Play Section */}
@@ -334,7 +333,7 @@ export default function Home() {
       {/* Section Divider */}
       <div className="section-divider">
         <div className="section-divider-icon">
-          <Heart className="w-6 h-6 text-soft-tangerine" />
+          <Heart className="w-6 h-6 text-deep-green" />
         </div>
       </div>
       {/* Pricing Section */}
@@ -380,7 +379,7 @@ export default function Home() {
       {/* Section Divider */}
       <div className="section-divider">
         <div className="section-divider-icon">
-          <Sprout className="w-6 h-6 text-deep-teal" />
+          <Sprout className="w-6 h-6 text-deep-green" />
         </div>
       </div>
       {/* Testimonials Section */}
