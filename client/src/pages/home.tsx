@@ -116,13 +116,12 @@ export default function Home() {
       <Blob color="#008080" className="bottom-[5%] -left-20 w-[500px] h-[500px] animate-float delay-2000" />
       <Blob color="#2F4858" className="top-1/3 -right-28 w-[400px] h-[400px] animate-float delay-3000" />
       <Blob color="#F9A870" className="top-2/3 left-1/4 w-[300px] h-[300px] animate-float delay-4000" />
-      
       <div className="container mx-auto px-4 py-12 relative">
         {/* Header/Navigation */}
         <header className={`flex justify-between items-center sticky top-0 z-50 py-4 px-8 transition-all duration-300 ${scrolled ? 'bg-warm-white/90 backdrop-blur-md shadow-md rounded-full' : ''}`}>
           <div className="flex items-center">
             <Flower className="text-deep-teal mr-2" />
-            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-deep-green">Growing Us</h1>
+            <h1 className="font-serif sm:text-3xl font-bold text-deep-green text-[18px]">Relationship Game</h1>
           </div>
           <div className="flex gap-4">
             <button className="cta-button" onClick={handlePurchase}>Buy Now</button>
@@ -369,9 +368,7 @@ export default function Home() {
               <Button 
                 onClick={handlePurchase}
                 className="cta-button w-full md:w-auto"
-              >
-                Let's Grow Together – Buy Now
-              </Button>
+              >Grow Your Relationship – Buy Now</Button>
             </div>
           </div>
         </div>
