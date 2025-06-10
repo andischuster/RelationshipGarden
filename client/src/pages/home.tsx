@@ -167,15 +167,15 @@ export default function Home() {
                           scale(${isActive ? 1 : 0.95})
                         `,
                         zIndex: isActive ? 10 : 10 - Math.abs(offset),
-                        left: '-160px',
-                        top: '-240px'
+                        left: '-144px',
+                        top: '-216px'
                       }}
                     >
                       <div
                         className="card-stack-item rounded-2xl border-4 border-deep-black shadow-2xl transition-all duration-300"
                         style={{
-                          width: '320px',
-                          height: '480px',
+                          width: '288px',
+                          height: '432px',
                           backgroundImage: `url(${card.image})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
