@@ -292,6 +292,25 @@
     66% { transform: translate(-20px, 30px) scale(0.9); }
   }
 
+  /* Squiggly underline for special text */
+  .squiggly-underline {
+    position: relative;
+    display: inline-block;
+  }
+
+  .squiggly-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background-image: url("data:image/svg+xml,%3csvg width='60' height='8' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M0,4 Q15,1 30,4 T60,4' stroke='%23FFC700' stroke-width='3' fill='none' stroke-linecap='round'/%3e%3c/svg%3e");
+    background-repeat: repeat-x;
+    background-size: 30px 6px;
+    opacity: 0.8;
+  }
+
 /* Custom Tailwind classes */
 .text-warm-white { color: var(--warm-white); }
 .text-deep-green { color: var(--deep-green); }

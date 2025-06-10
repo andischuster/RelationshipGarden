@@ -16,6 +16,7 @@ interface CardData {
   description: string;
   image: string;
   gradient: string;
+  hasUnderline?: boolean;
 }
 
 const cardData: CardData[] = [
@@ -31,7 +32,8 @@ const cardData: CardData[] = [
     title: "Elephant in the Room",
     description: "Speak about issues you know you should",
     image: elephantCard,
-    gradient: "from-deep-teal to-soft-tangerine"
+    gradient: "from-deep-teal to-soft-tangerine",
+    hasUnderline: true
   },
   {
     id: 2,
@@ -135,7 +137,11 @@ export default function Home() {
             {/* Card Description */}
             <div className="text-center max-w-md mx-auto mb-1">
               <p className="text-xl md:text-2xl text-deep-green/90 font-medium italic">
-                {cardData[currentCard].description}
+                {cardData[currentCard].hasUnderline ? (
+                  <span className="squiggly-underline">{cardData[currentCard].description}</span>
+                ) : (
+                  cardData[currentCard].description
+                )}
               </p>
             </div>
             
