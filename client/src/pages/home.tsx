@@ -118,22 +118,57 @@ export default function Home() {
           
           {/* Interactive Card Carousel */}
           <div className={`mb-12 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
-            {/* Current Card Display */}
-            <div className="flex flex-col items-center mb-8">
-              <div className="hover-lift mb-6">
-                <img 
-                  src={cardData[currentCard].image} 
-                  alt={`${cardData[currentCard].title} card`} 
-                  className="w-64 h-96 rounded-2xl border-4 border-deep-black shadow-lg object-cover"
-                />
+            {/* Endless Card Carousel */}
+            <div className="relative overflow-hidden mb-8">
+              <div className="flex items-center justify-center space-x-8 px-4">
+                {cardData.map((card, index) => {
+                  const isSelected = index === currentCard;
+                  const tiltAngle = [3, -2, 4, -3, 2][index];
+                  
+                  return (
+                    <div 
+                      key={card.id}
+                      onClick={() => setCurrentCard(index)}
+                      className={`card-item flex-shrink-0 cursor-pointer transition-all duration-500 ${
+                        isSelected ? 'z-20' : 'z-10'
+                      }`}
+                      style={{ 
+                        transform: `rotate(${isSelected ? 0 : tiltAngle}deg) scale(${isSelected ? 1.15 : 0.8})`,
+                        opacity: isSelected ? 1 : 0.6,
+                        transformOrigin: 'center center'
+                      }}
+                    >
+                      <div className="card-wobble-container">
+                        <img 
+                          src={card.image} 
+                          alt={`${card.title} card`} 
+                          className={`rounded-2xl object-cover transition-all duration-300 ${
+                            isSelected 
+                              ? 'w-72 h-[432px] border-4 border-deep-black' 
+                              : 'w-48 h-72 border-3 border-deep-black/70'
+                          }`}
+                          style={{
+                            boxShadow: isSelected 
+                              ? '10px 10px 0px 0px rgba(44, 82, 52, 1)' 
+                              : '6px 6px 0px 0px rgba(44, 82, 52, 0.5)'
+                          }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
               
-              {/* Card Description */}
-              <div className="text-center max-w-md">
-                <p className="text-xl md:text-2xl text-deep-green/90 font-medium italic">
-                  "{cardData[currentCard].description}"
-                </p>
-              </div>
+              {/* Side fade gradients */}
+              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-warm-white via-warm-white/80 to-transparent pointer-events-none z-30"></div>
+              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-warm-white via-warm-white/80 to-transparent pointer-events-none z-30"></div>
+            </div>
+            
+            {/* Card Description */}
+            <div className="text-center max-w-md mx-auto mb-8">
+              <p className="text-xl md:text-2xl text-deep-green/90 font-medium italic">
+                "{cardData[currentCard].description}"
+              </p>
             </div>
             
             {/* Carousel Navigation */}
