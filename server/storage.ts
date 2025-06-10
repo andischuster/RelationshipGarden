@@ -1,4 +1,6 @@
-import { users, type User, type InsertUser, type Preorder, type InsertPreorder } from "@shared/schema";
+import { users, preorders, type User, type InsertUser, type Preorder, type InsertPreorder } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 // modify the interface with any CRUD methods
 // you might need
@@ -12,53 +14,41 @@ export interface IStorage {
   getAllPreorders(): Promise<Preorder[]>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private preorders: Map<number, Preorder>;
-  currentId: number;
-  currentPreorderId: number;
-
-  constructor() {
-    this.users = new Map();
-    this.preorders = new Map();
-    this.currentId = 1;
-    this.currentPreorderId = 1;
-  }
-
+export class DatabaseStorage implements IStorage {
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
     return user;
   }
 
   async createPreorder(insertPreorder: InsertPreorder): Promise<Preorder> {
-    const id = this.currentPreorderId++;
-    const createdAt = new Date().toISOString();
-    const preorder: Preorder = { ...insertPreorder, id, createdAt };
-    this.preorders.set(id, preorder);
+    const [preorder] = await db
+      .insert(preorders)
+      .values(insertPreorder)
+      .returning();
     return preorder;
   }
 
   async getPreorderByEmail(email: string): Promise<Preorder | undefined> {
-    return Array.from(this.preorders.values()).find(
-      (preorder) => preorder.email === email,
-    );
+    const [preorder] = await db.select().from(preorders).where(eq(preorders.email, email));
+    return preorder || undefined;
   }
 
   async getAllPreorders(): Promise<Preorder[]> {
-    return Array.from(this.preorders.values());
+    return await db.select().from(preorders);
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
