@@ -99,6 +99,30 @@ export default function Home() {
     setCurrentCard((prev) => (prev - 1 + cardData.length) % cardData.length);
   };
 
+  // Touch/drag handlers
+  const [dragStart, setDragStart] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragStart = (clientX: number) => {
+    setDragStart(clientX);
+    setIsDragging(true);
+  };
+
+  const handleDragEnd = (clientX: number) => {
+    if (!isDragging) return;
+    
+    const dragDistance = clientX - dragStart;
+    const threshold = 50;
+
+    if (dragDistance > threshold) {
+      prevCard();
+    } else if (dragDistance < -threshold) {
+      nextCard();
+    }
+    
+    setIsDragging(false);
+  };
+
   return (
     <div className="bg-warm-white text-deep-green font-sans leading-relaxed">
       {/* Hero Section */}
@@ -126,21 +150,18 @@ export default function Home() {
           
           {/* Interactive Card Carousel */}
           <div className={`mb-12 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
-            {/* Stacked Card Carousel */}
-            <div className="relative mb-8 flex justify-center items-center">
-              {/* Left Arrow */}
-              <button 
-                onClick={prevCard}
-                className="absolute left-4 z-50 p-3 rounded-full bg-sunflower border-3 border-deep-black hover:bg-soft-tangerine transition-all duration-300 hover:scale-110"
-                aria-label="Previous card"
-              >
-                <ChevronLeft className="w-6 h-6 text-deep-green" />
-              </button>
-
-              <div className="relative w-[320px] h-[480px]">
+            {/* Swipeable Card Carousel */}
+            <div 
+              className="relative mb-8 flex justify-center items-center touch-pan-y"
+              onMouseDown={(e) => handleDragStart(e.clientX)}
+              onMouseUp={(e) => handleDragEnd(e.clientX)}
+              onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
+              onTouchEnd={(e) => handleDragEnd(e.changedTouches[0].clientX)}
+            >
+              <div className="relative w-[75vw] max-w-[240px] h-[360px] sm:w-[320px] sm:h-[480px]">
                 {cardData.map((card, index) => {
                   const isSelected = index === currentCard;
-                  const stackOffset = (index - currentCard) * 10;
+                  const stackOffset = (index - currentCard) * 8;
                   const rotationOffset = (index - currentCard) * 2;
                   const zIndex = isSelected ? 50 : 40 - Math.abs(index - currentCard);
                   
@@ -148,7 +169,7 @@ export default function Home() {
                     <div 
                       key={card.id}
                       onClick={() => setCurrentCard(index)}
-                      className="absolute cursor-pointer transition-all duration-500"
+                      className="absolute cursor-pointer transition-all duration-500 select-none"
                       style={{ 
                         left: '50%',
                         top: '50%',
@@ -167,30 +188,24 @@ export default function Home() {
                         <img 
                           src={card.image} 
                           alt={`${card.title} card`} 
-                          className="rounded-2xl object-contain border-4 border-deep-black transition-all duration-300"
+                          className="rounded-xl object-cover border-3 border-deep-black transition-all duration-300"
                           style={{
-                            width: '256px',   // 2:3 aspect ratio base
-                            height: '384px',  // 2:3 aspect ratio (256 * 1.5 = 384)
+                            width: '100%',
+                            height: '100%',
+                            maxWidth: '240px',
+                            maxHeight: '360px',
                             boxShadow: isSelected 
-                              ? '8px 8px 0px 0px rgba(44, 82, 52, 1)' 
-                              : '4px 4px 0px 0px rgba(44, 82, 52, 0.7)',
+                              ? '6px 6px 0px 0px rgba(44, 82, 52, 1)' 
+                              : '3px 3px 0px 0px rgba(44, 82, 52, 0.7)',
                             filter: isSelected ? 'none' : 'brightness(0.8)'
                           }}
+                          draggable={false}
                         />
                       </div>
                     </div>
                   );
                 })}
               </div>
-
-              {/* Right Arrow */}
-              <button 
-                onClick={nextCard}
-                className="absolute right-4 z-50 p-3 rounded-full bg-sunflower border-3 border-deep-black hover:bg-soft-tangerine transition-all duration-300 hover:scale-110"
-                aria-label="Next card"
-              >
-                <ChevronRight className="w-6 h-6 text-deep-green" />
-              </button>
             </div>
             
             {/* Card Description */}
