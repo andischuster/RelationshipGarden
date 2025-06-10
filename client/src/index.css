@@ -147,11 +147,11 @@
   .staggered-animation > *:nth-child(4) { animation-delay: 0.8s; }
   .staggered-animation > *:nth-child(5) { animation-delay: 1.0s; }
 
-  .card-wobble-container {
+  .carousel-card-hover {
     transition: transform 0.8s ease;
   }
 
-  .card-wobble-container:hover {
+  .carousel-card-hover:hover {
     animation: gentleFloat 1.5s ease-in-out;
   }
 
@@ -159,11 +159,6 @@
     0% { transform: translateY(0px) scale(1); }
     50% { transform: translateY(-2px) scale(1.02); }
     100% { transform: translateY(0px) scale(1); }
-  }
-
-  .carousel-card {
-    width: 320px;
-    height: auto;
   }
 
 
