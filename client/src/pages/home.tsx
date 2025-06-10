@@ -124,7 +124,7 @@ export default function Home() {
             <h1 className="font-serif sm:text-3xl font-bold text-deep-green text-[18px]">Relationship Game</h1>
           </div>
           <div className="flex gap-4">
-            <button className="cta-button" onClick={handlePurchase}>Buy Now</button>
+            <button className="cta-button" onClick={handlePurchase}>Play Now</button>
           </div>
         </header>
       {/* Hero Section */}
