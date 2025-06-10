@@ -137,10 +137,10 @@ export default function Home() {
                 <ChevronLeft className="w-6 h-6 text-deep-green" />
               </button>
 
-              <div className="relative w-80 h-96">
+              <div className="relative w-[480px] h-[720px]">
                 {cardData.map((card, index) => {
                   const isSelected = index === currentCard;
-                  const stackOffset = (index - currentCard) * 8;
+                  const stackOffset = (index - currentCard) * 12;
                   const rotationOffset = (index - currentCard) * 2;
                   const zIndex = isSelected ? 50 : 40 - Math.abs(index - currentCard);
                   
@@ -167,13 +167,13 @@ export default function Home() {
                         <img 
                           src={card.image} 
                           alt={`${card.title} card`} 
-                          className="rounded-xl object-cover border-3 border-deep-black transition-all duration-300"
+                          className="rounded-2xl object-cover border-4 border-deep-black transition-all duration-300"
                           style={{
-                            width: '192px',  // 48px * 4 for better visibility
-                            height: '288px', // 72px * 4 for better visibility
+                            width: '384px',  // 2x bigger: 192px * 2
+                            height: '576px', // 2x bigger: 288px * 2
                             boxShadow: isSelected 
-                              ? '6px 6px 0px 0px rgba(44, 82, 52, 1)' 
-                              : '3px 3px 0px 0px rgba(44, 82, 52, 0.7)',
+                              ? '8px 8px 0px 0px rgba(44, 82, 52, 1)' 
+                              : '4px 4px 0px 0px rgba(44, 82, 52, 0.7)',
                             filter: isSelected ? 'none' : 'brightness(0.8)'
                           }}
                         />
