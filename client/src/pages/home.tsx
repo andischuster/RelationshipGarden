@@ -254,7 +254,7 @@ export default function Home() {
             <div className="text-center max-w-md mx-auto px-4">
               <p className="text-lg sm:text-xl md:text-2xl text-deep-green/90 font-medium italic">
                 {cardData[currentCard].hasUnderline ? (
-                  <span className="squiggly-underline">{cardData[currentCard].description}</span>
+                  <span className="squiggly-underline mt-[16px] mb-[16px]">{cardData[currentCard].description}</span>
                 ) : (
                   cardData[currentCard].description
                 )}
@@ -594,7 +594,6 @@ export default function Home() {
         </div>
       </footer>
       </div>
-
       {/* Pre-order Modal */}
       <Dialog open={isPreorderModalOpen} onOpenChange={setIsPreorderModalOpen}>
         <DialogContent className="sm:max-w-[425px] bg-warm-white border-deep-green">
