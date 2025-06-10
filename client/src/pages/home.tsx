@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover } from 'lucide-react';
+import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Blob from '@/components/Blob';
 
@@ -348,7 +348,7 @@ export default function Home() {
               <div className="space-y-6 mb-8">
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-sunflower/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <div className="w-6 h-6 bg-deep-teal rounded-sm"></div>
+                    <Check className="w-6 h-6 text-deep-teal" />
                   </div>
                   <p className="text-lg text-deep-green/80 leading-relaxed">
                     50 beautifully illustrated prompt cards
@@ -357,7 +357,7 @@ export default function Home() {
                 
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-sunflower/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <div className="w-6 h-6 bg-deep-teal rounded-sm"></div>
+                    <Check className="w-6 h-6 text-deep-teal" />
                   </div>
                   <p className="text-lg text-deep-green/80 leading-relaxed">
                     5 instruction cards with gameplay rules
@@ -366,7 +366,7 @@ export default function Home() {
                 
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-sunflower/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <div className="w-6 h-6 bg-deep-teal rounded-sm"></div>
+                    <Check className="w-6 h-6 text-deep-teal" />
                   </div>
                   <p className="text-lg text-deep-green/80 leading-relaxed">
                     3 bonus "Magic Bean" cards for special moments
@@ -375,7 +375,7 @@ export default function Home() {
                 
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-sunflower/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <div className="w-6 h-6 bg-deep-teal rounded-sm"></div>
+                    <Check className="w-6 h-6 text-deep-teal" />
                   </div>
                   <p className="text-lg text-deep-green/80 leading-relaxed">
                     A custom-designed box with magnetic closure
