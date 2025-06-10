@@ -231,7 +231,7 @@ export default function Home() {
       {/* Section Divider */}
       <div className="section-divider">
         <div className="section-divider-icon">
-          <Flower className="w-6 h-6 text-deep-green" />
+          <Flower className="w-6 h-6 text-deep-teal" />
         </div>
       </div>
       {/* How To Play Section */}
@@ -332,7 +332,7 @@ export default function Home() {
       {/* Section Divider */}
       <div className="section-divider">
         <div className="section-divider-icon">
-          <Heart className="w-6 h-6 text-deep-green" />
+          <Heart className="w-6 h-6 text-deep-teal" />
         </div>
       </div>
       {/* Pricing Section */}
@@ -376,7 +376,7 @@ export default function Home() {
       {/* Section Divider */}
       <div className="section-divider">
         <div className="section-divider-icon">
-          <Sprout className="w-6 h-6 text-deep-green" />
+          <Sprout className="w-6 h-6 text-deep-teal" />
         </div>
       </div>
       {/* Testimonials Section */}
