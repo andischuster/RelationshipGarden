@@ -158,10 +158,10 @@ export default function Home() {
               onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
               onTouchEnd={(e) => handleDragEnd(e.changedTouches[0].clientX)}
             >
-              <div className="relative w-[75vw] max-w-[240px] h-[360px] sm:w-[320px] sm:h-[480px]">
+              <div className="relative w-[75vw] max-w-[480px] h-[720px]">
                 {cardData.map((card, index) => {
                   const isSelected = index === currentCard;
-                  const stackOffset = (index - currentCard) * 8;
+                  const stackOffset = (index - currentCard) * 12;
                   const rotationOffset = (index - currentCard) * 2;
                   const zIndex = isSelected ? 50 : 40 - Math.abs(index - currentCard);
                   
@@ -188,15 +188,13 @@ export default function Home() {
                         <img 
                           src={card.image} 
                           alt={`${card.title} card`} 
-                          className="rounded-xl object-cover border-3 border-deep-black transition-all duration-300"
+                          className="rounded-2xl object-cover border-4 border-deep-black transition-all duration-300"
                           style={{
-                            width: '100%',
-                            height: '100%',
-                            maxWidth: '240px',
-                            maxHeight: '360px',
+                            width: '480px',   // 2x larger: 240px * 2
+                            height: '720px',  // 2x larger: 360px * 2
                             boxShadow: isSelected 
-                              ? '6px 6px 0px 0px rgba(44, 82, 52, 1)' 
-                              : '3px 3px 0px 0px rgba(44, 82, 52, 0.7)',
+                              ? '8px 8px 0px 0px rgba(44, 82, 52, 1)' 
+                              : '4px 4px 0px 0px rgba(44, 82, 52, 0.7)',
                             filter: isSelected ? 'none' : 'brightness(0.8)'
                           }}
                           draggable={false}
