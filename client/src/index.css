@@ -364,6 +364,31 @@
     animation: spin-slow 30s linear infinite;
   }
 
+  .delay-1000 {
+    animation-delay: 1s;
+  }
+
+  .delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .delay-3000 {
+    animation-delay: 3s;
+  }
+
+  .delay-4000 {
+    animation-delay: 4s;
+  }
+
+  .secondary-button {
+    @apply text-deep-green font-medium px-4 py-2 rounded-full border-2 transition-all duration-300;
+    border-color: rgba(47, 72, 52, 0.2);
+  }
+
+  .secondary-button:hover {
+    border-color: rgba(47, 72, 52, 0.4);
+  }
+
   .squiggle {
     position: relative;
   }

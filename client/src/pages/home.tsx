@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Blob from '@/components/Blob';
 
 // Import card images
 import elephantCard from "@assets/Elephant in the Room_1749555023557.png";
@@ -65,6 +66,7 @@ const cardData: CardData[] = [
 export default function Home() {
   const [currentCard, setCurrentCard] = useState(0);
   const [isIntersecting, setIsIntersecting] = useState<{ [key: string]: boolean }>({});
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -72,6 +74,15 @@ export default function Home() {
     }, 8000);
 
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
