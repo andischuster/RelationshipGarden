@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram } from 'lucide-react';
+import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Import card images
@@ -91,6 +91,14 @@ export default function Home() {
     console.log('Purchase initiated for Growing Us card game');
   };
 
+  const nextCard = () => {
+    setCurrentCard((prev) => (prev + 1) % cardData.length);
+  };
+
+  const prevCard = () => {
+    setCurrentCard((prev) => (prev - 1 + cardData.length) % cardData.length);
+  };
+
   return (
     <div className="bg-warm-white text-deep-green font-sans leading-relaxed">
       {/* Hero Section */}
@@ -119,12 +127,21 @@ export default function Home() {
           {/* Interactive Card Carousel */}
           <div className={`mb-12 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
             {/* Stacked Card Carousel */}
-            <div className="relative mb-8 flex justify-center">
+            <div className="relative mb-8 flex justify-center items-center">
+              {/* Left Arrow */}
+              <button 
+                onClick={prevCard}
+                className="absolute left-4 z-50 p-3 rounded-full bg-sunflower border-3 border-deep-black hover:bg-soft-tangerine transition-all duration-300 hover:scale-110"
+                aria-label="Previous card"
+              >
+                <ChevronLeft className="w-6 h-6 text-deep-green" />
+              </button>
+
               <div className="relative w-80 h-96">
                 {cardData.map((card, index) => {
                   const isSelected = index === currentCard;
                   const stackOffset = (index - currentCard) * 8;
-                  const rotationOffset = (index - currentCard) * 3;
+                  const rotationOffset = (index - currentCard) * 2;
                   const zIndex = isSelected ? 50 : 40 - Math.abs(index - currentCard);
                   
                   return (
@@ -138,7 +155,7 @@ export default function Home() {
                         transform: `
                           translate(-50%, -50%) 
                           translateX(${stackOffset}px) 
-                          translateY(${stackOffset * 0.5}px)
+                          translateY(${stackOffset * 0.3}px)
                           rotate(${isSelected ? 0 : rotationOffset}deg) 
                           scale(${isSelected ? 1.1 : 1})
                         `,
@@ -150,11 +167,13 @@ export default function Home() {
                         <img 
                           src={card.image} 
                           alt={`${card.title} card`} 
-                          className="w-64 h-96 rounded-2xl object-cover border-4 border-deep-black transition-all duration-300"
+                          className="rounded-xl object-cover border-3 border-deep-black transition-all duration-300"
                           style={{
+                            width: '192px',  // 48px * 4 for better visibility
+                            height: '288px', // 72px * 4 for better visibility
                             boxShadow: isSelected 
-                              ? '8px 8px 0px 0px rgba(44, 82, 52, 1)' 
-                              : '4px 4px 0px 0px rgba(44, 82, 52, 0.7)',
+                              ? '6px 6px 0px 0px rgba(44, 82, 52, 1)' 
+                              : '3px 3px 0px 0px rgba(44, 82, 52, 0.7)',
                             filter: isSelected ? 'none' : 'brightness(0.8)'
                           }}
                         />
@@ -163,6 +182,15 @@ export default function Home() {
                   );
                 })}
               </div>
+
+              {/* Right Arrow */}
+              <button 
+                onClick={nextCard}
+                className="absolute right-4 z-50 p-3 rounded-full bg-sunflower border-3 border-deep-black hover:bg-soft-tangerine transition-all duration-300 hover:scale-110"
+                aria-label="Next card"
+              >
+                <ChevronRight className="w-6 h-6 text-deep-green" />
+              </button>
             </div>
             
             {/* Card Description */}
