@@ -80,9 +80,7 @@ export default function Home() {
   const { toast } = useToast();
 
   const form = useForm({
-    resolver: zodResolver(insertPreorderSchema.extend({
-      email: insertPreorderSchema.shape.email.email("Please enter a valid email address")
-    })),
+    resolver: zodResolver(insertPreorderSchema),
     defaultValues: {
       email: ""
     }
@@ -90,7 +88,7 @@ export default function Home() {
 
   const preorderMutation = useMutation({
     mutationFn: async (data: { email: string }) => {
-      return apiRequest("/api/preorders", "POST", data);
+      return apiRequest("POST", "/api/preorders", data);
     },
     onSuccess: () => {
       toast({
@@ -100,8 +98,20 @@ export default function Home() {
       setIsPreorderModalOpen(false);
       form.reset();
     },
-    onError: (error: any) => {
-      const message = error.message || "Something went wrong. Please try again.";
+    onError: async (error: any) => {
+      let message = "Something went wrong. Please try again.";
+      
+      if (error instanceof Response) {
+        try {
+          const errorData = await error.json();
+          message = errorData.error || message;
+        } catch {
+          message = `Server error (${error.status})`;
+        }
+      } else if (error.message) {
+        message = error.message;
+      }
+      
       toast({
         title: "Error",
         description: message,

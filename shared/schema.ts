@@ -21,6 +21,8 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 export const insertPreorderSchema = createInsertSchema(preorders).pick({
   email: true,
+}).extend({
+  email: z.string().email("Please enter a valid email address"),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
