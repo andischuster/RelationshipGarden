@@ -232,33 +232,46 @@
     bottom: 0;
     z-index: -20;
     pointer-events: none;
-    opacity: 0.08;
+    opacity: 0.25;
   }
 
   .vintage-blur::before {
     content: '';
     position: absolute;
-    top: 20%;
-    left: 10%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, var(--sunflower), transparent);
+    top: 10%;
+    left: 5%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--sunflower) 0%, rgba(255, 199, 0, 0.4) 40%, transparent 80%);
     border-radius: 50%;
-    filter: blur(80px);
+    filter: blur(120px);
     animation: floatGentle 20s ease-in-out infinite;
   }
 
   .vintage-blur::after {
     content: '';
     position: absolute;
-    bottom: 20%;
-    right: 15%;
-    width: 250px;
-    height: 250px;
-    background: radial-gradient(circle, var(--soft-tangerine), transparent);
+    bottom: 10%;
+    right: 5%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--soft-tangerine) 0%, rgba(255, 165, 103, 0.4) 40%, transparent 80%);
     border-radius: 50%;
-    filter: blur(60px);
+    filter: blur(100px);
     animation: floatGentle 15s ease-in-out infinite reverse;
+  }
+
+  /* Additional blur elements for more color */
+  .vintage-blur .blur-teal {
+    position: absolute;
+    top: 60%;
+    left: 30%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, var(--deep-teal) 0%, rgba(0, 128, 128, 0.3) 30%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(90px);
+    animation: floatGentle 25s ease-in-out infinite;
   }
 
   @keyframes floatGentle {

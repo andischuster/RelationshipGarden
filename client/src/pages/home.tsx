@@ -94,7 +94,9 @@ export default function Home() {
   return (
     <div className="bg-warm-white text-deep-green font-sans leading-relaxed relative">
       {/* Vintage Blur Background */}
-      <div className="vintage-blur"></div>
+      <div className="vintage-blur">
+        <div className="blur-teal"></div>
+      </div>
       {/* Navigation Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-warm-white/90 backdrop-blur-sm border-b border-deep-green/10">
         <div className="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
