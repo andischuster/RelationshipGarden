@@ -121,7 +121,7 @@ export default function Home() {
         <header className={`flex justify-between items-center sticky top-0 z-50 py-3 px-4 sm:py-4 sm:px-8 transition-all duration-300 ${scrolled ? 'bg-warm-white/90 backdrop-blur-md shadow-md rounded-full' : ''}`}>
           <div className="flex items-center min-w-0">
             <Flower className="text-deep-teal mr-2 flex-shrink-0" />
-            <h1 className="font-serif text-sm sm:text-lg md:text-xl font-bold text-deep-green whitespace-nowrap">Growing Us</h1>
+            <h1 className="font-serif text-sm sm:text-lg md:text-xl font-bold text-deep-green whitespace-nowrap">Relationship Game</h1>
           </div>
           <div className="flex gap-2 sm:gap-4">
             <button className="cta-button text-sm sm:text-base px-4 sm:px-8 py-2 sm:py-4" onClick={handlePurchase}>Play Now</button>
