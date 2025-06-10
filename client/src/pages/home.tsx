@@ -100,7 +100,7 @@ export default function Home() {
             <div className="w-8 h-8 bg-gradient-to-br from-deep-teal to-sunflower rounded-lg flex items-center justify-center">
               <div className="w-4 h-4 bg-warm-white rounded-sm"></div>
             </div>
-            <h1 className="font-serif text-2xl font-bold text-deep-green">Growing Us</h1>
+            <h1 className="font-serif font-bold text-deep-green text-[16px]">Conversational Card Game for Couples</h1>
           </div>
           <div className="flex items-center space-x-4">
             <button className="btn-outline px-6 py-2">
@@ -115,7 +115,6 @@ export default function Home() {
           </div>
         </div>
       </header>
-
       {/* Hero Section */}
       <section id="section-hero" className="min-h-screen flex flex-col justify-center items-center px-4 py-8 relative overflow-hidden">
         <div className="container mx-auto max-w-6xl text-center">
@@ -216,7 +215,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
       {/* How To Play Section */}
       <section id="section-howto" className="py-20 px-4 bg-warm-white">
         <div className="container mx-auto max-w-6xl">
@@ -312,7 +310,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
       {/* Pricing Section */}
       <section id="section-pricing" className="py-20 px-4 bg-gradient-to-b from-sunflower/10 to-warm-white">
         <div className="container mx-auto max-w-4xl text-center">
@@ -353,7 +350,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
       {/* Testimonials Section */}
       <section id="section-testimonials" className="py-20 px-4 bg-warm-white">
         <div className="container mx-auto max-w-6xl">
@@ -435,7 +431,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
       {/* Final CTA Section */}
       <section id="section-final-cta" className="py-20 px-4 bg-gradient-to-b from-warm-white to-sunflower/20">
         <div className="container mx-auto max-w-4xl text-center">
@@ -467,7 +462,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
       {/* Footer */}
       <footer className="py-12 px-4 bg-deep-green text-warm-white">
         <div className="container mx-auto max-w-4xl text-center">
