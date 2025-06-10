@@ -145,12 +145,44 @@ export default function Home() {
           <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
             {/* Stacked Card Carousel */}
             <div className="relative mb-3 flex justify-center">
-              <div className="relative">
-                <img 
-                  src={cardData[currentCard].image} 
-                  alt={`${cardData[currentCard].title} card`} 
-                  className="w-80 h-auto rounded-2xl border-4 border-deep-black shadow-2xl"
-                />
+              <div className="relative w-96 h-[600px]">
+                {cardData.map((card, index) => {
+                  const isSelected = index === currentCard;
+                  const stackOffset = (index - currentCard) * 8;
+                  const rotationOffset = (index - currentCard) * 3;
+                  const zIndex = isSelected ? 50 : 40 - Math.abs(index - currentCard);
+                  
+                  return (
+                    <div 
+                      key={card.id}
+                      onClick={() => setCurrentCard(index)}
+                      className="absolute cursor-pointer transition-all duration-1000 ease-out"
+                      style={{ 
+                        left: '50%',
+                        top: '50%',
+                        transform: `
+                          translate(-50%, -50%) 
+                          translateX(${stackOffset}px) 
+                          translateY(${stackOffset * 0.5}px)
+                          rotate(${isSelected ? 0 : rotationOffset}deg)
+                        `,
+                        zIndex: zIndex,
+                        transformOrigin: 'center center'
+                      }}
+                    >
+                      <div className="card-wobble-container">
+                        <img 
+                          src={card.image} 
+                          alt={`${card.title} card`} 
+                          className="w-80 h-auto rounded-2xl border-4 border-deep-black shadow-2xl transition-all duration-300"
+                          style={{
+                            filter: isSelected ? 'none' : 'brightness(0.8)'
+                          }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
             
