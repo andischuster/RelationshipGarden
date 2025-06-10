@@ -94,7 +94,7 @@ export default function Home() {
   return (
     <div className="bg-warm-white text-deep-green font-sans leading-relaxed">
       {/* Navigation Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-warm-white/90 backdrop-blur-sm border-b border-deep-green/10">
+      <header className="bg-warm-white border-b border-deep-green/10">
         <div className="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-deep-teal to-sunflower rounded-lg flex items-center justify-center">
@@ -117,7 +117,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section id="section-hero" className="min-h-screen flex flex-col justify-center items-center px-4 py-8 pt-24 relative overflow-hidden">
+      <section id="section-hero" className="min-h-screen flex flex-col justify-center items-center px-4 py-8 relative overflow-hidden">
         <div className="container mx-auto max-w-6xl text-center">
           
           {/* Main Title */}
