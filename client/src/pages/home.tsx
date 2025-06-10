@@ -63,7 +63,7 @@ export default function Home() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentCard((prev) => (prev + 1) % cardData.length);
-    }, 4000);
+    }, 8000);
 
     return () => clearInterval(interval);
   }, []);
@@ -152,7 +152,7 @@ export default function Home() {
                     <div 
                       key={card.id}
                       onClick={() => setCurrentCard(index)}
-                      className="absolute cursor-pointer transition-all duration-500"
+                      className="absolute cursor-pointer transition-all duration-1000 ease-out"
                       style={{ 
                         left: '50%',
                         top: '50%',
