@@ -250,11 +250,11 @@ export default function Home() {
             {/* Step 1 */}
             <div className={`flex items-start space-x-4 hover-lift bg-sunflower/5 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               <div className="flex-shrink-0 w-16 h-16 bg-sunflower rounded-full border-4 border-deep-black flex items-center justify-center">
-                <span className="font-serif text-2xl font-bold text-deep-green">1</span>
+                <Sprout className="w-8 h-8 text-deep-green" />
               </div>
               <div className="flex-grow">
                 <h3 className="font-serif text-2xl font-bold text-deep-green mb-3">
-                  <Sprout className="inline w-6 h-6 text-soft-tangerine mr-3" />
+                  <span className="font-serif text-2xl font-bold text-soft-tangerine mr-3">1</span>
                   Tend The Ground
                 </h3>
                 <p className="text-deep-green/80 text-lg">
@@ -265,12 +265,12 @@ export default function Home() {
             
             {/* Step 2 */}
             <div className={`flex items-start space-x-4 hover-lift bg-soft-tangerine/8 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
-              <div className="flex-shrink-0 w-16 h-16 bg-soft-tangerine rounded-full border-4 border-deep-black flex items-center justify-center">
-                <span className="font-serif text-2xl font-bold text-deep-green">2</span>
+              <div className="flex-shrink-0 w-16 h-16 bg-sunflower rounded-full border-4 border-deep-black flex items-center justify-center">
+                <Heart className="w-8 h-8 text-deep-green" />
               </div>
               <div className="flex-grow">
                 <h3 className="font-serif text-2xl font-bold text-deep-green mb-3">
-                  <Heart className="inline w-6 h-6 text-sunflower mr-3" />
+                  <span className="font-serif text-2xl font-bold text-soft-tangerine mr-3">2</span>
                   Cultivate Connection
                 </h3>
                 <p className="text-deep-green/80 text-lg">
@@ -281,12 +281,12 @@ export default function Home() {
             
             {/* Step 3 */}
             <div className={`flex items-start space-x-4 hover-lift bg-deep-teal/8 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
-              <div className="flex-shrink-0 w-16 h-16 bg-deep-teal rounded-full border-4 border-deep-black flex items-center justify-center">
-                <span className="font-serif text-2xl font-bold text-warm-white">3</span>
+              <div className="flex-shrink-0 w-16 h-16 bg-sunflower rounded-full border-4 border-deep-black flex items-center justify-center">
+                <Sun className="w-8 h-8 text-deep-green" />
               </div>
               <div className="flex-grow">
                 <h3 className="font-serif text-2xl font-bold text-deep-green mb-3">
-                  <Sun className="inline w-6 h-6 text-sunflower mr-3" />
+                  <span className="font-serif text-2xl font-bold text-soft-tangerine mr-3">3</span>
                   Sunflower Speak
                 </h3>
                 <p className="text-deep-green/80 text-lg">
@@ -298,11 +298,11 @@ export default function Home() {
             {/* Step 4 */}
             <div className={`flex items-start space-x-4 hover-lift bg-sunflower/8 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               <div className="flex-shrink-0 w-16 h-16 bg-sunflower rounded-full border-4 border-deep-black flex items-center justify-center">
-                <span className="font-serif text-2xl font-bold text-deep-green">4</span>
+                <Flower className="w-8 h-8 text-deep-green" />
               </div>
               <div className="flex-grow">
                 <h3 className="font-serif text-2xl font-bold text-deep-green mb-3">
-                  <Flower className="inline w-6 h-6 text-soft-tangerine mr-3" />
+                  <span className="font-serif text-2xl font-bold text-soft-tangerine mr-3">4</span>
                   Let Love Bloom
                 </h3>
                 <p className="text-deep-green/80 text-lg">
@@ -313,12 +313,12 @@ export default function Home() {
             
             {/* Step 5 */}
             <div className={`flex items-start space-x-4 hover-lift bg-soft-tangerine/5 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
-              <div className="flex-shrink-0 w-16 h-16 bg-soft-tangerine rounded-full border-4 border-deep-black flex items-center justify-center">
-                <span className="font-serif text-2xl font-bold text-deep-green">5</span>
+              <div className="flex-shrink-0 w-16 h-16 bg-sunflower rounded-full border-4 border-deep-black flex items-center justify-center">
+                <Leaf className="w-8 h-8 text-deep-green" />
               </div>
               <div className="flex-grow">
                 <h3 className="font-serif text-2xl font-bold text-deep-green mb-3">
-                  <Leaf className="inline w-6 h-6 text-deep-teal mr-3" />
+                  <span className="font-serif text-2xl font-bold text-soft-tangerine mr-3">5</span>
                   Plant a Promise
                 </h3>
                 <p className="text-deep-green/80 text-lg">
