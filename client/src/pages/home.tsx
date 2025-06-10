@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram } from 'lucide-react';
+import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Import card images
@@ -92,7 +92,9 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-warm-white text-deep-green font-sans leading-relaxed">
+    <div className="bg-warm-white text-deep-green font-sans leading-relaxed relative">
+      {/* Vintage Blur Background */}
+      <div className="vintage-blur"></div>
       {/* Navigation Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-warm-white/90 backdrop-blur-sm border-b border-deep-green/10">
         <div className="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
@@ -217,6 +219,13 @@ export default function Home() {
         </div>
       </section>
       
+      {/* Section Divider */}
+      <div className="section-divider">
+        <div className="section-divider-icon">
+          <Flower className="w-6 h-6 text-sunflower" />
+        </div>
+      </div>
+      
       {/* How To Play Section */}
       <section id="section-howto" className="py-20 px-4 bg-warm-white">
         <div className="container mx-auto max-w-6xl">
@@ -313,6 +322,13 @@ export default function Home() {
         </div>
       </section>
       
+      {/* Section Divider */}
+      <div className="section-divider">
+        <div className="section-divider-icon">
+          <Heart className="w-6 h-6 text-soft-tangerine" />
+        </div>
+      </div>
+      
       {/* Pricing Section */}
       <section id="section-pricing" className="py-20 px-4 bg-gradient-to-b from-sunflower/10 to-warm-white">
         <div className="container mx-auto max-w-4xl text-center">
@@ -353,6 +369,13 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
+      {/* Section Divider */}
+      <div className="section-divider">
+        <div className="section-divider-icon">
+          <Sprout className="w-6 h-6 text-deep-teal" />
+        </div>
+      </div>
       
       {/* Testimonials Section */}
       <section id="section-testimonials" className="py-20 px-4 bg-warm-white">

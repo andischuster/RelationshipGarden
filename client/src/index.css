@@ -181,6 +181,92 @@
   }
 }
 
+  /* Section Divider */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4rem 0;
+    position: relative;
+  }
+
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--deep-green), transparent);
+    opacity: 0.3;
+  }
+
+  .section-divider-icon {
+    background: var(--warm-white);
+    border: 2px solid var(--sunflower);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2rem;
+    position: relative;
+  }
+
+  .section-divider-icon::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    background: radial-gradient(circle, var(--sunflower) 20%, var(--soft-tangerine) 40%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+    filter: blur(8px);
+    opacity: 0.3;
+  }
+
+  /* Vintage blur background */
+  .vintage-blur {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -20;
+    pointer-events: none;
+    opacity: 0.08;
+  }
+
+  .vintage-blur::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--sunflower), transparent);
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: floatGentle 20s ease-in-out infinite;
+  }
+
+  .vintage-blur::after {
+    content: '';
+    position: absolute;
+    bottom: 20%;
+    right: 15%;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, var(--soft-tangerine), transparent);
+    border-radius: 50%;
+    filter: blur(60px);
+    animation: floatGentle 15s ease-in-out infinite reverse;
+  }
+
+  @keyframes floatGentle {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -20px) scale(1.1); }
+    66% { transform: translate(-20px, 30px) scale(0.9); }
+  }
+
 /* Custom Tailwind classes */
 .text-warm-white { color: var(--warm-white); }
 .text-deep-green { color: var(--deep-green); }
