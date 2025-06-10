@@ -123,7 +123,7 @@ export default function Home() {
         </header>
       {/* Hero Section */}
       <section id="section-hero" className="min-h-screen flex flex-col justify-center items-center px-2 sm:px-4 py-8 pt-20 sm:pt-24 relative overflow-hidden">
-        <div className="container mx-auto text-center">
+        <div className="mx-auto text-center w-full">
           
           {/* Main Title */}
           <h1 className={`font-serif text-5xl sm:text-6xl md:text-8xl font-bold text-deep-green mb-5 whitespace-nowrap ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
@@ -137,11 +137,24 @@ export default function Home() {
           
           {/* Interactive Card Carousel */}
           <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
+            {/* Test Card - Direct 320px implementation */}
+            <div className="flex justify-center mb-8">
+              <img 
+                src={cardData[currentCard].image} 
+                alt={`${cardData[currentCard].title} card test`} 
+                style={{
+                  width: '320px',
+                  height: 'auto'
+                }}
+                className="rounded-2xl border-4 border-deep-black shadow-2xl"
+              />
+            </div>
+            
             {/* Stacked Card Carousel */}
-            <div className="relative mb-3 flex justify-center">
+            <div className="relative mb-3 flex justify-center overflow-visible">
               <div 
                 className="relative cursor-pointer" 
-                style={{ width: '400px', height: '600px' }}
+                style={{ minWidth: '400px', minHeight: '600px' }}
                 onClick={() => setCurrentCard((currentCard + 1) % cardData.length)}
               >
                 {cardData.map((card, index) => {
