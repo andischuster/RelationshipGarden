@@ -135,54 +135,57 @@ export default function Home() {
             Every connection needs care, space, and warmth. These prompts help you nurture your relationship garden.
           </p>
           
-          {/* Interactive Card Carousel */}
+          {/* Interactive Card Stack */}
           <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
-
-            {/* Stacked Card Carousel */}
+            {/* Card Stack Container */}
             <div 
-              className="relative mb-3 flex justify-center cursor-pointer"
-              style={{ height: '600px' }}
+              className="flex justify-center items-center cursor-pointer"
               onClick={() => setCurrentCard((currentCard + 1) % cardData.length)}
+              style={{ 
+                height: '500px',
+                width: '100%',
+                padding: '20px'
+              }}
             >
-              {cardData.map((card, index) => {
-                const isActive = index === currentCard;
-                const horizontalOffset = (index - currentCard) * 8;
-                const verticalOffset = (index - currentCard) * 0.5 * 8;
-                const rotationOffset = (index - currentCard) * 3;
-                const zIndex = isActive ? 50 : 40 - Math.abs(index - currentCard);
-                
-                return (
-                  <div 
-                    key={card.id}
-                    className="absolute transition-all duration-1000 ease-out"
-                    style={{ 
-                      left: '50%',
-                      top: '50%',
-                      transform: `
-                        translate(-50%, -50%) 
-                        translateX(${horizontalOffset}px) 
-                        translateY(${verticalOffset}px)
-                        rotate(${isActive ? 0 : rotationOffset}deg)
-                      `,
-                      zIndex: zIndex,
-                      transformOrigin: 'center center'
-                    }}
-                  >
-                    <div className="carousel-card-hover">
-                      <img 
-                        src={card.image} 
-                        alt={`${card.title} card`} 
+              <div className="relative">
+                {cardData.map((card, index) => {
+                  const offset = index - currentCard;
+                  const isActive = index === currentCard;
+                  const isVisible = Math.abs(offset) <= 2;
+                  
+                  if (!isVisible) return null;
+                  
+                  return (
+                    <div
+                      key={card.id}
+                      className="absolute transition-all duration-1000 ease-out"
+                      style={{
+                        transform: `
+                          translateX(${offset * 8}px)
+                          translateY(${offset * 4}px)
+                          rotate(${offset * 3}deg)
+                          scale(${isActive ? 1 : 0.95})
+                        `,
+                        zIndex: isActive ? 10 : 10 - Math.abs(offset),
+                        left: '-160px',
+                        top: '-240px'
+                      }}
+                    >
+                      <img
+                        src={card.image}
+                        alt={card.title}
+                        className="card-stack-item rounded-2xl border-4 border-deep-black shadow-2xl transition-all duration-300"
                         style={{
                           width: '320px',
                           height: 'auto',
-                          filter: isActive ? 'none' : 'brightness(0.8)'
+                          filter: isActive ? 'none' : 'brightness(0.85)',
+                          opacity: isActive ? 1 : 0.9
                         }}
-                        className="rounded-2xl border-4 border-deep-black shadow-2xl transition-all duration-300"
                       />
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
             
             {/* Carousel Navigation */}

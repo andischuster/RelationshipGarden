@@ -147,11 +147,11 @@
   .staggered-animation > *:nth-child(4) { animation-delay: 0.8s; }
   .staggered-animation > *:nth-child(5) { animation-delay: 1.0s; }
 
-  .carousel-card-hover {
+  .card-stack-item {
     transition: transform 0.8s ease;
   }
 
-  .carousel-card-hover:hover {
+  .card-stack-item:hover {
     animation: gentleFloat 1.5s ease-in-out;
   }
 
