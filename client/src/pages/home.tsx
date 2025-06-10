@@ -106,7 +106,17 @@ export default function Home() {
             </div>
             <h1 className="font-serif font-bold text-deep-green text-[16px]">Conversational Card Game for Couples</h1>
           </div>
-          
+          <div className="flex items-center space-x-4">
+            <button className="btn-outline px-6 py-2">
+              About
+            </button>
+            <Button 
+              onClick={handlePurchase}
+              className="btn-primary text-deep-green font-semibold px-6 py-2 rounded-full"
+            >
+              Buy Now
+            </Button>
+          </div>
         </div>
       </header>
       {/* Hero Section */}
