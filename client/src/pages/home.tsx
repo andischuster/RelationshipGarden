@@ -118,23 +118,31 @@ export default function Home() {
           
           {/* Interactive Card Carousel */}
           <div className={`mb-12 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
-            {/* Endless Card Carousel */}
-            <div className="relative overflow-hidden mb-8">
-              <div className="flex items-center justify-center space-x-8 px-4">
+            {/* Stacked Card Carousel */}
+            <div className="relative mb-8 flex justify-center">
+              <div className="relative w-80 h-96">
                 {cardData.map((card, index) => {
                   const isSelected = index === currentCard;
-                  const tiltAngle = [3, -2, 4, -3, 2][index];
+                  const stackOffset = (index - currentCard) * 8;
+                  const rotationOffset = (index - currentCard) * 3;
+                  const zIndex = isSelected ? 50 : 40 - Math.abs(index - currentCard);
                   
                   return (
                     <div 
                       key={card.id}
                       onClick={() => setCurrentCard(index)}
-                      className={`card-item flex-shrink-0 cursor-pointer transition-all duration-500 ${
-                        isSelected ? 'z-20' : 'z-10'
-                      }`}
+                      className="absolute cursor-pointer transition-all duration-500"
                       style={{ 
-                        transform: `rotate(${isSelected ? 0 : tiltAngle}deg) scale(${isSelected ? 1.15 : 0.8})`,
-                        opacity: isSelected ? 1 : 0.6,
+                        left: '50%',
+                        top: '50%',
+                        transform: `
+                          translate(-50%, -50%) 
+                          translateX(${stackOffset}px) 
+                          translateY(${stackOffset * 0.5}px)
+                          rotate(${isSelected ? 0 : rotationOffset}deg) 
+                          scale(${isSelected ? 1.1 : 1})
+                        `,
+                        zIndex: zIndex,
                         transformOrigin: 'center center'
                       }}
                     >
@@ -142,15 +150,12 @@ export default function Home() {
                         <img 
                           src={card.image} 
                           alt={`${card.title} card`} 
-                          className={`rounded-2xl object-cover transition-all duration-300 ${
-                            isSelected 
-                              ? 'w-72 h-[432px] border-4 border-deep-black' 
-                              : 'w-48 h-72 border-3 border-deep-black/70'
-                          }`}
+                          className="w-64 h-96 rounded-2xl object-cover border-4 border-deep-black transition-all duration-300"
                           style={{
                             boxShadow: isSelected 
-                              ? '10px 10px 0px 0px rgba(44, 82, 52, 1)' 
-                              : '6px 6px 0px 0px rgba(44, 82, 52, 0.5)'
+                              ? '8px 8px 0px 0px rgba(44, 82, 52, 1)' 
+                              : '4px 4px 0px 0px rgba(44, 82, 52, 0.7)',
+                            filter: isSelected ? 'none' : 'brightness(0.8)'
                           }}
                         />
                       </div>
@@ -158,10 +163,6 @@ export default function Home() {
                   );
                 })}
               </div>
-              
-              {/* Side fade gradients */}
-              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-warm-white via-warm-white/80 to-transparent pointer-events-none z-30"></div>
-              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-warm-white via-warm-white/80 to-transparent pointer-events-none z-30"></div>
             </div>
             
             {/* Card Description */}
