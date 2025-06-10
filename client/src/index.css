@@ -147,6 +147,25 @@
     75% { transform: rotate(-1deg) scale(1.05); }
     100% { transform: rotate(0deg) scale(1.15); }
   }
+  
+  .carousel-card {
+    width: 160px;
+    height: 240px;
+  }
+  
+  @media (min-width: 640px) {
+    .carousel-card {
+      width: 200px;
+      height: 300px;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .carousel-card {
+      width: 240px;
+      height: 360px;
+    }
+  }
 }
 
 /* Custom Tailwind classes */
