@@ -116,22 +116,38 @@ export default function Home() {
             Every connection needs care, space, and warmth. These prompts help you nurture your relationship garden.
           </p>
           
-          {/* Featured Hero Cards */}
-          <div className={`flex flex-col md:flex-row justify-center items-center gap-6 mb-12 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
-            <div className="hover-lift">
-              <img src={growingUsCard} 
-                   alt="Better Half card showing relationship growth" 
-                   className="w-48 h-72 rounded-2xl border-4 border-deep-black shadow-lg object-cover" />
+          {/* Interactive Card Carousel */}
+          <div className={`mb-12 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
+            {/* Current Card Display */}
+            <div className="flex flex-col items-center mb-8">
+              <div className="hover-lift mb-6">
+                <img 
+                  src={cardData[currentCard].image} 
+                  alt={`${cardData[currentCard].title} card`} 
+                  className="w-64 h-96 rounded-2xl border-4 border-deep-black shadow-lg object-cover"
+                />
+              </div>
+              
+              {/* Card Description */}
+              <div className="text-center max-w-md">
+                <p className="text-xl md:text-2xl text-deep-green/90 font-medium italic">
+                  "{cardData[currentCard].description}"
+                </p>
+              </div>
             </div>
-            <div className="hover-lift md:mt-8">
-              <img src={elephantCard} 
-                   alt="Elephant in the Room card with a friendly elephant" 
-                   className="w-48 h-72 rounded-2xl border-4 border-deep-black shadow-lg object-cover" />
-            </div>
-            <div className="hover-lift">
-              <img src={sunflowerCard} 
-                   alt="The Sunflower card with a cheerful sunflower character" 
-                   className="w-48 h-72 rounded-2xl border-4 border-deep-black shadow-lg object-cover" />
+            
+            {/* Carousel Navigation */}
+            <div className="flex justify-center space-x-3">
+              {cardData.map((card, index) => (
+                <button 
+                  key={index}
+                  onClick={() => setCurrentCard(index)}
+                  className={`w-4 h-4 rounded-full border-2 border-deep-black transition-all duration-300 hover:scale-110 ${
+                    index === currentCard ? 'bg-sunflower scale-110' : 'bg-deep-green/30 hover:bg-deep-green/50'
+                  }`}
+                  aria-label={`View ${card.title} card`}
+                />
+              ))}
             </div>
           </div>
           
@@ -147,55 +163,6 @@ export default function Home() {
               <Truck className="inline w-4 h-4 text-sunflower mr-2" />
               Free shipping on orders of 2+ games
             </p>
-          </div>
-        </div>
-      </section>
-      
-      {/* Featured Cards Section */}
-      <section id="section-cards" className="py-20 px-4 bg-gradient-to-b from-warm-white to-sunflower/10">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className={`font-serif text-4xl md:text-5xl font-bold text-deep-green mb-6 ${isIntersecting['section-cards'] ? 'fade-in' : ''}`}>
-            Grow Together, One Card at a Time
-          </h2>
-          <p className={`text-lg text-deep-green/80 mb-16 max-w-2xl mx-auto ${isIntersecting['section-cards'] ? 'fade-in' : ''}`}>
-            Just like plants, your relationship needs care to flourish in all seasons. These prompts help you nurture your relationship garden.
-          </p>
-          
-          {/* Card Carousel */}
-          <div className="relative mb-12">
-            <div className="flex justify-center items-center space-x-4 overflow-x-auto pb-8">
-              {cardData.map((card, index) => (
-                <div 
-                  key={card.id}
-                  className={`card-item flex-shrink-0 transition-all duration-500 ${
-                    index === currentCard ? 'card-active' : 'card-blur'
-                  }`}
-                >
-                  <div className="bg-warm-white p-6 rounded-3xl border-4 border-deep-black shadow-lg hover-lift">
-                    <img 
-                      src={card.image} 
-                      alt={`${card.title} card`} 
-                      className="w-64 h-96 mx-auto rounded-2xl mb-4 object-cover"
-                    />
-                    <h3 className="font-serif text-2xl font-bold text-deep-green mb-2">{card.title}</h3>
-                    <p className="text-deep-green/80">"{card.description}"</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            {/* Carousel Navigation */}
-            <div className="flex justify-center space-x-3 mt-8">
-              {cardData.map((_, index) => (
-                <button 
-                  key={index}
-                  onClick={() => setCurrentCard(index)}
-                  className={`w-3 h-3 rounded-full border-2 border-deep-black transition-colors ${
-                    index === currentCard ? 'bg-sunflower' : 'bg-deep-green/30'
-                  }`}
-                />
-              ))}
-            </div>
           </div>
         </div>
       </section>
