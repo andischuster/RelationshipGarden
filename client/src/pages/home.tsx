@@ -337,38 +337,84 @@ export default function Home() {
       </div>
       {/* Pricing Section */}
       <section id="section-pricing" className="py-20 px-4 bg-gradient-to-b from-sunflower/10 to-warm-white">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className={`font-serif text-4xl md:text-5xl font-bold text-deep-green mb-8 ${isIntersecting['section-pricing'] ? 'fade-in' : ''}`}>
-            Ready to Grow Together?
-          </h2>
-          
-          <div className={`bg-warm-white rounded-3xl border-4 border-deep-black p-8 md:p-12 shadow-lg hover-lift max-w-2xl mx-auto ${isIntersecting['section-pricing'] ? 'fade-in' : ''}`}>
-            <div className="mb-8">
-              <span className="text-6xl font-serif font-bold text-deep-green">$25</span>
-              <div className="text-lg text-deep-green/80 mt-2">
-                50 beautifully illustrated prompt cards
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Left side - What's Included */}
+            <div className={`${isIntersecting['section-pricing'] ? 'fade-in' : ''}`}>
+              <h2 className="font-serif text-4xl md:text-5xl font-bold text-deep-green mb-4">
+                What's Included
+              </h2>
+              
+              {/* Squiggly underline */}
+              <div className="w-64 h-2 mb-8">
+                <svg width="256" height="8" viewBox="0 0 256 8" className="w-full">
+                  <path d="M0,4 Q32,1 64,4 T128,4 T192,4 T256,4" stroke="#FFC700" strokeWidth="3" fill="none" strokeLinecap="round"/>
+                </svg>
+              </div>
+              
+              <div className="space-y-6 mb-8">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-sunflower/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-6 h-6 bg-deep-teal rounded-sm"></div>
+                  </div>
+                  <p className="text-lg text-deep-green/80 leading-relaxed">
+                    50 beautifully illustrated prompt cards
+                  </p>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-sunflower/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-6 h-6 bg-deep-teal rounded-sm"></div>
+                  </div>
+                  <p className="text-lg text-deep-green/80 leading-relaxed">
+                    5 instruction cards with gameplay rules
+                  </p>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-sunflower/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-6 h-6 bg-deep-teal rounded-sm"></div>
+                  </div>
+                  <p className="text-lg text-deep-green/80 leading-relaxed">
+                    3 bonus "Magic Bean" cards for special moments
+                  </p>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-sunflower/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-6 h-6 bg-deep-teal rounded-sm"></div>
+                  </div>
+                  <p className="text-lg text-deep-green/80 leading-relaxed">
+                    A custom-designed box with magnetic closure
+                  </p>
+                </div>
+              </div>
+              
+              <div className="mb-8">
+                <div className="text-4xl font-serif font-bold text-deep-green mb-2">$25 per deck</div>
+                <p className="text-deep-green/70 text-lg mb-6">
+                  Free shipping on orders of two or more games
+                </p>
+                
+                <button 
+                  onClick={handlePurchase}
+                  className="cta-button flex items-center justify-center"
+                >
+                  <Gift className="w-5 h-5 mr-2" />
+                  Buy Now
+                </button>
               </div>
             </div>
             
-            <div className="bg-sunflower/20 rounded-2xl p-6 mb-8 border-2 border-sunflower">
-              <h3 className="font-serif text-2xl font-bold text-deep-green mb-2">
-                <Gift className="inline w-6 h-6 text-sunflower mr-2" />
-                Special Offer
-              </h3>
-              <p className="text-deep-green/80 text-lg">
-                Free shipping on orders of 2+ games
-              </p>
-            </div>
-            
-            <div className="mb-8">
-              <p className="text-deep-green/70 text-sm mb-4">
-                <TriangleAlert className="inline w-4 h-4 text-soft-tangerine mr-2" />
-                Limited first print run available!
-              </p>
-              <Button 
-                onClick={handlePurchase}
-                className="cta-button w-full md:w-auto"
-              >Grow Your Relationship – Buy Now</Button>
+            {/* Right side - Card visual */}
+            <div className={`flex justify-center ${isIntersecting['section-pricing'] ? 'fade-in' : ''}`}>
+              <div className="relative">
+                <img 
+                  src={magicBeanCard} 
+                  alt="Magic Bean card example" 
+                  className="w-80 h-auto rounded-2xl border-4 border-deep-black shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-300"
+                />
+              </div>
             </div>
           </div>
         </div>
