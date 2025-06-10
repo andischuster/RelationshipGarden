@@ -144,8 +144,8 @@ export default function Home() {
           {/* Interactive Card Carousel */}
           <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
             {/* Stacked Card Carousel */}
-            <div className="relative mb-3 flex justify-center">
-              <div className="relative w-96 h-[600px]">
+            <div className="relative mb-3 flex justify-center overflow-visible">
+              <div className="relative w-[500px] h-[700px] overflow-visible">
                 {cardData.map((card, index) => {
                   const isSelected = index === currentCard;
                   const stackOffset = (index - currentCard) * 8;
