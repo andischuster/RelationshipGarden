@@ -1,6 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover, Check } from 'lucide-react';
+import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover, Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { insertPreorderSchema } from '@shared/schema';
+import { apiRequest } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
 import Blob from '@/components/Blob';
 
 // Import card images
@@ -67,6 +76,47 @@ export default function Home() {
   const [currentCard, setCurrentCard] = useState(0);
   const [isIntersecting, setIsIntersecting] = useState<{ [key: string]: boolean }>({});
   const [scrolled, setScrolled] = useState(false);
+  const [isPreorderModalOpen, setIsPreorderModalOpen] = useState(false);
+  const { toast } = useToast();
+
+  const form = useForm({
+    resolver: zodResolver(insertPreorderSchema.extend({
+      email: insertPreorderSchema.shape.email.email("Please enter a valid email address")
+    })),
+    defaultValues: {
+      email: ""
+    }
+  });
+
+  const preorderMutation = useMutation({
+    mutationFn: async (data: { email: string }) => {
+      return apiRequest("/api/preorders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Pre-order Confirmed!",
+        description: "You'll receive 25% off when we launch. We'll email you soon!",
+      });
+      setIsPreorderModalOpen(false);
+      form.reset();
+    },
+    onError: (error: any) => {
+      const message = error.message || "Something went wrong. Please try again.";
+      toast({
+        title: "Error",
+        description: message,
+        variant: "destructive",
+      });
+    }
+  });
+
+  const onSubmit = (data: { email: string }) => {
+    preorderMutation.mutate(data);
+  };
 
   // Removed auto-cycling - cards now change only on click
 
