@@ -22,35 +22,35 @@ const cardData: CardData[] = [
   {
     id: 0,
     title: "Better Half",
-    description: Learn how you complement each other,
+    description: "Learn how you complement each other",
     image: growingUsCard,
     gradient: "from-soft-tangerine to-sunflower"
   },
   {
     id: 1,
     title: "Elephant in the Room",
-    description: Speak about issues you know you should,
+    description: "Speak about issues you know you should",
     image: elephantCard,
     gradient: "from-deep-teal to-soft-tangerine"
   },
   {
     id: 2,
     title: "The Sunflower",
-    description: Reflect about how far you've come,
+    description: "Reflect about how far you've come",
     image: sunflowerCard,
     gradient: "from-sunflower to-deep-teal"
   },
   {
     id: 3,
     title: "Early Bird",
-    description: Learn more about how you differ,
+    description: "Learn more about how you differ",
     image: foolCard,
     gradient: "from-soft-tangerine to-deep-teal"
   },
   {
     id: 4,
     title: "Magic Bean",
-    description: Leave something behind that grows,
+    description: "Leave something behind that grows",
     image: magicBeanCard,
     gradient: "from-deep-teal to-sunflower"
   }
