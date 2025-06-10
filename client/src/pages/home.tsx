@@ -192,19 +192,7 @@ export default function Home() {
               </div>
             </div>
             
-            {/* Carousel Navigation */}
-            <div className="flex justify-center space-x-3 mb-4">
-              {cardData.map((card, index) => (
-                <button 
-                  key={index}
-                  onClick={() => setCurrentCard(index)}
-                  className={`w-4 h-4 rounded-full border-2 border-deep-black transition-all duration-300 hover:scale-110 ${
-                    index === currentCard ? 'bg-sunflower scale-110' : 'bg-deep-green/30 hover:bg-deep-green/50'
-                  }`}
-                  aria-label={`View ${card.title} card`}
-                />
-              ))}
-            </div>
+
             
             {/* Card Description */}
             <div className="text-center max-w-md mx-auto px-4">
