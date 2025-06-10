@@ -5,12 +5,22 @@ export default {
   content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        'playfair': ['Playfair Display', 'serif'],
+        'inter': ['Inter', 'sans-serif'],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
+        'warm-cream': 'hsl(var(--warm-cream))',
+        'deep-green': 'hsl(var(--deep-green))',
+        'sunflower': 'hsl(var(--sunflower))',
+        'tangerine': 'hsl(var(--tangerine))',
+        'deep-teal': 'hsl(var(--deep-teal))',
+        'deep-black': 'hsl(var(--deep-black))',
         background: "var(--background)",
         foreground: "var(--foreground)",
         card: {
