@@ -1,0 +1,126 @@
+### Project: Landing Page for "Growing Us" Card Game
+
+Please create a landing page for a relationship card game called "Growing Us" with the subtitle "Every connection needs care, space, and warmth. These prompts helps you nurture your relationship garden." 
+
+Design and code a high-converting, mobile-first landing page for a whimsical relationship card game called **Growing Us**.
+
+🎯 **Primary Goal**
+Drive purchases of the game through a bold, delightful, and emotionally warm experience. Focus on clear messaging, a strong hero, social proof, and conversion-optimized CTAs.
+
+---
+
+🧩 **Product Info**
+
+- **Name**: Growing Us
+- **Tagline**: "Every connection needs care, space, and warmth. These prompts help you nurture your relationship garden."
+- **Price**: $25
+- **Offer**: Free shipping on orders of 2+ games
+- **Contents**: 50 beautifully illustrated prompt cards
+
+---
+
+👫 **Target Audience**
+
+- Millennials (late 20s–30s), especially those in tech/knowledge work
+- Couples looking for emotionally meaningful, design-forward experiences
+- Prioritize authenticity, playfulness, and safe emotional spaces
+
+---
+
+🎨 **Visual & Brand StyleAesthetic**: Mid-century modern storybook meets playful modern tarot
+
+**Mood**: Whimsical, elegant, expressive, emotionally warm
+
+**Color Palette**
+
+- Background: `#FDFCF8` (Warm Off-White)
+- Primary Text: `#2F4858` (Deep Green)
+- Highlight: `#FFC700` (Sunflower Yellow)
+- Secondary: `#F9A870` (Soft Tangerine)
+- Accent: `#008080` (Deep Teal)
+- Borders: `#1A1A1A` (Deep Black)
+
+**Typography**
+
+- Headings: `"Playfair Display"` (Elegant serif)
+- Body: `"Inter"` (Modern sans-serif)
+- Use card-style illustrations as main visual driver
+
+---
+
+**Layout Requirements**
+
+- **Hero Section**: Game title, tagline, 3 featured cards, strong CTA (“Buy Now – $25”)
+- **Featured Cards Section (Carousel, only one card visible at a time, fade out blur of cards that are not in the centre)**:
+    - H2: Grow Together, one card at a time
+    - Subheadline: Just like plants, your relationship needs care to flourish in all seasons. These prompts help you nurture your relationship garden.
+    - *Late Bloomer Card: “Reflect about how far you’ve come.”*
+    - *Elephant in the Room Card: “Speak about issues you know you should.”*
+    - *Early Bird Card: “Learn more about how you differ.”*
+    - *Better Half: “Speak about how you complement each other/”*
+    - *Magic Bean: “Leave something behind that grows over time.”*
+
+- **How To Play**:
+- “Simple steps to nurture your relationship through playful conversation.”
+- 5 steps (icons + short descriptions), big numbers on cards, vertically arranged
+    1. **Tend The Ground:** Find a safe space where honesty can grow and set aside 20–30 minutes. Place the numbered rule cards openly and draw 5 playing cards each.
+    2. **Cultivate Connection:** Take turns drawing a card, reflect quietly, then share your heart. Let them know how it matters to you.
+    3. **Sunflower Speak:** Use "I feel…" to shine light on your truth, not blame. Speak from the heart, and your partner will lean toward the warmth.
+    4. **Let Love Bloom:** End each conversation on a positive: love, laughter, a thank you. Validation grows safety, even without perfect agreement.
+    5. **Plant a Promise:** At the end of each session plant an intention. Write it, draw it, or say it aloud. and come back to see how it's blossomed.
+
+- **Pricing Section**: Emphasize $25, free shipping on 2+, limited print note
+- **Final CTA**: Reinforce urgency and ease (e.g. “Let’s Grow Together – Buy Now”)
+- **Testimonials Section** (3):
+    - *"My partner and I are both software engineers, and we spend all day problem-solving. This game helped us switch gears and connect on a totally different level. It’s like a playful team retrospective."*
+    - *"I was skeptical about a 'relationship game,' but this is different. It's not awkward at all—it's just really well-designed and the prompts led to conversations we didn't even know we needed to have."*
+    - “It’s like relationship therapy, but in a cozy hoodie. A retro for the heart.”
+
+---
+
+🧠 **Conversion Guidance**
+
+- Use **sunflower yellow buttons** with strong hover states
+- Repeat CTA 2–3x across the page
+- Showcase visual examples (card deck, sample prompts)
+- Incorporate urgency: “Limited first print run available!”
+- Mobile-first design with fast loading and scroll animations
+
+---
+
+🔍 **SEO & Technical**
+
+- Page title: “Growing Us – The Relationship Game for Curious Couples”
+- Meta description: “A 50-card game for couples to spark playful, deep connection. $25 with free shipping on 2+.”
+- Use semantic HTML with <h1>, <h2>, <section>, etc.
+- Alt text on illustrations
+- Responsive design with clean, modern layout
+
+---
+
+✨ **Tone & Voice**
+
+- Emotionally intelligent, playful, never cheesy
+- Light metaphorical language (gardening, growth)
+- Conversational but elegant
+- CTA tone: inviting (“Let’s Grow,” not “Buy Now” only)
+
+### **Vibe**
+
+- Pure mid-century modern children's book style
+- Friendly and optimistic with bold, simple shapes
+- Direct visual storytelling without unnecessary detail
+- Classic picture book charm
+- Feels like a storybook meets a modern tarot deck
+- Balance between elegant and playful
+- Think Bernice Myers and Joseph Levine's illustrations
+- Style reference: Bold shapes, limited colors, and playful characters typical of 1950s-60s children's books. Clean compositions with plenty of white space and clear visual hierarchy. Inspired by the inky warmth of children’s storybook sketches — similar to mid-century naturalist drawings, but with cartoon charm.
+
+---
+
+🚀 **Deliver**
+Generate complete HTML/CSS/JS code for a standalone landing page.
+
+- Inline or linked fonts via Google Fonts
+- Use SVG or uploaded images for illustration placement
+- Mobile-first, fast-loading, ready for Webflow/Next.js/React port
