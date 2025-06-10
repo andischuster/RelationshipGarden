@@ -29,7 +29,7 @@ const cardData: CardData[] = [
   {
     id: 1,
     title: "Elephant in the Room",
-    description: "Leave something behind that grows",
+    description: "Speak about issues you know you should",
     image: elephantCard,
     gradient: "from-deep-teal to-soft-tangerine"
   },
