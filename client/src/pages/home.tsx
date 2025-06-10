@@ -92,27 +92,27 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-warm-cream text-deep-green font-inter leading-relaxed relative">
+    <div className="bg-warm-white text-deep-green font-sans leading-relaxed relative">
       {/* Vintage Blur Background */}
       <div className="vintage-blur">
         <div className="blur-teal"></div>
       </div>
       {/* Navigation Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-warm-cream/90 backdrop-blur-sm border-b border-deep-green/10">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-warm-white/90 backdrop-blur-sm border-b border-deep-green/10">
         <div className="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-deep-teal to-sunflower rounded-lg flex items-center justify-center">
-              <div className="w-4 h-4 bg-warm-cream rounded-sm"></div>
+              <div className="w-4 h-4 bg-warm-white rounded-sm"></div>
             </div>
-            <h1 className="font-playfair text-2xl font-bold text-deep-green">Growing Us</h1>
+            <h1 className="font-serif text-2xl font-bold text-deep-green">Growing Us</h1>
           </div>
           <div className="flex items-center space-x-4">
-            <button className="secondary-button">
+            <button className="btn-outline px-6 py-2">
               About
             </button>
             <Button 
               onClick={handlePurchase}
-              className="cta-button"
+              className="btn-primary text-deep-green font-semibold px-6 py-2 rounded-full"
             >
               Buy Now
             </Button>
@@ -125,7 +125,7 @@ export default function Home() {
         <div className="container mx-auto max-w-6xl text-center">
           
           {/* Main Title */}
-          <h1 className={`font-playfair text-6xl md:text-8xl font-bold text-deep-green mb-6 squiggle ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
+          <h1 className={`font-serif text-6xl md:text-8xl font-bold text-deep-green mb-6 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
             Growing Us
           </h1>
           
@@ -209,7 +209,7 @@ export default function Home() {
           <div className={`${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.6s'}}>
             <Button 
               onClick={handlePurchase}
-              className="cta-button text-xl px-12"
+              className="btn-primary text-deep-green font-semibold text-xl px-12 py-4 rounded-full hover-lift"
             >
               Let's Grow Together – $25
             </Button>
