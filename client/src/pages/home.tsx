@@ -437,69 +437,42 @@ export default function Home() {
           <div className={`grid md:grid-cols-3 gap-8 ${isIntersecting['section-testimonials'] ? 'staggered-animation' : ''}`}>
             {/* Testimonial 1 */}
             <div className={`bg-warm-white p-8 rounded-3xl border-4 border-deep-black shadow-lg hover-lift ${isIntersecting['section-testimonials'] ? 'fade-in' : ''}`}>
-              <div className="flex items-center mb-6">
+              <p className="text-deep-green/80 text-lg mb-6 italic">
+                "My partner and I are both software engineers, and we spend all day problem-solving. This game helped us switch gears and connect on a totally different level. It's like a playful team retrospective."
+              </p>
+              <div className="flex justify-center">
                 <div className="flex text-sunflower">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 fill-current" />
                   ))}
-                </div>
-              </div>
-              <p className="text-deep-green/80 text-lg mb-6 italic">
-                "My partner and I are both software engineers, and we spend all day problem-solving. This game helped us switch gears and connect on a totally different level. It's like a playful team retrospective."
-              </p>
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-soft-tangerine rounded-full border-2 border-deep-black flex items-center justify-center mr-4">
-                  <Users className="w-6 h-6 text-deep-green" />
-                </div>
-                <div>
-                  <div className="font-semibold text-deep-green">Alex & Jordan</div>
-                  <div className="text-deep-green/70 text-sm">Software Engineers</div>
                 </div>
               </div>
             </div>
             
             {/* Testimonial 2 */}
             <div className={`bg-warm-white p-8 rounded-3xl border-4 border-deep-black shadow-lg hover-lift ${isIntersecting['section-testimonials'] ? 'fade-in' : ''}`}>
-              <div className="flex items-center mb-6">
+              <p className="text-deep-green/80 text-lg mb-6 italic">
+                "I was skeptical about a 'relationship game,' but this is different. It's not awkward at all—it's just really well-designed and the prompts led to conversations we didn't even know we needed to have."
+              </p>
+              <div className="flex justify-center">
                 <div className="flex text-sunflower">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 fill-current" />
                   ))}
-                </div>
-              </div>
-              <p className="text-deep-green/80 text-lg mb-6 italic">
-                "I was skeptical about a 'relationship game,' but this is different. It's not awkward at all—it's just really well-designed and the prompts led to conversations we didn't even know we needed to have."
-              </p>
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-deep-teal rounded-full border-2 border-deep-black flex items-center justify-center mr-4">
-                  <Users className="w-6 h-6 text-warm-white" />
-                </div>
-                <div>
-                  <div className="font-semibold text-deep-green">Sam & Riley</div>
-                  <div className="text-deep-green/70 text-sm">Creative Professionals</div>
                 </div>
               </div>
             </div>
             
             {/* Testimonial 3 */}
             <div className={`bg-warm-white p-8 rounded-3xl border-4 border-deep-black shadow-lg hover-lift ${isIntersecting['section-testimonials'] ? 'fade-in' : ''}`}>
-              <div className="flex items-center mb-6">
+              <p className="text-deep-green/80 text-lg mb-6 italic">
+                "It's like relationship therapy, but in a cozy hoodie. A retro for the heart."
+              </p>
+              <div className="flex justify-center">
                 <div className="flex text-sunflower">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 fill-current" />
                   ))}
-                </div>
-              </div>
-              <p className="text-deep-green/80 text-lg mb-6 italic">
-                "It's like relationship therapy, but in a cozy hoodie. A retro for the heart."
-              </p>
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-sunflower rounded-full border-2 border-deep-black flex items-center justify-center mr-4">
-                  <Users className="w-6 h-6 text-deep-green" />
-                </div>
-                <div>
-                  <div className="font-semibold text-deep-green">Casey & Morgan</div>
-                  <div className="text-deep-green/70 text-sm">Design & Tech</div>
                 </div>
               </div>
             </div>
