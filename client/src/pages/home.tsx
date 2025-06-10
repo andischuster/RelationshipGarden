@@ -120,10 +120,10 @@ export default function Home() {
           <div className={`mb-12 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
             {/* Stacked Card Carousel */}
             <div className="relative mb-8 flex justify-center">
-              <div className="relative w-80 h-96">
+              <div className="relative w-[500px] h-[600px]">
                 {cardData.map((card, index) => {
                   const isSelected = index === currentCard;
-                  const stackOffset = (index - currentCard) * 8;
+                  const stackOffset = (index - currentCard) * 12;
                   const rotationOffset = (index - currentCard) * 3;
                   const zIndex = isSelected ? 50 : 40 - Math.abs(index - currentCard);
                   
@@ -150,11 +150,11 @@ export default function Home() {
                         <img 
                           src={card.image} 
                           alt={`${card.title} card`} 
-                          className="w-64 h-96 rounded-2xl object-cover border-4 border-deep-black transition-all duration-300"
+                          className="w-72 h-[480px] rounded-2xl object-cover border-4 border-deep-black transition-all duration-300"
                           style={{
                             boxShadow: isSelected 
-                              ? '8px 8px 0px 0px rgba(44, 82, 52, 1)' 
-                              : '4px 4px 0px 0px rgba(44, 82, 52, 0.7)',
+                              ? '10px 10px 0px 0px rgba(44, 82, 52, 1)' 
+                              : '6px 6px 0px 0px rgba(44, 82, 52, 0.7)',
                             filter: isSelected ? 'none' : 'brightness(0.8)'
                           }}
                         />
