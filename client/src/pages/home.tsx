@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Import card images
@@ -91,38 +91,6 @@ export default function Home() {
     console.log('Purchase initiated for Growing Us card game');
   };
 
-  const nextCard = () => {
-    setCurrentCard((prev) => (prev + 1) % cardData.length);
-  };
-
-  const prevCard = () => {
-    setCurrentCard((prev) => (prev - 1 + cardData.length) % cardData.length);
-  };
-
-  // Touch/drag handlers
-  const [dragStart, setDragStart] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleDragStart = (clientX: number) => {
-    setDragStart(clientX);
-    setIsDragging(true);
-  };
-
-  const handleDragEnd = (clientX: number) => {
-    if (!isDragging) return;
-    
-    const dragDistance = clientX - dragStart;
-    const threshold = 50;
-
-    if (dragDistance > threshold) {
-      prevCard();
-    } else if (dragDistance < -threshold) {
-      nextCard();
-    }
-    
-    setIsDragging(false);
-  };
-
   return (
     <div className="bg-warm-white text-deep-green font-sans leading-relaxed">
       {/* Hero Section */}
@@ -150,33 +118,27 @@ export default function Home() {
           
           {/* Interactive Card Carousel */}
           <div className={`mb-12 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
-            {/* Swipeable Card Carousel */}
-            <div 
-              className="relative mb-8 flex justify-center items-center touch-pan-y"
-              onMouseDown={(e) => handleDragStart(e.clientX)}
-              onMouseUp={(e) => handleDragEnd(e.clientX)}
-              onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
-              onTouchEnd={(e) => handleDragEnd(e.changedTouches[0].clientX)}
-            >
-              <div className="relative w-[75vw] max-w-[480px] h-[720px]">
+            {/* Stacked Card Carousel */}
+            <div className="relative mb-8 flex justify-center">
+              <div className="relative w-80 h-96">
                 {cardData.map((card, index) => {
                   const isSelected = index === currentCard;
-                  const stackOffset = (index - currentCard) * 12;
-                  const rotationOffset = (index - currentCard) * 2;
+                  const stackOffset = (index - currentCard) * 8;
+                  const rotationOffset = (index - currentCard) * 3;
                   const zIndex = isSelected ? 50 : 40 - Math.abs(index - currentCard);
                   
                   return (
                     <div 
                       key={card.id}
                       onClick={() => setCurrentCard(index)}
-                      className="absolute cursor-pointer transition-all duration-500 select-none"
+                      className="absolute cursor-pointer transition-all duration-500"
                       style={{ 
                         left: '50%',
                         top: '50%',
                         transform: `
                           translate(-50%, -50%) 
                           translateX(${stackOffset}px) 
-                          translateY(${stackOffset * 0.3}px)
+                          translateY(${stackOffset * 0.5}px)
                           rotate(${isSelected ? 0 : rotationOffset}deg) 
                           scale(${isSelected ? 1.1 : 1})
                         `,
@@ -188,16 +150,13 @@ export default function Home() {
                         <img 
                           src={card.image} 
                           alt={`${card.title} card`} 
-                          className="rounded-2xl object-cover border-4 border-deep-black transition-all duration-300"
+                          className="w-64 h-96 rounded-2xl object-cover border-4 border-deep-black transition-all duration-300"
                           style={{
-                            width: '480px',   // 2x larger: 240px * 2
-                            height: '720px',  // 2x larger: 360px * 2
                             boxShadow: isSelected 
                               ? '8px 8px 0px 0px rgba(44, 82, 52, 1)' 
                               : '4px 4px 0px 0px rgba(44, 82, 52, 0.7)',
                             filter: isSelected ? 'none' : 'brightness(0.8)'
                           }}
-                          draggable={false}
                         />
                       </div>
                     </div>
