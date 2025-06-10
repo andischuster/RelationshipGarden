@@ -217,7 +217,7 @@ export default function Home() {
           <div className={`${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.6s'}}>
             <Button 
               onClick={handlePurchase}
-              className="btn-primary text-deep-green font-semibold text-xl px-12 py-4 rounded-full hover-lift"
+              className="btn-primary text-deep-green font-semibold text-lg sm:text-xl px-8 sm:px-12 py-3 sm:py-4 rounded-full hover-lift"
             >
               Let's Grow Together – $25
             </Button>
