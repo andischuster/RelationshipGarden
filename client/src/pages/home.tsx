@@ -118,26 +118,26 @@ export default function Home() {
       <Blob color="#F9A870" className="top-2/3 left-1/4 w-[300px] h-[300px] animate-float delay-4000" />
       <div className="container mx-auto px-4 py-12 relative">
         {/* Header/Navigation */}
-        <header className={`flex justify-between items-center sticky top-0 z-50 py-4 px-8 transition-all duration-300 ${scrolled ? 'bg-warm-white/90 backdrop-blur-md shadow-md rounded-full' : ''}`}>
-          <div className="flex items-center">
-            <Flower className="text-deep-teal mr-2" />
-            <h1 className="font-serif sm:text-3xl font-bold text-deep-green text-[18px]">Relationship Game</h1>
+        <header className={`flex justify-between items-center sticky top-0 z-50 py-3 px-4 sm:py-4 sm:px-8 transition-all duration-300 ${scrolled ? 'bg-warm-white/90 backdrop-blur-md shadow-md rounded-full' : ''}`}>
+          <div className="flex items-center min-w-0">
+            <Flower className="text-deep-teal mr-2 flex-shrink-0" />
+            <h1 className="font-serif text-sm sm:text-lg md:text-xl font-bold text-deep-green whitespace-nowrap">Growing Us</h1>
           </div>
-          <div className="flex gap-4">
-            <button className="cta-button" onClick={handlePurchase}>Play Now</button>
+          <div className="flex gap-2 sm:gap-4">
+            <button className="cta-button text-sm sm:text-base px-4 sm:px-8 py-2 sm:py-4" onClick={handlePurchase}>Play Now</button>
           </div>
         </header>
       {/* Hero Section */}
-      <section id="section-hero" className="min-h-screen flex flex-col justify-center items-center px-4 py-8 pt-24 relative overflow-hidden">
+      <section id="section-hero" className="min-h-screen flex flex-col justify-center items-center px-2 sm:px-4 py-8 pt-20 sm:pt-24 relative overflow-hidden">
         <div className="container mx-auto max-w-6xl text-center">
           
           {/* Main Title */}
-          <h1 className={`font-serif text-6xl md:text-8xl font-bold text-deep-green mb-5 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
+          <h1 className={`font-serif text-5xl sm:text-6xl md:text-8xl font-bold text-deep-green mb-5 whitespace-nowrap ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
             Growing Us
           </h1>
           
           {/* Tagline */}
-          <p className={`text-lg md:text-xl text-deep-green/70 mb-9 max-w-4xl mx-auto leading-relaxed ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.2s'}}>
+          <p className={`text-base sm:text-lg md:text-xl text-deep-green/70 mb-6 sm:mb-9 max-w-4xl mx-auto leading-relaxed px-4 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.2s'}}>
             Every connection needs care, space, and warmth. These prompts help you nurture your relationship garden.
           </p>
           
@@ -145,7 +145,7 @@ export default function Home() {
           <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
             {/* Stacked Card Carousel */}
             <div className="relative mb-3 flex justify-center">
-              <div className="relative w-96 h-[500px] sm:w-[500px] sm:h-[600px] md:w-[600px] md:h-[700px]">
+              <div className="relative w-[500px] h-[650px] sm:w-[500px] sm:h-[600px] md:w-[600px] md:h-[700px]">
                 {cardData.map((card, index) => {
                   const isSelected = index === currentCard;
                   const stackOffset = (index - currentCard) * 8;
@@ -202,8 +202,8 @@ export default function Home() {
             </div>
             
             {/* Card Description */}
-            <div className="text-center max-w-md mx-auto">
-              <p className="text-xl md:text-2xl text-deep-green/90 font-medium italic">
+            <div className="text-center max-w-md mx-auto px-4">
+              <p className="text-lg sm:text-xl md:text-2xl text-deep-green/90 font-medium italic">
                 {cardData[currentCard].hasUnderline ? (
                   <span className="squiggly-underline">{cardData[currentCard].description}</span>
                 ) : (
