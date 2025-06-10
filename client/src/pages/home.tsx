@@ -434,7 +434,7 @@ export default function Home() {
                     <Check className="w-6 h-6 text-deep-teal" />
                   </div>
                   <p className="text-lg text-deep-green/80 leading-relaxed">
-                    A custom-designed box with magnetic closure
+                    1 custom box with closure
                   </p>
                 </div>
               </div>
@@ -465,7 +465,7 @@ export default function Home() {
                     width: '320px',
                     height: 'auto'
                   }}
-                  className="rounded-2xl border-4 border-deep-black shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-300"
+                  className="rounded-2xl border-4 border-deep-black shadow-2xl transform rotate-3 hover:rotate-0 hover:scale-105 transition-all duration-300 animate-float"
                 />
               </div>
             </div>
