@@ -150,8 +150,10 @@ export default function Home() {
                         <img 
                           src={card.image} 
                           alt={`${card.title} card`} 
-                          className="w-64 h-96 rounded-2xl object-cover border-4 border-deep-black transition-all duration-300"
+                          className="rounded-2xl object-cover border-4 border-deep-black transition-all duration-300"
                           style={{
+                            width: '240px', 
+                            height: '360px',
                             boxShadow: isSelected 
                               ? '10px 10px 0px 0px rgba(44, 82, 52, 1)' 
                               : '6px 6px 0px 0px rgba(44, 82, 52, 0.7)',
