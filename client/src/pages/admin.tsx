@@ -3,11 +3,69 @@ import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Mail, Calendar, Users, Download } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Mail, Calendar, Users, Download, Lock } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import type { Preorder } from '@shared/schema';
 
 export default function Admin() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [authError, setAuthError] = useState('');
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === 'annaandi') {
+      setIsAuthenticated(true);
+      setAuthError('');
+    } else {
+      setAuthError('Incorrect password');
+      setPassword('');
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-warm-white flex items-center justify-center p-6">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center gap-2 text-deep-green">
+              <Lock className="h-5 w-5" />
+              Admin Access
+            </CardTitle>
+            <CardDescription>
+              Enter the password to access the admin dashboard
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-deep-green">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter admin password"
+                  className="border-deep-green/30 focus:border-deep-teal"
+                />
+                {authError && (
+                  <p className="text-sm text-red-600">{authError}</p>
+                )}
+              </div>
+              <Button 
+                type="submit" 
+                className="w-full bg-sunflower hover:bg-sunflower/90 text-deep-green font-semibold"
+              >
+                Access Dashboard
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
   const { data: preorders, isLoading, error, refetch } = useQuery({
     queryKey: ['/api/preorders'],
     queryFn: async () => {
