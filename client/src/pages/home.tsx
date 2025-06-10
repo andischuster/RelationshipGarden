@@ -98,13 +98,13 @@ export default function Home() {
         <div className="blur-teal"></div>
       </div>
       {/* Navigation Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-warm-white/90 backdrop-blur-sm border-b border-deep-green/10">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-warm-white/90 backdrop-blur-sm">
         <div className="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-deep-teal to-sunflower rounded-lg flex items-center justify-center">
               <div className="w-4 h-4 bg-warm-white rounded-sm"></div>
             </div>
-            <h1 className="font-serif text-2xl font-bold text-deep-green">Growing Us</h1>
+            <h1 className="font-serif text-2xl font-bold text-deep-green">Conversational Card Game for Couples</h1>
           </div>
           <div className="flex items-center space-x-4">
             <button className="btn-outline px-6 py-2">
