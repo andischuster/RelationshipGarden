@@ -14,6 +14,17 @@ export default function Admin() {
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
 
+  // Always call useQuery hook, but conditionally enable it
+  const { data: preorders, isLoading, error, refetch } = useQuery({
+    queryKey: ['/api/preorders'],
+    queryFn: async () => {
+      const response = await apiRequest('GET', '/api/preorders');
+      const result = await response.json();
+      return result.data as Preorder[];
+    },
+    enabled: isAuthenticated
+  });
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (password === 'annaandi') {
@@ -66,14 +77,6 @@ export default function Admin() {
       </div>
     );
   }
-  const { data: preorders, isLoading, error, refetch } = useQuery({
-    queryKey: ['/api/preorders'],
-    queryFn: async () => {
-      const response = await apiRequest('GET', '/api/preorders');
-      const result = await response.json();
-      return result.data as Preorder[];
-    }
-  });
 
   const downloadCSV = () => {
     if (!preorders || preorders.length === 0) return;
