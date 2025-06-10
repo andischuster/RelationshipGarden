@@ -9,6 +9,7 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   createPreorder(preorder: InsertPreorder): Promise<Preorder>;
   getPreorderByEmail(email: string): Promise<Preorder | undefined>;
+  getAllPreorders(): Promise<Preorder[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -53,6 +54,10 @@ export class MemStorage implements IStorage {
     return Array.from(this.preorders.values()).find(
       (preorder) => preorder.email === email,
     );
+  }
+
+  async getAllPreorders(): Promise<Preorder[]> {
+    return Array.from(this.preorders.values());
   }
 }
 
