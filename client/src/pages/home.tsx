@@ -94,10 +94,10 @@ export default function Home() {
   return (
     <div className="bg-warm-white text-deep-green font-sans leading-relaxed">
       {/* Navigation Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-warm-white/90 backdrop-blur-sm border-b border-deep-green/10">
-        <div className="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
+      <header className="absolute top-0 left-0 right-0 z-50">
+        <div className="container mx-auto max-w-6xl px-4 py-6 flex justify-between items-center">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-deep-teal to-sunflower rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-deep-teal to-sunflower rounded-lg flex items-center justify-center transform rotate-12">
               <div className="w-4 h-4 bg-warm-white rounded-sm"></div>
             </div>
             <h1 className="font-serif text-2xl font-bold text-deep-green">Growing Us</h1>
@@ -117,12 +117,26 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section id="section-hero" className="min-h-screen flex flex-col justify-center items-center px-4 py-8 pt-24 relative overflow-hidden">
-        <div className="container mx-auto max-w-6xl text-center">
-          
+      <section id="section-hero" className="min-h-screen flex flex-col justify-center items-center px-4 py-8 relative overflow-hidden">
+        {/* Whimsical Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-16 h-16 bg-sunflower/20 rounded-full blur-sm"></div>
+          <div className="absolute top-40 right-20 w-24 h-24 bg-soft-tangerine/15 rounded-full blur-md"></div>
+          <div className="absolute bottom-40 left-20 w-20 h-20 bg-deep-teal/10 rounded-full blur-lg"></div>
+          <div className="absolute top-1/3 left-1/4 w-8 h-8 bg-sunflower/25 transform rotate-45 blur-sm"></div>
+          <div className="absolute bottom-1/3 right-1/4 w-12 h-12 bg-soft-tangerine/20 transform rotate-12 blur-md"></div>
+        </div>
+
+        <div className="container mx-auto max-w-6xl text-center relative z-10">
           {/* Main Title */}
-          <h1 className={`font-serif text-6xl md:text-8xl font-bold text-deep-green mb-6 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
+          <h1 className={`font-serif text-6xl md:text-8xl font-bold text-deep-green mb-6 relative ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
             Growing Us
+            {/* Decorative underline */}
+            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1">
+              <svg viewBox="0 0 100 8" className="w-full h-full">
+                <path d="M5,4 Q25,1 50,4 T95,4" stroke="currentColor" strokeWidth="2" fill="none" className="text-sunflower"/>
+              </svg>
+            </div>
           </h1>
           
           {/* Tagline */}
@@ -205,9 +219,10 @@ export default function Home() {
           <div className={`${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.6s'}}>
             <Button 
               onClick={handlePurchase}
-              className="btn-primary text-deep-green font-semibold text-xl px-12 py-4 rounded-full hover-lift"
+              className="btn-primary text-deep-green font-semibold text-xl px-12 py-4 rounded-full hover-lift relative"
             >
-              Let's Grow Together – $25
+              <Gift className="inline w-5 h-5 mr-2" />
+              Get Your Deck - $25
             </Button>
             <p className="text-sm text-deep-green/70 mt-3">
               <Truck className="inline w-4 h-4 text-sunflower mr-2" />
@@ -216,13 +231,36 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Decorative Section Divider */}
+      <div className="relative py-16 flex justify-center items-center">
+        <div className="flex items-center space-x-8">
+          <div className="w-24 h-px bg-gradient-to-r from-transparent to-sunflower/50"></div>
+          <div className="w-8 h-8 bg-gradient-to-br from-sunflower to-soft-tangerine rounded-full flex items-center justify-center transform rotate-12">
+            <Flower className="w-4 h-4 text-deep-green" />
+          </div>
+          <div className="w-24 h-px bg-gradient-to-l from-transparent to-sunflower/50"></div>
+        </div>
+      </div>
       
       {/* How To Play Section */}
-      <section id="section-howto" className="py-20 px-4 bg-warm-white">
-        <div className="container mx-auto max-w-6xl">
+      <section id="section-howto" className="py-20 px-4 bg-warm-white relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-10 right-10 w-20 h-20 bg-deep-teal/8 rounded-full blur-lg"></div>
+          <div className="absolute bottom-20 left-10 w-16 h-16 bg-sunflower/12 transform rotate-45 blur-md"></div>
+          <div className="absolute top-1/2 right-1/4 w-12 h-12 bg-soft-tangerine/10 rounded-full blur-sm"></div>
+        </div>
+        <div className="container mx-auto max-w-6xl relative z-10">
           <div className="text-center mb-16">
-            <h2 className={`font-serif text-4xl md:text-5xl font-bold text-deep-green mb-6 ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
-              How To Play
+            <h2 className={`font-serif text-4xl md:text-5xl font-bold text-deep-green mb-6 relative inline-block ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
+              How to Play
+              {/* Squiggly underline */}
+              <div className="absolute -bottom-1 left-0 right-0">
+                <svg viewBox="0 0 200 8" className="w-full h-2">
+                  <path d="M5,4 Q25,1 50,4 T95,4 T145,4 T195,4" stroke="currentColor" strokeWidth="2" fill="none" className="text-soft-tangerine"/>
+                </svg>
+              </div>
             </h2>
             <p className={`text-lg text-deep-green/80 max-w-2xl mx-auto ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               Simple steps to nurture your relationship through playful conversation.
@@ -313,11 +351,33 @@ export default function Home() {
         </div>
       </section>
       
+      {/* Another Decorative Section Divider */}
+      <div className="relative py-16 flex justify-center items-center">
+        <div className="flex items-center space-x-8">
+          <div className="w-24 h-px bg-gradient-to-r from-transparent to-deep-teal/50"></div>
+          <div className="w-8 h-8 bg-gradient-to-br from-deep-teal to-sunflower rounded-full flex items-center justify-center transform -rotate-12">
+            <Heart className="w-4 h-4 text-warm-white" />
+          </div>
+          <div className="w-24 h-px bg-gradient-to-l from-transparent to-deep-teal/50"></div>
+        </div>
+      </div>
+
       {/* Pricing Section */}
-      <section id="section-pricing" className="py-20 px-4 bg-gradient-to-b from-sunflower/10 to-warm-white">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className={`font-serif text-4xl md:text-5xl font-bold text-deep-green mb-8 ${isIntersecting['section-pricing'] ? 'fade-in' : ''}`}>
+      <section id="section-pricing" className="py-20 px-4 bg-gradient-to-b from-sunflower/10 to-warm-white relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-1/4 w-24 h-24 bg-soft-tangerine/8 rounded-full blur-xl"></div>
+          <div className="absolute bottom-32 right-1/3 w-18 h-18 bg-deep-teal/6 transform rotate-45 blur-lg"></div>
+        </div>
+        <div className="container mx-auto max-w-4xl text-center relative z-10">
+          <h2 className={`font-serif text-4xl md:text-5xl font-bold text-deep-green mb-8 relative inline-block ${isIntersecting['section-pricing'] ? 'fade-in' : ''}`}>
             Ready to Grow Together?
+            {/* Squiggly underline */}
+            <div className="absolute -bottom-1 left-0 right-0">
+              <svg viewBox="0 0 300 8" className="w-full h-2">
+                <path d="M5,4 Q25,1 50,4 T95,4 T145,4 T195,4 T245,4 T295,4" stroke="currentColor" strokeWidth="2" fill="none" className="text-sunflower"/>
+              </svg>
+            </div>
           </h2>
           
           <div className={`bg-warm-white rounded-3xl border-4 border-deep-black p-8 md:p-12 shadow-lg hover-lift max-w-2xl mx-auto ${isIntersecting['section-pricing'] ? 'fade-in' : ''}`}>
@@ -354,9 +414,26 @@ export default function Home() {
         </div>
       </section>
       
+      {/* Another Decorative Section Divider */}
+      <div className="relative py-16 flex justify-center items-center">
+        <div className="flex items-center space-x-8">
+          <div className="w-24 h-px bg-gradient-to-r from-transparent to-soft-tangerine/50"></div>
+          <div className="w-8 h-8 bg-gradient-to-br from-soft-tangerine to-deep-teal rounded-full flex items-center justify-center transform rotate-45">
+            <Star className="w-4 h-4 text-warm-white" />
+          </div>
+          <div className="w-24 h-px bg-gradient-to-l from-transparent to-soft-tangerine/50"></div>
+        </div>
+      </div>
+
       {/* Testimonials Section */}
-      <section id="section-testimonials" className="py-20 px-4 bg-warm-white">
-        <div className="container mx-auto max-w-6xl">
+      <section id="section-testimonials" className="py-20 px-4 bg-warm-white relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-16 left-8 w-14 h-14 bg-sunflower/10 rounded-full blur-md"></div>
+          <div className="absolute bottom-24 right-12 w-20 h-20 bg-deep-teal/8 transform rotate-12 blur-lg"></div>
+          <div className="absolute top-1/3 left-1/3 w-8 h-8 bg-soft-tangerine/15 rounded-full blur-sm"></div>
+        </div>
+        <div className="container mx-auto max-w-6xl relative z-10">
           <div className="text-center mb-16">
             <h2 className={`font-serif text-4xl md:text-5xl font-bold text-deep-green mb-6 ${isIntersecting['section-testimonials'] ? 'fade-in' : ''}`}>
               What Couples Are Saying
@@ -364,28 +441,7 @@ export default function Home() {
           </div>
           
           <div className={`grid md:grid-cols-3 gap-8 ${isIntersecting['section-testimonials'] ? 'staggered-animation' : ''}`}>
-            {/* Testimonial 1 */}
-            <div className={`bg-warm-white p-8 rounded-3xl border-4 border-deep-black shadow-lg hover-lift ${isIntersecting['section-testimonials'] ? 'fade-in' : ''}`}>
-              <div className="flex items-center mb-6">
-                <div className="flex text-sunflower">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-current" />
-                  ))}
-                </div>
-              </div>
-              <p className="text-deep-green/80 text-lg mb-6 italic">
-                "My partner and I are both software engineers, and we spend all day problem-solving. This game helped us switch gears and connect on a totally different level. It's like a playful team retrospective."
-              </p>
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-soft-tangerine rounded-full border-2 border-deep-black flex items-center justify-center mr-4">
-                  <Users className="w-6 h-6 text-deep-green" />
-                </div>
-                <div>
-                  <div className="font-semibold text-deep-green">Alex & Jordan</div>
-                  <div className="text-deep-green/70 text-sm">Software Engineers</div>
-                </div>
-              </div>
-            </div>
+            
             
             {/* Testimonial 2 */}
             <div className={`bg-warm-white p-8 rounded-3xl border-4 border-deep-black shadow-lg hover-lift ${isIntersecting['section-testimonials'] ? 'fade-in' : ''}`}>
