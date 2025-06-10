@@ -152,7 +152,7 @@ export default function Home() {
                     <div 
                       key={card.id}
                       onClick={() => setCurrentCard(index)}
-                      className={`absolute cursor-pointer transition-all duration-500 ${!isSelected ? 'card-float' : ''}`}
+                      className="absolute cursor-pointer transition-all duration-500"
                       style={{ 
                         left: '50%',
                         top: '50%',
