@@ -181,11 +181,8 @@ export default function Home() {
                         <img 
                           src={card.image} 
                           alt={`${card.title} card`} 
-                          className="carousel-card rounded-2xl object-cover border-4 border-deep-black transition-all duration-300"
+                          className="carousel-card card-outline card-shadow object-cover transition-all duration-300"
                           style={{
-                            boxShadow: isSelected 
-                              ? '10px 10px 0px 0px rgba(44, 82, 52, 1)' 
-                              : '6px 6px 0px 0px rgba(44, 82, 52, 0.7)',
                             filter: isSelected ? 'none' : 'brightness(0.8)'
                           }}
                         />
@@ -365,7 +362,7 @@ export default function Home() {
               </p>
               <Button 
                 onClick={handlePurchase}
-                className="btn-primary text-deep-green font-semibold text-xl px-12 py-4 rounded-full hover-lift w-full md:w-auto"
+                className="cta-button w-full md:w-auto"
               >
                 Let's Grow Together – Buy Now
               </Button>
