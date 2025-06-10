@@ -90,11 +90,7 @@ export default function Home() {
 
   const preorderMutation = useMutation({
     mutationFn: async (data: { email: string }) => {
-      return apiRequest("/api/preorders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
+      return apiRequest("/api/preorders", "POST", data);
     },
     onSuccess: () => {
       toast({
@@ -149,7 +145,7 @@ export default function Home() {
   }, []);
 
   const handlePurchase = () => {
-    console.log('Purchase initiated for Growing Us card game');
+    setIsPreorderModalOpen(true);
   };
 
   return (
@@ -588,6 +584,62 @@ export default function Home() {
         </div>
       </footer>
       </div>
+
+      {/* Pre-order Modal */}
+      <Dialog open={isPreorderModalOpen} onOpenChange={setIsPreorderModalOpen}>
+        <DialogContent className="sm:max-w-[425px] bg-warm-white border-deep-green">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-2xl text-deep-green">Pre-Order Growing Us</DialogTitle>
+            <DialogDescription className="text-deep-green/80">
+              Get early access with 25% off the regular price. We'll email you when it's ready to ship!
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-deep-green font-medium">Email Address</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                {...form.register("email")}
+                className="border-deep-green/30 focus:border-deep-teal"
+              />
+              {form.formState.errors.email && (
+                <p className="text-sm text-red-600">{form.formState.errors.email.message}</p>
+              )}
+            </div>
+            <div className="bg-sunflower/10 p-4 rounded-lg border border-sunflower/30">
+              <div className="flex items-center space-x-2 mb-2">
+                <Gift className="w-5 h-5 text-deep-teal" />
+                <span className="font-semibold text-deep-green">Pre-Order Benefits</span>
+              </div>
+              <ul className="text-sm text-deep-green/80 space-y-1">
+                <li>• 25% discount ($18.75 instead of $25)</li>
+                <li>• First access when we launch</li>
+                <li>• Free shipping included</li>
+                <li>• Early bird exclusive updates</li>
+              </ul>
+            </div>
+            <div className="flex space-x-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsPreorderModalOpen(false)}
+                className="flex-1 border-deep-green text-deep-green hover:bg-deep-green/10"
+              >
+                Maybe Later
+              </Button>
+              <Button
+                type="submit"
+                disabled={preorderMutation.isPending}
+                className="flex-1 bg-sunflower hover:bg-sunflower/90 text-deep-green font-semibold"
+              >
+                {preorderMutation.isPending ? "Saving..." : "Reserve My Copy"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
