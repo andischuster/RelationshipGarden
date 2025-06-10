@@ -118,7 +118,7 @@ export default function Home() {
             <h1 className="font-serif text-sm sm:text-lg md:text-xl font-bold text-deep-green whitespace-nowrap">Relationship Game</h1>
           </div>
           <div className="flex gap-2 sm:gap-4">
-            <button className="cta-button text-sm sm:text-base px-4 sm:px-8 py-2 sm:py-4" onClick={handlePurchase}>Play Now</button>
+            <button className="cta-button sm:text-base px-4 sm:px-8 py-2 sm:py-4 text-[16px]" onClick={handlePurchase}>Play Now</button>
           </div>
         </header>
       {/* Hero Section */}
