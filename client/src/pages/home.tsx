@@ -171,16 +171,20 @@ export default function Home() {
                         top: '-240px'
                       }}
                     >
-                      <img
-                        src={card.image}
-                        alt={card.title}
+                      <div
                         className="card-stack-item rounded-2xl border-4 border-deep-black shadow-2xl transition-all duration-300"
                         style={{
                           width: '320px',
-                          height: 'auto',
+                          height: '480px',
+                          backgroundImage: `url(${card.image})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          backgroundRepeat: 'no-repeat',
                           filter: isActive ? 'none' : 'brightness(0.85)',
                           opacity: isActive ? 1 : 0.9
                         }}
+                        role="img"
+                        aria-label={card.title}
                       />
                     </div>
                   );
