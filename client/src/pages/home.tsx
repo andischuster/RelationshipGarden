@@ -119,14 +119,14 @@ export default function Home() {
           {/* Interactive Card Carousel */}
           <div className={`mb-6 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
             {/* Card Description */}
-            <div className="text-center max-w-md mx-auto mb-4">
+            <div className="text-center max-w-md mx-auto mb-2">
               <p className="text-xl md:text-2xl text-deep-green/90 font-medium italic">
                 "{cardData[currentCard].description}"
               </p>
             </div>
             
             {/* Stacked Card Carousel */}
-            <div className="relative mb-4 flex justify-center">
+            <div className="relative mb-2 flex justify-center">
               <div className="relative w-96 h-[500px] sm:w-[500px] sm:h-[600px] md:w-[600px] md:h-[700px]">
                 {cardData.map((card, index) => {
                   const isSelected = index === currentCard;
