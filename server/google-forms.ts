@@ -85,13 +85,14 @@ class GoogleFormsDirectSubmission implements GoogleFormsService {
     // Check which one looks like a form ID (longer string starting with 1FAIpQLSe)
     if (url.startsWith('1FAIpQLSe')) {
       this.formSubmissionUrl = `https://docs.google.com/forms/d/e/${url}/formResponse`;
-      this.emailFieldEntry = `entry.${entry}`;
+      this.emailFieldEntry = `entry.1835138428`; // Correct entry field from form analysis
     } else if (entry.startsWith('1FAIpQLSe')) {
       this.formSubmissionUrl = `https://docs.google.com/forms/d/e/${entry}/formResponse`;
-      this.emailFieldEntry = `entry.${url}`;
+      this.emailFieldEntry = `entry.1835138428`; // Correct entry field from form analysis
     } else {
-      this.formSubmissionUrl = url;
-      this.emailFieldEntry = entry;
+      // For complete URL format, still use the hardcoded correct entry
+      this.formSubmissionUrl = url.includes('docs.google.com') ? url : `https://docs.google.com/forms/d/e/${url}/formResponse`;
+      this.emailFieldEntry = `entry.1835138428`; // Always use the correct entry field
     }
   }
 
