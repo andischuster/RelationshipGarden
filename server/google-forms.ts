@@ -78,8 +78,21 @@ class GoogleFormsDirectSubmission implements GoogleFormsService {
   private readonly emailFieldEntry: string;
 
   constructor() {
-    this.formSubmissionUrl = process.env.GOOGLE_FORM_SUBMISSION_URL || '';
-    this.emailFieldEntry = process.env.GOOGLE_FORM_EMAIL_ENTRY || '';
+    // The secrets appear to be swapped, so let's handle both cases
+    const url = process.env.GOOGLE_FORM_SUBMISSION_URL || '';
+    const entry = process.env.GOOGLE_FORM_EMAIL_ENTRY || '';
+    
+    // Check which one looks like a form ID (longer string starting with 1FAIpQLSe)
+    if (url.startsWith('1FAIpQLSe')) {
+      this.formSubmissionUrl = `https://docs.google.com/forms/d/e/${url}/formResponse`;
+      this.emailFieldEntry = `entry.${entry}`;
+    } else if (entry.startsWith('1FAIpQLSe')) {
+      this.formSubmissionUrl = `https://docs.google.com/forms/d/e/${entry}/formResponse`;
+      this.emailFieldEntry = `entry.${url}`;
+    } else {
+      this.formSubmissionUrl = url;
+      this.emailFieldEntry = entry;
+    }
   }
 
   async addPreorder(email: string): Promise<{ success: boolean; message: string }> {
@@ -89,11 +102,9 @@ class GoogleFormsDirectSubmission implements GoogleFormsService {
         throw new Error('Google Forms configuration missing');
       }
 
-      // Construct proper form URL if only form ID was provided
-      let formUrl = this.formSubmissionUrl;
-      if (!formUrl.includes('docs.google.com')) {
-        formUrl = `https://docs.google.com/forms/d/e/${formUrl}/formResponse`;
-      }
+      const formUrl = this.formSubmissionUrl;
+      console.log(`Attempting to submit to: ${formUrl}`);
+      console.log(`Using entry field: ${this.emailFieldEntry}`);
 
       const formData = new URLSearchParams();
       formData.append(this.emailFieldEntry, email);
@@ -102,10 +113,13 @@ class GoogleFormsDirectSubmission implements GoogleFormsService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'Mozilla/5.0 (compatible; EmailBot/1.0)',
         },
         body: formData,
         redirect: 'manual' // Don't follow redirects
       });
+
+      console.log(`Form response status: ${response.status}`);
 
       // Google Forms typically returns 302 redirect on successful submission
       if (response.status === 200 || response.status === 302) {
