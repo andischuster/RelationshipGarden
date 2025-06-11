@@ -17,13 +17,13 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       output: {
-        manualChunks: undefined, // Disable chunking for faster build
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-button'],
+        }
       }
     },
-    minify: 'esbuild', // Faster minification
-    target: 'es2020',
-    sourcemap: false,
-    chunkSizeWarningLimit: 2000,
+    chunkSizeWarningLimit: 1000,
   },
   server: {
     fs: {
