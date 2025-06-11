@@ -38,7 +38,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       const preorders = emails.map((email, index) => ({
         id: index + 1,
         email,
-        createdAt: new Date().toISOString() // Sheets will have timestamp in second column
+        createdAt: new Date().toISOString()
       }));
       
       res.json({
