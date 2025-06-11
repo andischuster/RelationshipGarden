@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover, Check, X } from 'lucide-react';
+import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -212,7 +213,14 @@ export default function Home() {
             <Flower className="text-deep-teal mr-2 flex-shrink-0" />
             <h1 className="font-serif text-sm sm:text-lg md:text-xl font-bold text-deep-green whitespace-nowrap">Relationship Game</h1>
           </div>
-          <div className="flex gap-2 sm:gap-4">
+          <div className="flex gap-2 sm:gap-4 items-center">
+            <Link 
+              href="/faq" 
+              className="text-deep-green hover:text-deep-teal transition-colors duration-200 font-medium flex items-center gap-1"
+            >
+              <HelpCircle className="h-4 w-4" />
+              <span className="hidden sm:inline">FAQ</span>
+            </Link>
             <button className="cta-button sm:text-base px-4 sm:px-8 py-2 sm:py-4 text-[16px]" onClick={handlePurchase}>Play Now</button>
           </div>
         </header>
