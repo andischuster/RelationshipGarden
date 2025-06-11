@@ -4,115 +4,71 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
-console.log('Building static files for deployment...');
+console.log('Building for static deployment...');
 
 try {
-  // Clean up any existing build directories
-  console.log('Cleaning up existing directories...');
+  // Clean existing build
   if (fs.existsSync('dist')) {
     fs.rmSync('dist', { recursive: true, force: true });
+    console.log('Cleaned existing build directory');
   }
   
-  // Set NODE_ENV to production to avoid development dependencies
+  // Build with production settings
   process.env.NODE_ENV = 'production';
+  console.log('Running Vite build...');
   
-  // Build the client using the current vite configuration with timeout
-  console.log('Building client with vite (production mode)...');
   try {
-    execSync('timeout 120 npx vite build --mode production', { 
+    execSync('npx vite build --mode production --logLevel warn', { 
       stdio: 'inherit',
-      timeout: 120000 
+      timeout: 180000,
+      env: process.env
     });
+    console.log('Build completed successfully');
   } catch (error) {
-    console.log('Vite build completed or timed out, checking output...');
+    console.log('Build process finished, checking output...');
   }
   
-  // The current config builds to dist/public, we need to move files to dist/
-  console.log('Restructuring build output...');
-  
+  // Fix deployment structure
   if (fs.existsSync('dist/public')) {
-    console.log('Found dist/public directory, restructuring...');
+    console.log('Restructuring for static deployment...');
     
-    // Create a temporary directory for the move
-    const tempDir = 'temp-static';
-    if (fs.existsSync(tempDir)) {
-      fs.rmSync(tempDir, { recursive: true, force: true });
-    }
-    fs.mkdirSync(tempDir);
+    // Move files from dist/public to dist
+    const publicItems = fs.readdirSync('dist/public');
+    publicItems.forEach(item => {
+      const src = path.join('dist/public', item);
+      const dest = path.join('dist', item);
+      fs.renameSync(src, dest);
+    });
     
-    // Move everything from dist/public to temp directory
-    const publicFiles = fs.readdirSync('dist/public');
-    for (const file of publicFiles) {
-      const srcPath = path.join('dist/public', file);
-      const tempPath = path.join(tempDir, file);
-      
-      if (fs.statSync(srcPath).isDirectory()) {
-        fs.cpSync(srcPath, tempPath, { recursive: true });
-      } else {
-        fs.copyFileSync(srcPath, tempPath);
-      }
-    }
-    
-    // Remove the entire dist directory
-    fs.rmSync('dist', { recursive: true, force: true });
-    
-    // Rename temp directory to dist
-    fs.renameSync(tempDir, 'dist');
-    
-    console.log('Successfully restructured build output');
-  } else {
-    console.log('No dist/public directory found, checking current structure...');
+    // Remove empty public directory
+    fs.rmdirSync('dist/public');
+    console.log('Structure corrected for deployment');
   }
   
-  // Remove any server-side files that might have been built
-  const serverFiles = ['index.js', 'index.js.map'];
-  for (const file of serverFiles) {
+  // Remove server files
+  ['index.js', 'index.js.map'].forEach(file => {
     const filePath = path.join('dist', file);
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
       console.log(`Removed server file: ${file}`);
     }
-  }
+  });
   
-  console.log('Static build complete!');
-  
-  if (fs.existsSync('dist')) {
-    console.log('Contents of dist/:');
-    const distFiles = fs.readdirSync('dist');
-    console.log(distFiles.join(', '));
-    
-    // Verify index.html exists
-    if (fs.existsSync('dist/index.html')) {
-      console.log('✓ index.html found in dist/ directory');
-      console.log('✓ Build ready for static deployment');
-    } else {
-      console.error('✗ index.html not found in dist/ directory');
-      
-      // Try to find index.html in subdirectories
-      function findIndexHtml(dir, prefix = '') {
-        const items = fs.readdirSync(dir);
-        for (const item of items) {
-          const fullPath = path.join(dir, item);
-          const relativePath = path.join(prefix, item);
-          
-          if (fs.statSync(fullPath).isDirectory()) {
-            findIndexHtml(fullPath, relativePath);
-          } else if (item === 'index.html') {
-            console.log(`Found index.html at: ${relativePath}`);
-          }
-        }
-      }
-      
-      console.log('Searching for index.html in dist directory...');
-      findIndexHtml('dist');
-    }
+  // Verify deployment structure
+  if (fs.existsSync('dist/index.html')) {
+    const contents = fs.readdirSync('dist');
+    console.log('Static deployment ready');
+    console.log(`Build contains: ${contents.join(', ')}`);
+    console.log('The dist/ directory is properly structured for deployment');
   } else {
-    console.error('✗ dist directory not found');
+    console.error('Deployment verification failed');
+    if (fs.existsSync('dist')) {
+      console.log('Current dist contents:', fs.readdirSync('dist').join(', '));
+    }
     process.exit(1);
   }
   
 } catch (error) {
-  console.error('Build failed:', error.message);
-  console.error('Error details:', error);
+  console.error('Build process failed:', error.message);
   process.exit(1);
 }
