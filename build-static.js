@@ -1,74 +1,79 @@
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
+import { copyFileSync, mkdirSync, existsSync, readdirSync, statSync, rmSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-console.log('Building for static deployment...');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-try {
-  // Clean existing build
-  if (fs.existsSync('dist')) {
-    fs.rmSync('dist', { recursive: true, force: true });
-    console.log('Cleaned existing build directory');
+function buildForStaticDeployment() {
+  console.log('Building for static deployment...');
+  
+  // Clean existing dist directory
+  const distPath = join(__dirname, 'dist');
+  if (existsSync(distPath)) {
+    rmSync(distPath, { recursive: true, force: true });
   }
   
-  // Build with production settings
-  process.env.NODE_ENV = 'production';
-  console.log('Running Vite build...');
+  // Build with default configuration
+  execSync('npm run build', { stdio: 'inherit' });
   
-  try {
-    execSync('npx vite build --mode production --logLevel warn', { 
-      stdio: 'inherit',
-      timeout: 180000,
-      env: process.env
-    });
-    console.log('Build completed successfully');
-  } catch (error) {
-    console.log('Build process finished, checking output...');
-  }
-  
-  // Fix deployment structure
-  if (fs.existsSync('dist/public')) {
-    console.log('Restructuring for static deployment...');
+  // Check if files are in dist/public/
+  const publicPath = join(distPath, 'public');
+  if (existsSync(publicPath)) {
+    console.log('Moving files from dist/public/ to dist/...');
     
-    // Move files from dist/public to dist
-    const publicItems = fs.readdirSync('dist/public');
-    publicItems.forEach(item => {
-      const src = path.join('dist/public', item);
-      const dest = path.join('dist', item);
-      fs.renameSync(src, dest);
+    // Move all files from dist/public/ to dist/
+    const files = readdirSync(publicPath);
+    files.forEach(file => {
+      const sourcePath = join(publicPath, file);
+      const targetPath = join(distPath, file);
+      
+      const stats = statSync(sourcePath);
+      if (stats.isDirectory()) {
+        copyDirectoryRecursive(sourcePath, targetPath);
+      } else {
+        copyFileSync(sourcePath, targetPath);
+      }
     });
     
-    // Remove empty public directory
-    fs.rmdirSync('dist/public');
-    console.log('Structure corrected for deployment');
+    // Remove the public directory
+    rmSync(publicPath, { recursive: true, force: true });
   }
   
-  // Remove server files
-  ['index.js', 'index.js.map'].forEach(file => {
-    const filePath = path.join('dist', file);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-      console.log(`Removed server file: ${file}`);
-    }
-  });
-  
-  // Verify deployment structure
-  if (fs.existsSync('dist/index.html')) {
-    const contents = fs.readdirSync('dist');
-    console.log('Static deployment ready');
-    console.log(`Build contains: ${contents.join(', ')}`);
-    console.log('The dist/ directory is properly structured for deployment');
+  // Verify final structure
+  if (existsSync(join(distPath, 'index.html'))) {
+    console.log('✓ Static deployment structure ready!');
+    console.log('Files in dist/:');
+    readdirSync(distPath).forEach(file => {
+      const stats = statSync(join(distPath, file));
+      console.log(`  ${stats.isDirectory() ? 'd' : '-'} ${file}`);
+    });
   } else {
-    console.error('Deployment verification failed');
-    if (fs.existsSync('dist')) {
-      console.log('Current dist contents:', fs.readdirSync('dist').join(', '));
-    }
+    console.error('✗ Build failed - index.html not found');
     process.exit(1);
   }
-  
-} catch (error) {
-  console.error('Build process failed:', error.message);
-  process.exit(1);
 }
+
+function copyDirectoryRecursive(src, dest) {
+  if (!existsSync(dest)) {
+    mkdirSync(dest, { recursive: true });
+  }
+  
+  const files = readdirSync(src);
+  files.forEach(file => {
+    const srcPath = join(src, file);
+    const destPath = join(dest, file);
+    const stats = statSync(srcPath);
+    
+    if (stats.isDirectory()) {
+      copyDirectoryRecursive(srcPath, destPath);
+    } else {
+      copyFileSync(srcPath, destPath);
+    }
+  });
+}
+
+buildForStaticDeployment();

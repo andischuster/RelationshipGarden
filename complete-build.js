@@ -1,102 +1,116 @@
 #!/usr/bin/env node
 
-import { execSync, spawn } from 'child_process';
-import fs from 'fs';
-import path from 'path';
+import { execSync } from 'child_process';
+import { existsSync, readdirSync, statSync, copyFileSync, mkdirSync, rmSync, writeFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-console.log('Creating complete full-stack deployment...');
-
-// Clean and setup
-if (fs.existsSync('dist')) {
-  fs.rmSync('dist', { recursive: true, force: true });
-}
-fs.mkdirSync('dist');
-
-// Build backend (fast)
-console.log('Building backend server...');
-execSync('npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist', {
-  stdio: 'inherit'
-});
-
-// Build frontend with timeout management
-console.log('Building frontend assets...');
-const buildProcess = spawn('npx', ['vite', 'build', '--mode', 'production'], {
-  stdio: 'pipe',
-  env: { ...process.env, NODE_ENV: 'production' }
-});
-
-let buildOutput = '';
-let buildComplete = false;
-
-buildProcess.stdout.on('data', (data) => {
-  buildOutput += data.toString();
-  if (data.toString().includes('built in')) {
-    buildComplete = true;
-  }
-});
-
-buildProcess.stderr.on('data', (data) => {
-  buildOutput += data.toString();
-});
-
-// Monitor build with timeout
-const buildTimeout = setTimeout(() => {
-  if (!buildComplete) {
-    console.log('Frontend build taking too long, checking partial output...');
-    buildProcess.kill();
-    checkBuildOutput();
-  }
-}, 90000); // 1.5 minutes
-
-buildProcess.on('close', () => {
-  clearTimeout(buildTimeout);
-  checkBuildOutput();
-});
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 function checkBuildOutput() {
-  console.log('Checking build structure...');
+  const distPath = join(__dirname, 'dist');
   
-  // Check what we have
-  if (fs.existsSync('dist/public')) {
-    console.log('Frontend build successful - found dist/public');
-  } else if (fs.existsSync('dist') && fs.readdirSync('dist').length > 1) {
-    console.log('Partial build found, checking contents...');
-  } else {
-    console.log('Creating minimal frontend structure...');
-    createMinimalFrontend();
+  if (!existsSync(distPath)) {
+    console.error('❌ No dist directory found');
+    return false;
   }
   
-  // Verify we have both components
-  const hasServer = fs.existsSync('dist/index.js');
-  const hasPublic = fs.existsSync('dist/public');
-  
-  console.log('Deployment status:');
-  console.log('Backend server:', hasServer ? 'Ready' : 'Missing');
-  console.log('Frontend assets:', hasPublic ? 'Ready' : 'Missing');
-  
-  if (hasServer) {
-    console.log('Full-stack deployment ready');
-    console.log('Start production server: npm start');
+  // Check if index.html is in the right place
+  if (existsSync(join(distPath, 'index.html'))) {
+    console.log('✅ index.html found in dist/');
+    return true;
   }
+  
+  // Check if files are in dist/public/
+  const publicPath = join(distPath, 'public');
+  if (existsSync(publicPath) && existsSync(join(publicPath, 'index.html'))) {
+    console.log('📁 Files found in dist/public/, fixing structure...');
+    
+    // Move files from public to root
+    const files = readdirSync(publicPath);
+    files.forEach(file => {
+      const src = join(publicPath, file);
+      const dest = join(distPath, file);
+      
+      if (statSync(src).isDirectory()) {
+        if (existsSync(dest)) rmSync(dest, { recursive: true });
+        copyDirectory(src, dest);
+      } else {
+        copyFileSync(src, dest);
+      }
+    });
+    
+    // Remove public directory
+    rmSync(publicPath, { recursive: true });
+    console.log('✅ Fixed directory structure');
+    return true;
+  }
+  
+  console.error('❌ index.html not found in expected locations');
+  return false;
+}
+
+function copyDirectory(src, dest) {
+  mkdirSync(dest, { recursive: true });
+  const files = readdirSync(src);
+  
+  files.forEach(file => {
+    const srcPath = join(src, file);
+    const destPath = join(dest, file);
+    
+    if (statSync(srcPath).isDirectory()) {
+      copyDirectory(srcPath, destPath);
+    } else {
+      copyFileSync(srcPath, destPath);
+    }
+  });
 }
 
 function createMinimalFrontend() {
-  // Create basic public directory structure
-  fs.mkdirSync('dist/public', { recursive: true });
+  console.log('🔨 Building static frontend only...');
   
-  // Copy client template as base
-  if (fs.existsSync('client/index.html')) {
-    let htmlContent = fs.readFileSync('client/index.html', 'utf-8');
-    
-    // Update paths for production
-    htmlContent = htmlContent.replace('/src/main.tsx', '/assets/main.js');
-    
-    fs.writeFileSync('dist/public/index.html', htmlContent);
-    console.log('Created basic index.html');
+  // Clean dist
+  const distPath = join(__dirname, 'dist');
+  if (existsSync(distPath)) {
+    rmSync(distPath, { recursive: true });
   }
   
-  // Create assets directory
-  if (!fs.existsSync('dist/public/assets')) {
-    fs.mkdirSync('dist/public/assets');
+  // Use static config if available, otherwise default
+  const configFile = existsSync('./vite.config.static.ts') ? 
+    '--config vite.config.static.ts' : '';
+  
+  try {
+    execSync(`npx vite build ${configFile}`, { stdio: 'inherit' });
+    
+    if (checkBuildOutput()) {
+      console.log('✅ Static deployment ready');
+      
+      // List final structure
+      console.log('\nDeployment structure:');
+      const files = readdirSync(distPath);
+      files.forEach(file => {
+        const stats = statSync(join(distPath, file));
+        console.log(`  ${stats.isDirectory() ? 'd' : '-'} ${file}`);
+      });
+      
+      return true;
+    }
+  } catch (error) {
+    console.error('❌ Build failed:', error.message);
+    return false;
   }
+  
+  return false;
+}
+
+// Main execution
+console.log('🚀 Preparing static deployment...');
+
+if (createMinimalFrontend()) {
+  console.log('\n✅ Ready for static deployment!');
+  console.log('The dist/ directory contains all files needed for deployment.');
+} else {
+  console.error('\n❌ Static deployment preparation failed');
+  process.exit(1);
 }

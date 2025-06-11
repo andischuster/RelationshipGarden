@@ -1,62 +1,84 @@
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
+import { existsSync, readdirSync, statSync, copyFileSync, mkdirSync, rmSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-console.log('Fixing static deployment structure...');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-// Clean and prepare
-if (fs.existsSync('dist')) {
-  fs.rmSync('dist', { recursive: true, force: true });
-}
+console.log('🔧 Fixing deployment structure...');
 
-try {
-  // Build with optimized settings to reduce timeout risk
-  console.log('Running optimized build...');
-  execSync('NODE_ENV=production npx vite build --mode production --logLevel warn', {
-    stdio: 'inherit',
-    timeout: 120000,
-    env: { ...process.env, NODE_ENV: 'production' }
+const distPath = join(__dirname, 'dist');
+const publicPath = join(distPath, 'public');
+
+// Check current structure
+if (existsSync(publicPath)) {
+  console.log('📁 Found files in dist/public/, moving to dist/...');
+  
+  // Move all files from public to dist root
+  const files = readdirSync(publicPath);
+  
+  files.forEach(file => {
+    const src = join(publicPath, file);
+    const dest = join(distPath, file);
+    
+    if (statSync(src).isDirectory()) {
+      // Copy directory recursively
+      if (existsSync(dest)) {
+        rmSync(dest, { recursive: true });
+      }
+      copyDirectory(src, dest);
+    } else {
+      // Copy file
+      copyFileSync(src, dest);
+    }
+    
+    console.log(`✓ Moved ${file}`);
   });
-  console.log('Build completed');
-} catch (error) {
-  console.log('Build process completed, checking output...');
+  
+  // Remove the public directory
+  rmSync(publicPath, { recursive: true });
+  console.log('✓ Removed dist/public/ directory');
 }
 
-// Handle deployment structure
-if (fs.existsSync('dist/public')) {
-  console.log('Restructuring for static deployment...');
-  
-  // Move contents from dist/public to dist
-  const publicPath = 'dist/public';
-  const items = fs.readdirSync(publicPath);
-  
-  items.forEach(item => {
-    const src = path.join(publicPath, item);
-    const dest = path.join('dist', item);
-    fs.renameSync(src, dest);
-  });
-  
-  // Remove empty public directory
-  fs.rmdirSync(publicPath);
-  console.log('Structure fixed for deployment');
-}
-
-// Clean server files
-['index.js', 'index.js.map'].forEach(file => {
-  const filePath = path.join('dist', file);
-  if (fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath);
-  }
-});
-
-// Verify final structure
-if (fs.existsSync('dist/index.html')) {
-  const contents = fs.readdirSync('dist');
-  console.log('Deployment ready:', contents.join(', '));
-  console.log('The dist/ directory is now properly structured for static deployment');
+// Verify the structure
+if (existsSync(join(distPath, 'index.html'))) {
+  console.log('✅ Static deployment structure is ready!');
+  console.log('\nFinal structure:');
+  listDirectory(distPath, '');
 } else {
-  console.error('Deployment verification failed - index.html not in correct location');
+  console.error('❌ index.html not found in dist/');
   process.exit(1);
+}
+
+function copyDirectory(src, dest) {
+  mkdirSync(dest, { recursive: true });
+  
+  const files = readdirSync(src);
+  files.forEach(file => {
+    const srcPath = join(src, file);
+    const destPath = join(dest, file);
+    
+    if (statSync(srcPath).isDirectory()) {
+      copyDirectory(srcPath, destPath);
+    } else {
+      copyFileSync(srcPath, destPath);
+    }
+  });
+}
+
+function listDirectory(dir, indent) {
+  const files = readdirSync(dir);
+  files.forEach(file => {
+    const filePath = join(dir, file);
+    const stats = statSync(filePath);
+    const type = stats.isDirectory() ? 'd' : '-';
+    console.log(`${indent}${type} ${file}`);
+    
+    if (stats.isDirectory() && indent.length < 4) { // Limit depth
+      listDirectory(filePath, indent + '  ');
+    }
+  });
 }
