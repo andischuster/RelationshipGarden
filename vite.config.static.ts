@@ -17,13 +17,17 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       output: {
-        manualChunks: undefined, // Disable chunking for faster build
+        manualChunks: undefined,
+        assetFileNames: 'assets/[name][extname]',
+        chunkFileNames: 'assets/[name].js',
+        entryFileNames: 'assets/[name].js'
       }
     },
-    minify: 'esbuild', // Faster minification
-    target: 'es2020',
+    minify: false, // Skip minification for faster build
+    target: 'es2015',
     sourcemap: false,
-    chunkSizeWarningLimit: 2000,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 5000,
   },
   server: {
     fs: {
