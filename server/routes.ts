@@ -50,18 +50,6 @@ export async function registerRoutes(app: Express): Promise<void> {
     }
   });
 
-  app.get("/api/preorders", async (req, res) => {
-    try {
-      const preorders = await storage.getAllPreorders();
-      res.json({
-        success: true,
-        data: preorders,
-        count: preorders.length
-      });
-    } catch (error) {
-      console.error("Error fetching preorders:", error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
+
 
 }

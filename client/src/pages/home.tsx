@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover, Check, X } from 'lucide-react';
+import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -621,10 +622,10 @@ export default function Home() {
               <Mail className="w-4 h-4 mr-2" />
               Contact Us
             </a>
-            <a href="#" className="text-warm-white/80 hover:text-sunflower transition-colors flex items-center">
+            <Link href="/faq" className="text-warm-white/80 hover:text-sunflower transition-colors flex items-center">
               <HelpCircle className="w-4 h-4 mr-2" />
               FAQ
-            </a>
+            </Link>
           </div>
           
           <div className="text-warm-white/60 text-sm">
