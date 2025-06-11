@@ -2,8 +2,6 @@ interface GoogleFormsService {
   addPreorder(email: string): Promise<{ success: boolean; message: string }>;
 }
 
-
-
 class GoogleFormsDirectSubmission implements GoogleFormsService {
   private readonly formSubmissionUrl: string;
   private readonly emailFieldEntry: string;
@@ -63,13 +61,6 @@ class GoogleFormsDirectSubmission implements GoogleFormsService {
       console.error('Error submitting to Google Form:', error);
       return { success: false, message: 'Failed to register pre-order' };
     }
-  }
-
-  async getPreorders(): Promise<string[]> {
-    // For direct submission, we can't easily read back the responses
-    // Would need the linked spreadsheet approach
-    console.log('Reading responses requires spreadsheet access');
-    return [];
   }
 }
 
