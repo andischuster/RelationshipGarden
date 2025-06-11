@@ -1,77 +1,98 @@
-# Static Deployment Guide
+# Deployment Guide
 
-This project has been configured to support static deployment on Replit. The main issue was that the build process was creating files in `dist/public/` instead of directly in `dist/`, which caused deployment failures.
+## Problem
+The deployment failed because Vite was creating files in `dist/public/` instead of directly in `dist/`, which static deployment services expect.
 
-## Solution Implemented
+## Solution
+This project now includes multiple deployment configurations and build scripts to handle both static and full-stack deployments.
 
-### 1. Build Script (`build-static.js`)
-A dedicated Node.js script that:
-- Runs the Vite build process in production mode
-- Restructures the output from `dist/public/` to `dist/`
-- Removes any server-side files that shouldn't be in static deployment
-- Validates that `index.html` is in the correct location
+## Static Deployment (Recommended)
 
-### 2. Shell Script (`build-static.sh`)
-A simple wrapper script for easy execution.
+### Quick Build
+```bash
+./test-build.sh
+```
 
-## How to Deploy
+### Manual Build Options
 
-### Option 1: Using the Node.js Script
+#### Option 1: Static Configuration (Preferred)
+```bash
+npx vite build --config vite.config.static.ts --mode production
+```
+
+#### Option 2: Fallback with Restructuring
+```bash
+npx vite build --mode production
+# Then move files from dist/public/ to dist/
+mv dist/public/* dist/ && rmdir dist/public
+```
+
+### Automated Build Scripts
+
+#### Simple Build
 ```bash
 node build-static.js
 ```
 
-### Option 2: Using the Shell Script
+#### Build with Fallback
 ```bash
-chmod +x build-static.sh
-./build-static.sh
+node build-static-fallback.js
 ```
 
-### Option 3: Manual Steps
-If the automated scripts don't work, you can manually restructure the build:
+#### Production Build
+```bash
+node build-for-deployment.js
+```
 
-1. Run the build command:
-   ```bash
-   npx vite build --mode production
-   ```
+## Configuration Files
 
-2. Restructure the output:
-   ```bash
-   # Move files from dist/public to dist
-   mv dist/public/* dist/
-   rmdir dist/public
-   
-   # Remove any server files
-   rm -f dist/index.js dist/index.js.map
-   ```
+### vite.config.static.ts
+- Optimized for static deployment
+- Outputs directly to `dist/`
+- Includes chunk optimization
+- Removes development plugins
+
+### vite.config.ts (Default)
+- Full-stack configuration
+- Outputs to `dist/public/` (requires restructuring)
+- Includes development tools
+
+## Deployment Types
+
+### Static Deployment
+- Use for frontend-only hosting
+- Build command: `node build-static.js`
+- Output: `dist/` directory with `index.html` at root
+
+### Autoscale Deployment
+- Use for full-stack application
+- Build command: `npm run build`
+- Includes both frontend and backend
 
 ## Verification
 
-After running the build script, verify that:
-- ✓ `dist/index.html` exists
-- ✓ Static assets (CSS, JS, images) are in `dist/`
-- ✓ No server-side files (`index.js`) are present
-- ✓ All client assets have correct relative paths
-
-## Deployment Process
-
-1. Run one of the build commands above
-2. Verify the build structure
-3. Deploy using Replit's static deployment feature
-4. The app will be available at your `.replit.app` domain
+After building, verify the structure:
+```bash
+ls -la dist/
+# Should show:
+# index.html
+# assets/
+# (other static files)
+```
 
 ## Troubleshooting
 
-### Build Timeout
-If the build process times out due to large dependencies:
-- The script includes timeout handling
-- The build may complete successfully even if it appears to timeout
-- Check for the presence of `dist/index.html` to confirm success
+1. **Build timeout**: The build process includes many dependencies. If it times out, try the fallback script.
 
-### Missing Files
-If `index.html` is not in the root `dist/` directory:
-- Check if it's in a subdirectory like `dist/public/`
-- The script includes automatic detection and moving of misplaced files
+2. **Missing index.html**: Check if files are in `dist/public/` and need restructuring.
 
-### Static Assets Not Loading
-Ensure all asset paths in the built files are relative and not absolute paths starting with `/`.
+3. **Large bundle size**: The static config includes chunk optimization to reduce bundle size.
+
+## Deployment Commands Summary
+
+| Purpose | Command |
+|---------|---------|
+| Quick test | `./test-build.sh` |
+| Static build | `node build-static.js` |
+| Production build | `node build-for-deployment.js` |
+| Full-stack build | `npm run build` |
