@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover, Check, X } from 'lucide-react';
+import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Users, Mail, HelpCircle, Instagram, Clover, Check, X } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -311,7 +311,7 @@ export default function Home() {
               Let's Grow Together – $25
             </Button>
             <p className="text-sm text-deep-green/70 mt-3">
-              <Truck className="inline w-4 h-4 text-sunflower mr-2" />
+              <ShoppingCart className="inline w-4 h-4 text-sunflower mr-2" />
               Free shipping on orders of 2+ games
             </p>
           </div>
