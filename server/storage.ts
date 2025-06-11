@@ -6,12 +6,8 @@ import { eq } from "drizzle-orm";
 // you might need
 
 export interface IStorage {
-  getUser(id: number): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
   createPreorder(preorder: InsertPreorder): Promise<Preorder>;
   getPreorderByEmail(email: string): Promise<Preorder | undefined>;
-  getAllPreorders(): Promise<Preorder[]>;
 }
 
 export class DatabaseStorage implements IStorage {
