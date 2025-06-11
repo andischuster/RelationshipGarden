@@ -17,15 +17,15 @@ export async function registerRoutes(app: Express): Promise<void> {
         return res.status(400).json({ error: "Invalid email format" });
       }
 
-      // Use Google Sheets service
-      const response = await googleSheetsService.addPreorder(result.data.email);
-      
-      if (response.success) {
-        res.json({ success: true, message: response.message });
-      } else {
-        const statusCode = response.message.includes("already registered") ? 409 : 500;
-        res.status(statusCode).json({ error: response.message });
+      // Google Sheets API requires OAuth for write operations, so fall back to database
+      // Check if email already exists
+      const existingPreorder = await storage.getPreorderByEmail(result.data.email);
+      if (existingPreorder) {
+        return res.status(409).json({ error: "Email already registered for pre-order" });
       }
+
+      const preorder = await storage.createPreorder(result.data);
+      res.json({ success: true, message: "Pre-order registered successfully!" });
     } catch (error) {
       console.error("Error creating preorder:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -34,13 +34,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.get("/api/preorders", async (req, res) => {
     try {
-      const emails = await googleSheetsService.getPreorders();
-      const preorders = emails.map((email, index) => ({
-        id: index + 1,
-        email,
-        createdAt: new Date().toISOString()
-      }));
-      
+      const preorders = await storage.getAllPreorders();
       res.json({
         success: true,
         data: preorders,
