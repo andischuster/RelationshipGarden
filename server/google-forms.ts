@@ -1,25 +1,34 @@
 interface GoogleFormsService {
   addPreorder(email: string): Promise<{ success: boolean; message: string }>;
+  getPreorders(): Promise<string[]>;
 }
 
-class GoogleFormsDirectSubmission implements GoogleFormsService {
-  private readonly formSubmissionUrl: string;
-  private readonly emailFieldEntry: string;
+class GoogleFormsAPI implements GoogleFormsService {
+  private readonly formId: string;
+  private readonly emailFieldId: string;
+  private readonly apiKey: string;
+  private readonly spreadsheetId: string;
 
   constructor() {
-    this.formSubmissionUrl = process.env.GOOGLE_FORM_URL || 'https://docs.google.com/forms/d/e/1FAIpQLSerOXUpDzQqoM2RC4Lvkg95AJ4nRBLHnQb-918TA3ibMgLi0Q/formResponse';
-    this.emailFieldEntry = process.env.GOOGLE_FORM_EMAIL_ENTRY || 'entry.1835138428';
+    this.formId = process.env.GOOGLE_FORM_ID || '';
+    this.emailFieldId = process.env.GOOGLE_FORM_EMAIL_FIELD || '';
+    this.apiKey = process.env.GOOGLE_SHEETS_API_KEY || '';
+    this.spreadsheetId = process.env.GOOGLE_SHEET_ID || '';
   }
 
   async addPreorder(email: string): Promise<{ success: boolean; message: string }> {
     try {
-      console.log(`Attempting to submit to: ${this.formSubmissionUrl}`);
-      console.log(`Using entry field: ${this.emailFieldEntry}`);
+      // Check if email already exists by reading the linked spreadsheet
+      const existingEmails = await this.getPreorders();
+      if (existingEmails.includes(email)) {
+        return { success: false, message: 'Email already registered for pre-order' };
+      }
 
+      // Submit to Google Form
       const formData = new URLSearchParams();
-      formData.append(this.emailFieldEntry, email);
+      formData.append(this.emailFieldId, email);
 
-      const response = await fetch(this.formSubmissionUrl, {
+      const response = await fetch(`https://docs.google.com/forms/d/e/${this.formId}/formResponse`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -27,8 +36,8 @@ class GoogleFormsDirectSubmission implements GoogleFormsService {
         body: formData
       });
 
-      console.log(`Form response status: ${response.status}`);
-
+      // Google Forms returns 200 even for successful submissions when using formResponse
+      // The response doesn't indicate success/failure, so we assume success if no error
       if (response.status === 200 || response.status === 302) {
         return { success: true, message: 'Pre-order registered successfully!' };
       } else {
@@ -38,6 +47,98 @@ class GoogleFormsDirectSubmission implements GoogleFormsService {
       console.error('Error submitting to Google Form:', error);
       return { success: false, message: 'Failed to register pre-order' };
     }
+  }
+
+  async getPreorders(): Promise<string[]> {
+    try {
+      // Read from the Google Sheet that's linked to the form
+      const response = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${this.spreadsheetId}/values/Sheet1?key=${this.apiKey}`
+      );
+
+      if (!response.ok) {
+        console.error(`Error reading form responses: ${response.status}`);
+        return [];
+      }
+
+      const data = await response.json();
+      // Skip header row and extract email column
+      const emails = data.values?.slice(1).map((row: string[]) => row[1]).filter(Boolean) || [];
+      return emails;
+    } catch (error) {
+      console.error('Error fetching form responses:', error);
+      return [];
+    }
+  }
+}
+
+// Simpler direct form submission without API
+class GoogleFormsDirectSubmission implements GoogleFormsService {
+  private readonly formSubmissionUrl: string;
+  private readonly emailFieldEntry: string;
+
+  constructor() {
+    // The secrets appear to be swapped, so let's handle both cases
+    const url = process.env.GOOGLE_FORM_SUBMISSION_URL || '';
+    const entry = process.env.GOOGLE_FORM_EMAIL_ENTRY || '';
+    
+    // Check which one looks like a form ID (longer string starting with 1FAIpQLSe)
+    if (url.startsWith('1FAIpQLSe')) {
+      this.formSubmissionUrl = `https://docs.google.com/forms/d/e/${url}/formResponse`;
+      this.emailFieldEntry = `entry.1835138428`; // Correct entry field from form analysis
+    } else if (entry.startsWith('1FAIpQLSe')) {
+      this.formSubmissionUrl = `https://docs.google.com/forms/d/e/${entry}/formResponse`;
+      this.emailFieldEntry = `entry.1835138428`; // Correct entry field from form analysis
+    } else {
+      // For complete URL format, still use the hardcoded correct entry
+      this.formSubmissionUrl = url.includes('docs.google.com') ? url : `https://docs.google.com/forms/d/e/${url}/formResponse`;
+      this.emailFieldEntry = `entry.1835138428`; // Always use the correct entry field
+    }
+  }
+
+  async addPreorder(email: string): Promise<{ success: boolean; message: string }> {
+    try {
+      // Check if we have valid configuration
+      if (!this.formSubmissionUrl || !this.emailFieldEntry) {
+        throw new Error('Google Forms configuration missing');
+      }
+
+      const formUrl = this.formSubmissionUrl;
+      console.log(`Attempting to submit to: ${formUrl}`);
+      console.log(`Using entry field: ${this.emailFieldEntry}`);
+
+      const formData = new URLSearchParams();
+      formData.append(this.emailFieldEntry, email);
+
+      const response = await fetch(formUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'Mozilla/5.0 (compatible; EmailBot/1.0)',
+        },
+        body: formData,
+        redirect: 'manual' // Don't follow redirects
+      });
+
+      console.log(`Form response status: ${response.status}`);
+
+      // Google Forms typically returns 302 redirect on successful submission
+      if (response.status === 200 || response.status === 302) {
+        return { success: true, message: 'Pre-order registered successfully!' };
+      } else {
+        throw new Error(`Form submission failed: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Error submitting to Google Form:', error);
+      return { success: false, message: 'Failed to register pre-order' };
+    }
+  }
+
+  async getPreorders(): Promise<string[]> {
+    // For direct submission, we can't easily read back the responses
+    // Would need the linked spreadsheet approach
+    console.log('Reading responses requires spreadsheet access');
+    return [];
   }
 }
 

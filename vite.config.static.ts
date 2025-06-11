@@ -3,15 +3,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 
 export default defineConfig({
-  plugins: [
-    react({
-      babel: {
-        plugins: [
-          // Remove development-only babel plugins for faster builds
-        ]
-      }
-    })
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
@@ -25,26 +17,13 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       output: {
-        manualChunks: undefined,
-        assetFileNames: 'assets/[name].[hash][extname]',
-        chunkFileNames: 'assets/[name].[hash].js',
-        entryFileNames: 'assets/[name].[hash].js',
-      },
-      external: [],
+        manualChunks: undefined, // Disable chunking for faster build
+      }
     },
-    minify: 'esbuild',
+    minify: 'esbuild', // Faster minification
     target: 'es2020',
     sourcemap: false,
     chunkSizeWarningLimit: 2000,
-    reportCompressedSize: false,
-    cssCodeSplit: false,
-  },
-  esbuild: {
-    target: 'es2020',
-    minifyIdentifiers: true,
-    minifySyntax: true,
-    minifyWhitespace: true,
-    drop: ['console', 'debugger'],
   },
   server: {
     fs: {
