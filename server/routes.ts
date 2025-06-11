@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { storage } from "./storage";
 import { insertPreorderSchema } from "@shared/schema";
+import { googleSheetsService } from "./google-sheets";
 
 export async function registerRoutes(app: Express): Promise<void> {
   // put application routes here
@@ -16,14 +17,15 @@ export async function registerRoutes(app: Express): Promise<void> {
         return res.status(400).json({ error: "Invalid email format" });
       }
 
-      // Check if email already exists
-      const existingPreorder = await storage.getPreorderByEmail(result.data.email);
-      if (existingPreorder) {
-        return res.status(409).json({ error: "Email already registered for pre-order" });
+      // Use Google Sheets service
+      const response = await googleSheetsService.addPreorder(result.data.email);
+      
+      if (response.success) {
+        res.json({ success: true, message: response.message });
+      } else {
+        const statusCode = response.message.includes("already registered") ? 409 : 500;
+        res.status(statusCode).json({ error: response.message });
       }
-
-      const preorder = await storage.createPreorder(result.data);
-      res.json({ success: true, message: "Pre-order registered successfully!" });
     } catch (error) {
       console.error("Error creating preorder:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -32,7 +34,13 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.get("/api/preorders", async (req, res) => {
     try {
-      const preorders = await storage.getAllPreorders();
+      const emails = await googleSheetsService.getPreorders();
+      const preorders = emails.map((email, index) => ({
+        id: index + 1,
+        email,
+        createdAt: new Date().toISOString() // Sheets will have timestamp in second column
+      }));
+      
       res.json({
         success: true,
         data: preorders,
