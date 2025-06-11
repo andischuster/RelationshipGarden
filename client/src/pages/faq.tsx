@@ -1,6 +1,7 @@
 import { Link } from "wouter";
-import { ChevronLeft, ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronDown, ChevronRight, Flower, Heart } from "lucide-react";
 import { useState } from "react";
+import Blob from "@/components/Blob";
 
 interface FAQItem {
   question: string;
@@ -54,21 +55,21 @@ function FAQAccordion({ item }: { item: FAQItem }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border border-gray-200 rounded-lg mb-4 overflow-hidden">
+    <div className="border-4 border-deep-black rounded-3xl mb-6 overflow-hidden shadow-lg hover-lift">
       <button
-        className="w-full px-6 py-4 text-left bg-white hover:bg-gray-50 transition-colors duration-200 flex items-center justify-between"
+        className="w-full px-6 py-6 text-left bg-warm-white hover:bg-sunflower/20 transition-colors duration-200 flex items-center justify-between"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="font-medium text-gray-900 pr-4">{item.question}</span>
+        <span className="font-medium text-deep-green pr-4 text-lg">{item.question}</span>
         {isOpen ? (
-          <ChevronDown className="h-5 w-5 text-gray-500 flex-shrink-0" />
+          <ChevronDown className="h-6 w-6 text-deep-teal flex-shrink-0" />
         ) : (
-          <ChevronRight className="h-5 w-5 text-gray-500 flex-shrink-0" />
+          <ChevronRight className="h-6 w-6 text-deep-teal flex-shrink-0" />
         )}
       </button>
       {isOpen && (
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-          <p className="text-gray-700 leading-relaxed">{item.answer}</p>
+        <div className="px-6 py-6 bg-sunflower/10 border-t-4 border-deep-black">
+          <p className="text-deep-green/80 leading-relaxed">{item.answer}</p>
         </div>
       )}
     </div>
@@ -77,23 +78,33 @@ function FAQAccordion({ item }: { item: FAQItem }) {
 
 export default function FAQ() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="bg-warm-white text-deep-green font-sans leading-relaxed relative overflow-hidden min-h-screen">
+      {/* Background blobs */}
+      <Blob color="#FFC700" className="top-0 -left-20 w-[600px] h-[600px] animate-float" />
+      <Blob color="#F9A870" className="-bottom-40 -right-20 w-[550px] h-[550px] animate-float delay-1000" />
+      <Blob color="#008080" className="bottom-[5%] -left-20 w-[500px] h-[500px] animate-float delay-2000" />
+      <Blob color="#2F4858" className="top-1/3 -right-28 w-[400px] h-[400px] animate-float delay-3000" />
+      <Blob color="#F9A870" className="top-2/3 left-1/4 w-[300px] h-[300px] animate-float delay-4000" />
+      
+      <div className="container mx-auto px-4 py-12 max-w-4xl relative">
         {/* Header with back button */}
-        <div className="mb-8">
+        <div className="mb-12">
           <Link 
             href="/" 
-            className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200 mb-6"
+            className="inline-flex items-center text-deep-teal hover:text-deep-green transition-colors duration-200 mb-8 font-medium"
           >
             <ChevronLeft className="h-5 w-5 mr-1" />
             Back to Home
           </Link>
           
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Frequently Asked Questions
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <div className="flex items-center justify-center mb-6">
+              <Flower className="text-deep-teal mr-3 h-8 w-8" />
+              <h1 className="font-serif text-4xl md:text-6xl font-bold text-deep-green">
+                Frequently Asked Questions
+              </h1>
+            </div>
+            <p className="text-xl text-deep-green/80 max-w-2xl mx-auto leading-relaxed">
               Everything you need to know about Growing Us and how it can help strengthen your relationship.
             </p>
           </div>
@@ -107,21 +118,45 @@ export default function FAQ() {
         </div>
 
         {/* CTA Section */}
-        <div className="text-center mt-12 p-8 bg-white rounded-xl shadow-sm border border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        <div className="text-center mt-16 p-8 bg-warm-white rounded-3xl border-4 border-deep-black shadow-lg hover-lift max-w-2xl mx-auto">
+          <h2 className="font-serif text-3xl font-bold text-deep-green mb-4">
             Still have questions?
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-deep-green/80 mb-8 text-lg leading-relaxed">
             Join our waitlist to stay updated and be the first to know when Growing Us becomes available.
           </p>
           <Link 
             href="/"
-            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200"
+            className="inline-flex items-center bg-sunflower text-deep-green px-8 py-4 rounded-full font-semibold hover:bg-soft-tangerine transition-colors duration-200 border-4 border-deep-black shadow-lg hover-lift"
           >
+            <Heart className="w-5 h-5 mr-2" />
             Join Waitlist
           </Link>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="py-12 px-4 bg-deep-green text-warm-white relative">
+        <div className="container mx-auto max-w-4xl text-center">
+          <div className="mb-8">
+            <h3 className="font-serif text-3xl font-bold mb-4">Growing Us</h3>
+            <p className="text-warm-white/80">
+              Every connection needs care, space, and warmth.
+            </p>
+          </div>
+          
+          <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8">
+            <Link href="/" className="text-warm-white/80 hover:text-sunflower transition-colors flex items-center">
+              <Heart className="w-4 h-4 mr-2" />
+              Back to Home
+            </Link>
+          </div>
+          
+          <div className="text-warm-white/60 text-sm">
+            © 2024 Growing Us. Made with love for growing relationships.
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

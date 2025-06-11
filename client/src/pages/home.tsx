@@ -213,14 +213,7 @@ export default function Home() {
             <Flower className="text-deep-teal mr-2 flex-shrink-0" />
             <h1 className="font-serif text-sm sm:text-lg md:text-xl font-bold text-deep-green whitespace-nowrap">Relationship Game</h1>
           </div>
-          <div className="flex gap-2 sm:gap-4 items-center">
-            <Link 
-              href="/faq" 
-              className="text-deep-green hover:text-deep-teal transition-colors duration-200 font-medium flex items-center gap-1"
-            >
-              <HelpCircle className="h-4 w-4" />
-              <span className="hidden sm:inline">FAQ</span>
-            </Link>
+          <div className="flex gap-2 sm:gap-4">
             <button className="cta-button sm:text-base px-4 sm:px-8 py-2 sm:py-4 text-[16px]" onClick={handlePurchase}>Play Now</button>
           </div>
         </header>
@@ -629,10 +622,10 @@ export default function Home() {
               <Mail className="w-4 h-4 mr-2" />
               Contact Us
             </a>
-            <a href="#" className="text-warm-white/80 hover:text-sunflower transition-colors flex items-center">
+            <Link href="/faq" className="text-warm-white/80 hover:text-sunflower transition-colors flex items-center">
               <HelpCircle className="w-4 h-4 mr-2" />
               FAQ
-            </a>
+            </Link>
           </div>
           
           <div className="text-warm-white/60 text-sm">
