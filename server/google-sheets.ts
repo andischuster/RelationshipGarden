@@ -11,7 +11,7 @@ class GoogleSheetsAPI implements GoogleSheetsService {
   constructor() {
     this.spreadsheetId = process.env.GOOGLE_SHEET_ID || '';
     this.apiKey = process.env.GOOGLE_SHEETS_API_KEY || '';
-    this.sheetName = process.env.GOOGLE_SHEET_NAME || 'Preorders';
+    this.sheetName = process.env.GOOGLE_SHEET_NAME || 'Sheet1';
   }
 
   async addPreorder(email: string): Promise<{ success: boolean; message: string }> {
@@ -37,6 +37,8 @@ class GoogleSheetsAPI implements GoogleSheetsService {
       );
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Append API Error ${response.status}:`, errorText);
         throw new Error(`Google Sheets API error: ${response.status}`);
       }
 
@@ -49,15 +51,20 @@ class GoogleSheetsAPI implements GoogleSheetsService {
 
   async getPreorders(): Promise<string[]> {
     try {
+      console.log(`Fetching from sheet: ${this.spreadsheetId}, range: ${this.sheetName}`);
       const response = await fetch(
         `https://sheets.googleapis.com/v4/spreadsheets/${this.spreadsheetId}/values/${this.sheetName}?key=${this.apiKey}`
       );
 
       if (!response.ok) {
-        throw new Error(`Google Sheets API error: ${response.status}`);
+        const errorText = await response.text();
+        console.error(`API Error ${response.status}:`, errorText);
+        console.error(`URL used: https://sheets.googleapis.com/v4/spreadsheets/${this.spreadsheetId}/values/${this.sheetName}?key=${this.apiKey.substring(0, 10)}...`);
+        throw new Error(`Google Sheets API error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('Sheet data received:', data);
       const emails = data.values?.map((row: string[]) => row[0]).filter(Boolean) || [];
       return emails;
     } catch (error) {
