@@ -29,6 +29,9 @@ export default defineConfig({
     reportCompressedSize: false,
     chunkSizeWarningLimit: 5000,
   },
+  esbuild: {
+    target: 'es2020',
+  },
   server: {
     fs: {
       strict: true,
