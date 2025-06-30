@@ -24,13 +24,13 @@ export default defineConfig({
       }
     },
     minify: false, // Skip minification for faster build
-    target: 'es2020',
+    target: 'esnext',
     sourcemap: false,
     reportCompressedSize: false,
     chunkSizeWarningLimit: 5000,
   },
   esbuild: {
-    target: 'es2020',
+    target: 'esnext',
   },
   server: {
     fs: {
