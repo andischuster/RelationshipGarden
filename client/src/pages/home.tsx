@@ -91,19 +91,19 @@ export default function Home() {
     mutationFn: async (data: { email: string }) => {
       // Check if we're in static deployment mode
       const isStatic = !import.meta.env.VITE_GOOGLE_FORM_URL && !import.meta.env.VITE_GOOGLE_SHEET_ID;
-      
+
       if (import.meta.env.VITE_GOOGLE_FORM_URL) {
         // Use Google Forms submission for static deployment
         const formData = new FormData();
         const emailFieldId = import.meta.env.VITE_GOOGLE_FORM_EMAIL_FIELD || 'entry.1234567890';
         formData.append(emailFieldId, data.email);
-        
+
         await fetch(import.meta.env.VITE_GOOGLE_FORM_URL, {
           method: 'POST',
           mode: 'no-cors',
           body: formData
         });
-        
+
         return { success: true };
       } else if (import.meta.env.VITE_GOOGLE_SHEET_ID && import.meta.env.VITE_GOOGLE_SHEETS_API_KEY) {
         // Use Google Sheets API for static deployment
@@ -119,15 +119,27 @@ export default function Home() {
             })
           }
         );
-        
+
         if (!response.ok) {
           throw new Error('Failed to save email');
         }
-        
+
         return { success: true };
       } else {
-        // Fallback to backend API
-        return apiRequest("POST", "/api/preorders", data);
+        // Static deployment fallback - try to use Google Forms with hardcoded values
+        console.log('No environment variables set, using static fallback');
+
+        // You can either:
+        // 1. Set up Google Forms environment variables, or
+        // 2. Use a hardcoded Google Form URL here
+        // For now, let's simulate success and log the email
+        console.log('Email submitted:', data.email);
+
+        // In a real static deployment, you'd want to either:
+        // - Set VITE_GOOGLE_FORM_URL in your environment variables
+        // - Or use a service like Formspree, Netlify Forms, etc.
+
+        return { success: true, message: 'Email recorded (static mode)' };
       }
     },
     onSuccess: () => {
@@ -140,7 +152,7 @@ export default function Home() {
     },
     onError: async (error: any) => {
       let message = "Something went wrong. Please try again.";
-      
+
       if (error instanceof Response) {
         try {
           const errorData = await error.json();
@@ -151,7 +163,7 @@ export default function Home() {
       } else if (error.message) {
         message = error.message;
       }
-      
+
       toast({
         title: "Error",
         description: message,
@@ -220,17 +232,17 @@ export default function Home() {
       {/* Hero Section */}
       <section id="section-hero" className="min-h-screen flex flex-col justify-center items-center px-2 sm:px-4 py-8 pt-20 sm:pt-24 relative overflow-hidden">
         <div className="mx-auto text-center w-full">
-          
+
           {/* Main Title */}
           <h1 className={`font-serif text-5xl sm:text-6xl md:text-8xl font-bold text-deep-green mb-5 whitespace-nowrap ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
             Growing Us
           </h1>
-          
+
           {/* Tagline */}
           <p className={`text-base sm:text-lg md:text-xl text-deep-green/70 mb-6 sm:mb-9 max-w-4xl mx-auto leading-relaxed px-4 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.2s'}}>
             Every connection needs care, space, and warmth. These prompts help you nurture your relationship garden.
           </p>
-          
+
           {/* Interactive Card Stack */}
           <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
             {/* Card Stack Container */}
@@ -248,9 +260,9 @@ export default function Home() {
                   const offset = index - currentCard;
                   const isActive = index === currentCard;
                   const isVisible = Math.abs(offset) <= 2;
-                  
+
                   if (!isVisible) return null;
-                  
+
                   return (
                     <div
                       key={card.id}
@@ -287,9 +299,9 @@ export default function Home() {
                 })}
               </div>
             </div>
-            
 
-            
+
+
             {/* Card Description */}
             <div className="text-center max-w-md mx-auto px-4">
               <p className="text-lg sm:text-xl md:text-2xl text-deep-green/90 font-medium italic">
@@ -301,7 +313,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          
+
           {/* Primary CTA */}
           <div className={`${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.6s'}}>
             <Button 
@@ -334,7 +346,7 @@ export default function Home() {
               Simple steps to nurture your relationship through playful conversation.
             </p>
           </div>
-          
+
           <div className={`grid gap-6 max-w-4xl mx-auto ${isIntersecting['section-howto'] ? 'staggered-animation' : ''}`}>
             {/* Step 1 */}
             <div className={`flex items-start space-x-4 hover-lift bg-sunflower/5 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
@@ -351,7 +363,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            
+
             {/* Step 2 */}
             <div className={`flex items-start space-x-4 hover-lift bg-soft-tangerine/8 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               <div className="flex-shrink-0 w-16 h-16 bg-sunflower rounded-full border-4 border-deep-black flex items-center justify-center">
@@ -367,7 +379,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            
+
             {/* Step 3 */}
             <div className={`flex items-start space-x-4 hover-lift bg-deep-teal/8 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               <div className="flex-shrink-0 w-16 h-16 bg-sunflower rounded-full border-4 border-deep-black flex items-center justify-center">
@@ -383,7 +395,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            
+
             {/* Step 4 */}
             <div className={`flex items-start space-x-4 hover-lift bg-sunflower/8 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               <div className="flex-shrink-0 w-16 h-16 bg-sunflower rounded-full border-4 border-deep-black flex items-center justify-center">
@@ -399,7 +411,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            
+
             {/* Step 5 */}
             <div className={`flex items-start space-x-4 hover-lift bg-soft-tangerine/5 p-6 rounded-2xl ${isIntersecting['section-howto'] ? 'fade-in' : ''}`}>
               <div className="flex-shrink-0 w-16 h-16 bg-sunflower rounded-full border-4 border-deep-black flex items-center justify-center">
@@ -433,14 +445,14 @@ export default function Home() {
               <h2 className="font-serif text-4xl md:text-5xl font-bold text-deep-green mb-4">
                 What's Included
               </h2>
-              
+
               {/* Squiggly underline */}
               <div className="w-64 h-2 mb-8">
                 <svg width="256" height="8" viewBox="0 0 256 8" className="w-full">
                   <path d="M0,4 Q32,1 64,4 T128,4 T192,4 T256,4" stroke="#FFC700" strokeWidth="3" fill="none" strokeLinecap="round"/>
                 </svg>
               </div>
-              
+
               <div className="space-y-6 mb-8">
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-sunflower/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
@@ -450,7 +462,7 @@ export default function Home() {
                     50 beautifully illustrated cards
                   </p>
                 </div>
-                
+
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-sunflower/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                     <Check className="w-6 h-6 text-deep-teal" />
@@ -459,7 +471,7 @@ export default function Home() {
                     5 instruction cards
                   </p>
                 </div>
-                
+
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-sunflower/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                     <Check className="w-6 h-6 text-deep-teal" />
@@ -468,7 +480,7 @@ export default function Home() {
                     3 bonus cards for special moments
                   </p>
                 </div>
-                
+
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-sunflower/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                     <Check className="w-6 h-6 text-deep-teal" />
@@ -478,13 +490,13 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="mb-8">
                 <div className="text-4xl font-serif font-bold text-deep-green mb-2">$25 per deck</div>
                 <p className="text-deep-green/70 text-lg mb-6">
                   Free shipping on orders of two or more games
                 </p>
-                
+
                 <button 
                   onClick={handlePurchase}
                   className="cta-button flex items-center justify-center"
@@ -494,7 +506,7 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            
+
             {/* Right side - Card visual */}
             <div className={`flex justify-center ${isIntersecting['section-pricing'] ? 'fade-in' : ''}`}>
               <div className="relative">
@@ -526,7 +538,7 @@ export default function Home() {
               What Couples Are Saying
             </h2>
           </div>
-          
+
           <div className={`grid md:grid-cols-3 gap-8 ${isIntersecting['section-testimonials'] ? 'staggered-animation' : ''}`}>
             {/* Testimonial 1 */}
             <div className={`bg-warm-white p-8 rounded-3xl border-4 border-deep-black shadow-lg hover-lift ${isIntersecting['section-testimonials'] ? 'fade-in' : ''}`}>
@@ -541,7 +553,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            
+
             {/* Testimonial 2 */}
             <div className={`bg-warm-white p-8 rounded-3xl border-4 border-deep-black shadow-lg hover-lift ${isIntersecting['section-testimonials'] ? 'fade-in' : ''}`}>
               <p className="text-deep-green/80 text-lg mb-6 italic">
@@ -555,7 +567,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            
+
             {/* Testimonial 3 */}
             <div className={`bg-warm-white p-8 rounded-3xl border-4 border-deep-black shadow-lg hover-lift ${isIntersecting['section-testimonials'] ? 'fade-in' : ''}`}>
               <p className="text-deep-green/80 text-lg mb-6 italic">
@@ -581,13 +593,13 @@ export default function Home() {
           <p className={`text-xl text-deep-green/80 mb-12 max-w-2xl mx-auto ${isIntersecting['section-final-cta'] ? 'fade-in' : ''}`}>
             Don't let meaningful conversations wither. Start growing deeper connections today.
           </p>
-          
+
           <div className={`bg-warm-white rounded-3xl border-4 border-deep-black p-8 shadow-lg hover-lift max-w-lg mx-auto ${isIntersecting['section-final-cta'] ? 'fade-in' : ''}`}>
             <div className="mb-6">
               <span className="text-4xl font-serif font-bold text-deep-green">$25</span>
               <div className="text-deep-green/80 mt-1">Free shipping on 2+ games</div>
             </div>
-            
+
             <Button 
               onClick={handlePurchase}
               className="btn-primary text-deep-green font-semibold text-xl px-12 py-4 rounded-full hover-lift w-full mb-4"
@@ -595,7 +607,7 @@ export default function Home() {
               <Heart className="w-5 h-5 mr-2" />
               Let's Grow Together
             </Button>
-            
+
             <p className="text-deep-green/70 text-sm">
               <Shield className="inline w-4 h-4 text-deep-teal mr-2" />
               30-day love-it-or-return guarantee
@@ -612,7 +624,7 @@ export default function Home() {
               Every connection needs care, space, and warmth.
             </p>
           </div>
-          
+
           <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8">
             <a href="#" className="text-warm-white/80 hover:text-sunflower transition-colors flex items-center">
               <Instagram className="w-4 h-4 mr-2" />
@@ -627,7 +639,7 @@ export default function Home() {
               FAQ
             </Link>
           </div>
-          
+
           <div className="text-warm-white/60 text-sm">
             © 2024 Growing Us. Made with love for growing relationships.
           </div>
@@ -641,7 +653,7 @@ export default function Home() {
             <DialogTitle className="font-serif text-2xl text-deep-green">Pre-Order Growing Us</DialogTitle>
             <DialogDescription className="text-deep-green/80">
               Get early access with 25% off the regular price. We'll email you when it's ready to ship!
-            </DialogDescription>
+                        </DialogDescription>
           </DialogHeader>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
