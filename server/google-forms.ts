@@ -7,22 +7,15 @@ class GoogleFormsDirectSubmission implements GoogleFormsService {
   private readonly emailFieldEntry: string;
 
   constructor() {
-    // The secrets appear to be swapped, so let's handle both cases
-    const url = process.env.GOOGLE_FORM_SUBMISSION_URL || '';
-    const entry = process.env.GOOGLE_FORM_EMAIL_ENTRY || '';
+    // Read from environment variables (secrets)
+    const formUrl = process.env.GOOGLE_FORM_SUBMISSION_URL || '';
+    const entryField = process.env.GOOGLE_FORM_EMAIL_ENTRY || '';
     
-    // Check which one looks like a form ID (longer string starting with 1FAIpQLSe)
-    if (url.startsWith('1FAIpQLSe')) {
-      this.formSubmissionUrl = `https://docs.google.com/forms/d/e/${url}/formResponse`;
-      this.emailFieldEntry = `entry.1835138428`; // Correct entry field from form analysis
-    } else if (entry.startsWith('1FAIpQLSe')) {
-      this.formSubmissionUrl = `https://docs.google.com/forms/d/e/${entry}/formResponse`;
-      this.emailFieldEntry = `entry.1835138428`; // Correct entry field from form analysis
-    } else {
-      // For complete URL format, still use the hardcoded correct entry
-      this.formSubmissionUrl = url.includes('docs.google.com') ? url : `https://docs.google.com/forms/d/e/${url}/formResponse`;
-      this.emailFieldEntry = `entry.1835138428`; // Always use the correct entry field
-    }
+    console.log('Google Forms config:', { formUrl: formUrl ? 'SET' : 'MISSING', entryField: entryField ? 'SET' : 'MISSING' });
+    
+    // Use the form URL directly from secrets
+    this.formSubmissionUrl = formUrl;
+    this.emailFieldEntry = entryField;
   }
 
   async addPreorder(email: string): Promise<{ success: boolean; message: string }> {
