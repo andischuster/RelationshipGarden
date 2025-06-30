@@ -24,7 +24,7 @@ export default defineConfig({
       }
     },
     minify: false, // Skip minification for faster build
-    target: 'es2015',
+    target: 'es2020',
     sourcemap: false,
     reportCompressedSize: false,
     chunkSizeWarningLimit: 5000,
