@@ -273,7 +273,7 @@ CREATE TABLE preorders (
 ## Interactive Activity Generator Feature
 
 ### Overview
-A new interactive feature that transforms the main CTA from "Let's Grow Together – $25" to "Start to Grow Together for Free". When clicked, the existing card stack performs a flipping animation to reveal an activity generator interface that helps couples get personalized relationship activity suggestions.
+A interactive lead generation feature transforms the main CTA into a chatbox. When clicked, the existing card stack performs a flipping animation to reveal an activity generator interface that helps couples get personalized relationship activity suggestions.
 
 ### Feature Specifications
 
@@ -281,21 +281,20 @@ A new interactive feature that transforms the main CTA from "Let's Grow Together
 - **Trigger**: Click on "Start to Grow Together for Free" button
 - **Animation**: 3D card flip effect using CSS transforms
 - **Duration**: 800ms with easing function
-- **Behavior**: Current card stack container flips to reveal input interface
+- **Behavior**: Current card stack container flips to reveal chat input interface in simple design
 - **Fallback**: Graceful degradation for reduced motion preferences
 
 #### Activity Generator Interface
 
 **Input Collection**:
-- **Partner 1 Prompt**: "What would you like to improve or experience in your relationship?"
-- **Partner 2 Prompt**: "What would your partner like to improve or experience?"
+- **Partner 1 Prompt**: "Get started for free. What would you like to improve or experience in your relationship?" Transition to next card after Input. 
+- **Partner 2 Prompt**: "What would your partner like to improve or experience?" Transition to next card.
 - **Input Method**: Text areas with placeholder text and character limits
 - **Validation**: Required fields with helpful error messaging
 - **Progressive Disclosure**: Show Partner 2 input after Partner 1 completion
 
 **Activity Generation**:
-- **Processing State**: Loading animation with encouraging messages
-- **Activity Suggestion**: Personalized romantic/meaningful activity based on combined input
+- **Activity Suggestion**: Personalized romantic/meaningful activity based on combined input using AI agent.
 - **Conversation Prompts**: Include tailored discussion starters with each activity
 - **Visual Design**: Maintain card aesthetic with new content
 
