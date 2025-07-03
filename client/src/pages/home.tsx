@@ -713,10 +713,8 @@ export default function Home() {
               <p className="text-lg sm:text-xl md:text-2xl text-deep-green/90 font-medium italic">
                 {activityGeneratorState.isFlipped ? (
                   "Get your personalized activity suggestion"
-                ) : cardData[currentCard].hasUnderline ? (
-                  <span className="squiggly-underline mt-[16px] mb-[16px]">{cardData[currentCard].description}</span>
                 ) : (
-                  cardData[currentCard].description
+                  <span className="squiggly-underline mt-[16px] mb-[16px]">Discover Your Next Meaningful Moment Together.</span>
                 )}
               </p>
             </div>
