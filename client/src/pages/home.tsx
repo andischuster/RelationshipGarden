@@ -431,9 +431,6 @@ export default function Home() {
               <p className="text-sm font-medium text-black/80 mb-3 leading-relaxed px-2">
                 {activityGeneratorState.generatedActivity.description}
               </p>
-              <div className="text-sm font-bold text-black/60 mb-4">
-                ⏱️ {activityGeneratorState.generatedActivity.estimatedTime}
-              </div>
 
               {activityGeneratorState.generatedActivity.conversationPrompts?.length > 0 && (
                 <div className="border-4 border-black p-4 mb-4">
