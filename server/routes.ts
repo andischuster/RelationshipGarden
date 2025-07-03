@@ -2,6 +2,12 @@ import type { Express } from "express";
 import { storage } from "./storage";
 import { insertPreorderSchema, insertActivitySuggestionSchema } from "@shared/schema";
 import { googleFormsService } from "./google-forms";
+import OpenAI from 'openai';
+
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function registerRoutes(app: Express): Promise<void> {
   // put application routes here
@@ -113,122 +119,74 @@ export async function registerRoutes(app: Express): Promise<void> {
 
 }
 
-// Simple activity generation function
+// AI-powered activity generation function
 async function generateActivity(partner1Input: string, partner2Input: string) {
-  // Basic keyword matching to determine category and activity
-  const combinedInput = `${partner1Input} ${partner2Input}`.toLowerCase();
-  
-  // Activity templates organized by category
-  const activityTemplates = {
-    communication: [
-      {
-        title: "The Deep Conversation Night",
-        description: "Create a cozy atmosphere and take turns sharing your thoughts and dreams. Set aside phones and distractions for meaningful dialogue.",
-        conversationPrompts: [
-          "What's something you've learned about yourself recently?",
-          "What dream would you pursue if you knew you couldn't fail?",
-          "How do you feel most loved and appreciated?"
-        ],
-        estimatedTime: "1-2 hours"
-      },
-      {
-        title: "Question & Answer Journey",
-        description: "Use thoughtful questions to explore each other's perspectives and experiences in a comfortable, judgment-free space.",
-        conversationPrompts: [
-          "What's a childhood memory that still makes you smile?",
-          "What values are most important to you in our relationship?",
-          "What's one thing you'd like to try together this year?"
-        ],
-        estimatedTime: "45-60 minutes"
-      }
-    ],
-    intimacy: [
-      {
-        title: "Gratitude & Appreciation Circle",
-        description: "Take turns expressing specific things you appreciate about each other and your relationship. Focus on actions, qualities, and moments that matter.",
-        conversationPrompts: [
-          "What's something your partner did recently that made you feel loved?",
-          "What quality do you most admire in your partner?",
-          "What's your favorite memory of us together this month?"
-        ],
-        estimatedTime: "30-45 minutes"
-      },
-      {
-        title: "Connection Ritual",
-        description: "Create a special moment together through gentle touch, eye contact, and shared breathing. Focus on being present with each other.",
-        conversationPrompts: [
-          "How are you feeling right now in this moment?",
-          "What do you need from me today?",
-          "What makes you feel most connected to me?"
-        ],
-        estimatedTime: "20-30 minutes"
-      }
-    ],
-    fun: [
-      {
-        title: "Adventure Planning Session",
-        description: "Dream together about future adventures, both big and small. Create a vision board or list of experiences you want to share.",
-        conversationPrompts: [
-          "If we could travel anywhere together, where would we go?",
-          "What's a new activity we could try together this month?",
-          "What would make for a perfect weekend together?"
-        ],
-        estimatedTime: "1 hour"
-      },
-      {
-        title: "Playful Challenge Day",
-        description: "Choose a fun activity to do together - could be a game, puzzle, cooking challenge, or creative project that brings out your playful sides.",
-        conversationPrompts: [
-          "What did you enjoy most about this activity?",
-          "What did we learn about each other during this?",
-          "What other activities would be fun to try together?"
-        ],
-        estimatedTime: "1-3 hours"
-      }
-    ],
-    growth: [
-      {
-        title: "Goals & Dreams Alignment",
-        description: "Share your individual goals and explore how you can support each other's growth while building shared dreams.",
-        conversationPrompts: [
-          "What personal goal is most important to you right now?",
-          "How can I best support your dreams?",
-          "What shared goal would you like us to work on together?"
-        ],
-        estimatedTime: "1-1.5 hours"
-      },
-      {
-        title: "Relationship Check-In",
-        description: "Have an honest, gentle conversation about how your relationship is growing and what you both want to nurture moving forward.",
-        conversationPrompts: [
-          "What's working really well in our relationship?",
-          "What's one thing we could improve together?",
-          "How do you want our relationship to grow this year?"
-        ],
-        estimatedTime: "45-60 minutes"
-      }
-    ]
-  };
+  try {
+    const prompt = `You are a relationship counseling expert creating personalized activities for couples. Based on the following inputs from two partners, create a unique relationship activity that addresses their specific interests and needs.
 
-  // Determine category based on keywords
-  let category: keyof typeof activityTemplates = 'communication';
-  
-  if (combinedInput.includes('talk') || combinedInput.includes('communicate') || combinedInput.includes('conversation')) {
-    category = 'communication';
-  } else if (combinedInput.includes('intimate') || combinedInput.includes('close') || combinedInput.includes('connect') || combinedInput.includes('love')) {
-    category = 'intimacy';
-  } else if (combinedInput.includes('fun') || combinedInput.includes('play') || combinedInput.includes('enjoy') || combinedInput.includes('adventure')) {
-    category = 'fun';
-  } else if (combinedInput.includes('grow') || combinedInput.includes('goal') || combinedInput.includes('improve') || combinedInput.includes('better')) {
-    category = 'growth';
+Partner 1 shared: "${partner1Input}"
+Partner 2 shared: "${partner2Input}"
+
+Please create a personalized relationship activity that considers both partners' inputs. Return your response as a JSON object with this exact structure:
+
+{
+  "title": "A creative, engaging title for the activity",
+  "description": "A detailed description of the activity that incorporates elements from both partners' inputs (2-3 sentences)",
+  "conversationPrompts": [
+    "First thoughtful question based on their shared interests",
+    "Second question that helps them connect deeper",
+    "Third question that encourages growth together"
+  ],
+  "estimatedTime": "Realistic time estimate (e.g., '45-60 minutes')",
+  "category": "One of: communication, intimacy, fun, or growth"
+}
+
+Make the activity specific to their inputs - reference their interests, concerns, or goals when relevant. Keep the tone warm, supportive, and relationship-focused.`;
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.8,
+      max_tokens: 800
+    });
+
+    const responseContent = completion.choices[0].message.content;
+    if (!responseContent) {
+      throw new Error("No response from OpenAI");
+    }
+
+    // Parse the JSON response
+    const activity = JSON.parse(responseContent);
+    
+    // Validate the response has required fields
+    if (!activity.title || !activity.description || !activity.conversationPrompts || !activity.estimatedTime || !activity.category) {
+      throw new Error("Invalid activity structure from AI");
+    }
+
+    return activity;
+  } catch (error) {
+    console.error("Error generating AI activity:", error);
+    
+    // Fallback to a simple personalized activity if AI fails
+    return {
+      title: "Personalized Connection Time",
+      description: `Based on what you both shared, spend time discussing your thoughts and feelings together. Create a comfortable space where you can both express yourselves openly.`,
+      conversationPrompts: [
+        `Reflecting on what you shared - "${partner1Input}" - how do you think we can explore this together?`,
+        `You mentioned "${partner2Input}" - what would make this meaningful for our relationship?`,
+        "What's one thing we could do together that combines both of our interests?"
+      ],
+      estimatedTime: "45-60 minutes",
+      category: "communication"
+    };
   }
-
-  // Select a random activity from the determined category
-  const categoryActivities = activityTemplates[category];
-  const selectedActivity = categoryActivities[Math.floor(Math.random() * categoryActivities.length)];
-
-  return {
-    ...selectedActivity,
-    category
-  };
 }
