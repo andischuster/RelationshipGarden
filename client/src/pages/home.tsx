@@ -328,9 +328,7 @@ export default function Home() {
                     style={{ 
                       backgroundColor: 'transparent',
                       color: '#000',
-                      textAlign: 'left',
-                      transform: 'scale(1.3)',
-                      transformOrigin: 'top left'
+                      textAlign: 'left'
                     }}
                     rows={3}
                     maxLength={300}
@@ -342,8 +340,8 @@ export default function Home() {
               </div>
 
               {/* Partner Indicator */}
-              <div className="mb-6" style={{ marginTop: '8px' }}>
-                <div className="inline-flex items-center px-2 py-1 bg-transparent border border-gray-400 text-gray-500 rounded-full" style={{ marginLeft: '8px' }}>
+              <div className="mb-6">
+                <div className="inline-flex items-center px-2 py-1 bg-transparent border border-gray-400 text-gray-500 rounded-full">
                   <Users className="w-3 h-3 mr-1" />
                   <span className="text-xs font-medium">Partner 1</span>
                   <ChevronDown className="w-3 h-3 ml-1" />
@@ -382,9 +380,7 @@ export default function Home() {
                     style={{ 
                       backgroundColor: 'transparent',
                       color: '#000',
-                      textAlign: 'left',
-                      transform: 'scale(1.3)',
-                      transformOrigin: 'top left'
+                      textAlign: 'left'
                     }}
                     rows={3}
                     maxLength={300}
@@ -396,8 +392,8 @@ export default function Home() {
               </div>
 
               {/* Partner Indicator */}
-              <div className="mb-6" style={{ marginTop: '8px' }}>
-                <div className="inline-flex items-center px-4 py-2 bg-transparent border-2 border-black text-black rounded-full" style={{ marginLeft: '8px' }}>
+              <div className="mb-6">
+                <div className="inline-flex items-center px-4 py-2 bg-transparent border-2 border-black text-black rounded-full">
                   <Users className="w-4 h-4 mr-2" />
                   <span className="text-sm font-bold">Partner 2</span>
                   <ChevronDown className="w-4 h-4 ml-2" />
