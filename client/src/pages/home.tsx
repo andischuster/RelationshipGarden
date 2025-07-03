@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover, Check, X } from 'lucide-react';
+import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover, Check, X, ChevronDown } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -315,40 +315,51 @@ export default function Home() {
     switch (activityGeneratorState.currentStep) {
       case 'partner1':
         return (
-          <div className="flex flex-col h-full">
-            <div className="text-center mb-3">
-              <p className="text-sm leading-relaxed" style={{ color: '#5D4037' }}>Get started for free. What would you like to improve or experience in your relationship?</p>
+          <div className="flex flex-col h-full p-6">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-black text-black mb-4 tracking-wide">
+                GROW TOGETHER
+              </h2>
+              <div className="w-full h-1 bg-black mb-6"></div>
             </div>
             
-            <div className="flex-1 mb-3">
-              <textarea
-                placeholder="Type what you'd like to improve together..."
-                value={activityGeneratorState.partner1Input}
-                onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
-                className="w-full h-24 p-3 rounded-lg resize-none text-sm focus:outline-none focus:ring-2"
-                style={{ 
-                  backgroundColor: '#FFF8E1',
-                  border: '2px solid #8D6E63',
-                  color: '#3E2723'
-                }}
-                maxLength={150}
-              />
-              <div className="text-xs text-right mt-1" style={{ color: '#8D6E63' }}>
-                {activityGeneratorState.partner1Input.length}/150
+            {/* Main Content Area */}
+            <div className="flex-1 flex flex-col justify-center">
+              <div className="mb-8">
+                <p className="text-xl font-bold text-black leading-relaxed mb-6">
+                  Tell us what you would like to improve about your relationship
+                  <span className="animate-pulse">...</span>
+                  <span className="animate-blink ml-1 text-2xl font-bold">|</span>
+                </p>
+                
+                <textarea
+                  placeholder=""
+                  value={activityGeneratorState.partner1Input}
+                  onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
+                  className="w-full h-32 p-4 border-4 border-black rounded-none resize-none text-lg font-medium focus:outline-none bg-transparent placeholder:text-black/40"
+                  style={{ 
+                    backgroundColor: 'transparent',
+                    color: '#000'
+                  }}
+                  maxLength={300}
+                />
+              </div>
+
+              {/* Partner Indicator */}
+              <div className="mb-6">
+                <div className="inline-flex items-center px-4 py-2 bg-black text-white rounded-full">
+                  <Users className="w-4 h-4 mr-2" />
+                  <span className="text-sm font-bold">Partner 1</span>
+                  <ChevronDown className="w-4 h-4 ml-2" />
+                </div>
               </div>
             </div>
 
-            <div className="rounded-lg p-3 mb-3" style={{ backgroundColor: '#F9A870', opacity: 0.7 }}>
-              <div className="flex items-center text-xs" style={{ color: '#5D4037' }}>
-                <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#8B4513' }}></div>
-                Partner 1
-              </div>
-            </div>
-
+            {/* Bottom Button */}
             <Button
               onClick={handlePartner1Submit}
-              className="w-full py-3 rounded-lg text-white font-medium hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: '#8B4513' }}
+              className="w-full py-4 bg-black text-white font-bold text-lg hover:bg-black/90 transition-colors rounded-none border-4 border-black"
               disabled={!activityGeneratorState.partner1Input.trim()}
             >
               Continue
@@ -358,54 +369,70 @@ export default function Home() {
 
       case 'partner2':
         return (
-          <div className="flex flex-col h-full">
-            <div className="text-center mb-3">
-              <p className="text-sm leading-relaxed" style={{ color: '#5D4037' }}>What would your partner like to improve or experience?</p>
+          <div className="flex flex-col h-full p-6">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-black text-black mb-4 tracking-wide">
+                GROW TOGETHER
+              </h2>
+              <div className="w-full h-1 bg-black mb-6"></div>
             </div>
             
-            <div className="flex-1 mb-3">
-              <textarea
-                placeholder="What your partner wants to improve..."
-                value={activityGeneratorState.partner2Input}
-                onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner2Input: e.target.value }))}
-                className="w-full h-24 p-3 rounded-lg resize-none text-sm focus:outline-none focus:ring-2"
-                style={{ 
-                  backgroundColor: '#FFF8E1',
-                  border: '2px solid #8D6E63',
-                  color: '#3E2723'
-                }}
-                maxLength={150}
-              />
-              <div className="text-xs text-right mt-1" style={{ color: '#8D6E63' }}>
-                {activityGeneratorState.partner2Input.length}/150
+            {/* Main Content Area */}
+            <div className="flex-1 flex flex-col justify-center">
+              <div className="mb-8">
+                <p className="text-xl font-bold text-black leading-relaxed mb-6">
+                  What would your partner like to improve about your relationship
+                  <span className="animate-pulse">...</span>
+                  <span className="animate-blink ml-1 text-2xl font-bold">|</span>
+                </p>
+                
+                <textarea
+                  placeholder=""
+                  value={activityGeneratorState.partner2Input}
+                  onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner2Input: e.target.value }))}
+                  className="w-full h-32 p-4 border-4 border-black rounded-none resize-none text-lg font-medium focus:outline-none bg-transparent placeholder:text-black/40"
+                  style={{ 
+                    backgroundColor: 'transparent',
+                    color: '#000'
+                  }}
+                  maxLength={300}
+                />
+              </div>
+
+              {/* Partner Indicator */}
+              <div className="mb-6">
+                <div className="inline-flex items-center px-4 py-2 bg-black text-white rounded-full">
+                  <Users className="w-4 h-4 mr-2" />
+                  <span className="text-sm font-bold">Partner 2</span>
+                  <ChevronDown className="w-4 h-4 ml-2" />
+                </div>
               </div>
             </div>
 
-            <div className="rounded-lg p-3 mb-3" style={{ backgroundColor: '#F9A870', opacity: 0.7 }}>
-              <div className="flex items-center text-xs" style={{ color: '#5D4037' }}>
-                <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#FF7043' }}></div>
-                Partner 2
-              </div>
-            </div>
-
+            {/* Bottom Button */}
             <Button
               onClick={handlePartner2Submit}
-              className="w-full py-2 rounded-lg text-white font-medium hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: '#8B4513' }}
+              className="w-full py-4 bg-black text-white font-bold text-lg hover:bg-black/90 transition-colors rounded-none border-4 border-black"
               disabled={!activityGeneratorState.partner2Input.trim()}
             >
-              Generate
+              Generate activity
             </Button>
           </div>
         );
 
       case 'generation':
         return (
-          <div className="flex flex-col h-full justify-center items-center">
-            <Sprout className="w-12 h-12 mx-auto animate-pulse mb-4" style={{ color: '#F9A870' }} />
-            <h3 className="text-lg font-bold mb-3" style={{ color: '#8B4513' }}>Creating Your Activity</h3>
-            <p className="text-sm text-center px-2 mb-6" style={{ color: '#5D4037' }}>Crafting something special for you both...</p>
-            <div className="w-6 h-6 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#8B4513', borderTopColor: 'transparent' }}></div>
+          <div className="flex flex-col h-full justify-center items-center p-6">
+            <div className="text-center">
+              <div className="w-16 h-16 border-4 border-black border-t-transparent rounded-full animate-spin mb-6"></div>
+              <h3 className="text-2xl font-black text-black mb-4">
+                Creating Your Activity
+              </h3>
+              <p className="text-lg font-bold text-black/70">
+                Crafting something special for you both...
+              </p>
+            </div>
           </div>
         );
 
@@ -413,25 +440,30 @@ export default function Home() {
         if (!activityGeneratorState.generatedActivity) return null;
         
         return (
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full p-6">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-black text-black mb-4 tracking-wide">
+                YOUR ACTIVITY
+              </h2>
+              <div className="w-full h-1 bg-black mb-6"></div>
+            </div>
             
-            
-            <div className="flex-1 overflow-y-auto mb-4">
-              <h4 className="font-semibold text-sm mb-2" style={{ color: '#8B4513' }}>
+            <div className="flex-1 overflow-y-auto mb-6">
+              <h4 className="text-xl font-black text-black mb-4">
                 {activityGeneratorState.generatedActivity.title}
               </h4>
-              <p className="text-sm mb-3 leading-relaxed" style={{ color: '#5D4037' }}>
-                {activityGeneratorState.generatedActivity.description.slice(0, 150)}...
+              <p className="text-lg font-medium text-black/80 mb-4 leading-relaxed">
+                {activityGeneratorState.generatedActivity.description}
               </p>
-              <div className="text-xs font-medium mb-4" style={{ color: '#8D6E63' }}>
+              <div className="text-sm font-bold text-black/60 mb-4">
                 ⏱️ {activityGeneratorState.generatedActivity.estimatedTime}
               </div>
 
               {activityGeneratorState.generatedActivity.conversationPrompts?.length > 0 && (
-                <div className="mb-4">
-                  <h5 className="font-semibold text-sm mb-2" style={{ color: '#8B4513' }}>💬 Conversation Starter:</h5>
-                  <p className="text-sm italic" style={{ color: '#5D4037' }}>
-                    "{activityGeneratorState.generatedActivity.conversationPrompts[0].slice(0, 100)}..."
+                <div className="border-4 border-black p-4 mb-4">
+                  <h5 className="font-black text-black mb-2">Conversation Starter:</h5>
+                  <p className="text-lg font-medium text-black/80 italic">
+                    "{activityGeneratorState.generatedActivity.conversationPrompts[0]}"
                   </p>
                 </div>
               )}
@@ -439,8 +471,7 @@ export default function Home() {
 
             <Button
               onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'email' }))}
-              className="w-full py-3 rounded-lg text-white font-medium hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: '#8B4513' }}
+              className="w-full py-4 bg-black text-white font-bold text-lg hover:bg-black/90 transition-colors rounded-none border-4 border-black"
             >
               💌 Send to Email
             </Button>
@@ -449,64 +480,56 @@ export default function Home() {
 
       case 'email':
         return (
-          <div className="flex flex-col h-full">
-            <div className="text-center mb-4">
-              <Mail className="w-8 h-8 mx-auto mb-3" style={{ color: '#F9A870' }} />
-              <h3 className="text-lg font-bold mb-2" style={{ color: '#8B4513' }}>Save Your Activity</h3>
-              <p className="text-sm" style={{ color: '#5D4037' }}>We'll send the full details to your email</p>
+          <div className="flex flex-col h-full p-6">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-black text-black mb-4 tracking-wide">
+                SAVE ACTIVITY
+              </h2>
+              <div className="w-full h-1 bg-black mb-6"></div>
+              <p className="text-lg font-bold text-black/80">
+                We'll send the full details to your email
+              </p>
             </div>
-            <div className="flex-1 mb-4">
+            
+            <div className="flex-1 flex flex-col justify-center mb-6">
               <input
                 type="email"
                 placeholder="Enter your email address"
                 value={activityGeneratorState.email}
                 onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, email: e.target.value }))}
-                className="w-full p-3 rounded-lg text-sm text-center focus:outline-none focus:ring-2"
+                className="w-full p-4 border-4 border-black rounded-none text-lg font-medium text-center focus:outline-none bg-transparent placeholder:text-black/50"
                 style={{ 
-                  backgroundColor: '#FFF8E1',
-                  border: '2px solid #8D6E63',
-                  color: '#3E2723'
+                  backgroundColor: 'transparent',
+                  color: '#000'
                 }}
               />
             </div>
+            
             {activityGeneratorState.emailCaptured ? (
-              <div className="text-center space-y-4">
-                <div className="font-medium text-sm mb-2" style={{ color: '#8B4513' }}>
-                  ✅ Activity sent successfully!
+              <div className="text-center space-y-6">
+                <div className="border-4 border-black p-4">
+                  <div className="font-black text-xl text-black mb-2">
+                    ✅ Activity sent successfully!
+                  </div>
+                  <p className="text-lg font-bold text-black/70 mb-4">
+                    Check your inbox for the full activity details.
+                  </p>
                 </div>
-                <p className="text-xs mb-4" style={{ color: '#5D4037' }}>Check your inbox for the full activity details. Want more activities?</p>
                 <Button
                   onClick={() => setIsPreorderModalOpen(true)}
-                  className="w-full py-3 rounded-lg border-2 hover:opacity-80 transition-opacity"
-                  style={{ 
-                    backgroundColor: 'transparent',
-                    borderColor: '#8B4513',
-                    color: '#8B4513'
-                  }}
-                >Explore Our Card Game</Button>
+                  className="w-full py-4 bg-transparent border-4 border-black text-black font-bold text-lg hover:bg-black hover:text-white transition-colors rounded-none"
+                >
+                  Explore Our Card Game
+                </Button>
               </div>
             ) : (
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'result' }))}
-                  className="flex-1 py-3 rounded-lg border-2 hover:opacity-80 transition-opacity"
-                  style={{ 
-                    backgroundColor: 'transparent',
-                    borderColor: '#8D6E63',
-                    color: '#5D4037'
-                  }}
-                >
-                  Back
-                </Button>
-                <Button
-                  onClick={handleEmailSubmit}
-                  disabled={emailCaptureMutation.isPending || !activityGeneratorState.email.trim()}
-                  className="flex-1 py-3 rounded-lg text-white font-medium hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: '#8B4513' }}
-                >
-                  {emailCaptureMutation.isPending ? 'Sending...' : 'Send Activity'}
-                </Button>
-              </div>
+              <Button
+                onClick={handleEmailSubmit}
+                disabled={emailCaptureMutation.isPending || !activityGeneratorState.email.trim()}
+                className="w-full py-4 bg-black text-white font-bold text-lg hover:bg-black/90 transition-colors rounded-none border-4 border-black"
+              >
+                {emailCaptureMutation.isPending ? 'Sending...' : 'Send Activity'}
+              </Button>
             )}
           </div>
         );
