@@ -444,7 +444,7 @@ export default function Home() {
 
             <Button
               onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'email' }))}
-              className="w-full py-2 bg-black text-white font-bold text-sm hover:bg-black/90 transition-colors rounded-none border-4 border-black"
+              className="w-full py-2 bg-gradient-to-r from-sunflower to-soft-tangerine hover:from-sunflower/90 hover:to-soft-tangerine/90 text-deep-green font-bold text-sm hover-lift shadow-lg rounded-full"
             >
               💌 Send to Email
             </Button>
@@ -454,16 +454,6 @@ export default function Home() {
       case 'email':
         return (
           <div className="flex flex-col h-full p-3">
-            <div className="text-center mb-4">
-              <h2 className="text-xl font-black text-black mb-2 tracking-wide">
-                SAVE ACTIVITY
-              </h2>
-              <div className="w-full h-1 bg-black mb-3"></div>
-              <p className="text-sm font-bold text-black/80">
-                We'll send the full details to your email
-              </p>
-            </div>
-
             <div className="flex-1 flex flex-col justify-center mb-3">
               <input
                 type="email"
