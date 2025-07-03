@@ -430,20 +430,18 @@ export default function Home() {
             
             
             <div className="flex-1 overflow-y-auto mb-4">
-              <div className="p-4 rounded-lg mb-3" style={{ backgroundColor: '#F9A870', opacity: 0.3 }}>
-                <h4 className="font-semibold text-sm mb-2" style={{ color: '#8B4513' }}>
-                  {activityGeneratorState.generatedActivity.title}
-                </h4>
-                <p className="text-sm mb-3 leading-relaxed" style={{ color: '#5D4037' }}>
-                  {activityGeneratorState.generatedActivity.description.slice(0, 150)}...
-                </p>
-                <div className="text-xs font-medium" style={{ color: '#8D6E63' }}>
-                  ⏱️ {activityGeneratorState.generatedActivity.estimatedTime}
-                </div>
+              <h4 className="font-semibold text-sm mb-2" style={{ color: '#8B4513' }}>
+                {activityGeneratorState.generatedActivity.title}
+              </h4>
+              <p className="text-sm mb-3 leading-relaxed" style={{ color: '#5D4037' }}>
+                {activityGeneratorState.generatedActivity.description.slice(0, 150)}...
+              </p>
+              <div className="text-xs font-medium mb-4" style={{ color: '#8D6E63' }}>
+                ⏱️ {activityGeneratorState.generatedActivity.estimatedTime}
               </div>
 
               {activityGeneratorState.generatedActivity.conversationPrompts?.length > 0 && (
-                <div className="border p-3 rounded-lg" style={{ backgroundColor: '#FFF8E1', borderColor: '#8D6E63' }}>
+                <div className="mb-4">
                   <h5 className="font-semibold text-sm mb-2" style={{ color: '#8B4513' }}>💬 Conversation Starter:</h5>
                   <p className="text-sm italic" style={{ color: '#5D4037' }}>
                     "{activityGeneratorState.generatedActivity.conversationPrompts[0].slice(0, 100)}..."
