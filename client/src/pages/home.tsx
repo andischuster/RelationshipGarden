@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover, Check, X, ChevronDown } from 'lucide-react';
+import { Heart, Sprout, Sun, Flower, Leaf, ShoppingCart, Shield, Star, Gift, TriangleAlert, Truck, Users, Mail, HelpCircle, Instagram, Clover, Check, X, ChevronDown, Send } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -319,19 +319,24 @@ export default function Home() {
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col justify-center">
               <div className="mb-8">
-                <input
-                  type="text"
-                  placeholder="Tell us what you would like to improve about your relationship..."
-                  value={activityGeneratorState.partner1Input}
-                  onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
-                  className="w-full p-4 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50"
-                  style={{ 
-                    backgroundColor: 'transparent',
-                    color: '#000'
-                  }}
-                  maxLength={300}
-                />
-                <span className="animate-blink ml-1 text-2xl font-bold">|</span>
+                <div className="relative">
+                  <textarea
+                    placeholder="Tell us what you would like to improve about your relationship..."
+                    value={activityGeneratorState.partner1Input}
+                    onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
+                    className="w-full p-4 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-left resize-none"
+                    style={{ 
+                      backgroundColor: 'transparent',
+                      color: '#000',
+                      textAlign: 'left'
+                    }}
+                    rows={3}
+                    maxLength={300}
+                  />
+                  {!activityGeneratorState.partner1Input && (
+                    <span className="absolute top-4 left-4 animate-blink text-2xl font-bold text-black pointer-events-none">|</span>
+                  )}
+                </div>
               </div>
 
               {/* Partner Indicator */}
@@ -347,7 +352,7 @@ export default function Home() {
             {/* Bottom Button - Header Style */}
             <div className="text-center">
               <h2 
-                className="text-2xl font-black text-black mb-4 tracking-wide cursor-pointer hover:text-black/80 transition-colors"
+                className="text-2xl font-black text-black mb-4 tracking-wide cursor-pointer hover:text-black/80 transition-colors yellow-squiggly-underline inline-flex items-center gap-3"
                 onClick={handlePartner1Submit}
                 style={{ 
                   opacity: !activityGeneratorState.partner1Input.trim() ? 0.5 : 1,
@@ -355,8 +360,9 @@ export default function Home() {
                 }}
               >
                 CONTINUE
+                <Send className="w-6 h-6 text-yellow-500" />
               </h2>
-              <div className="w-full h-1 bg-black"></div>
+              <div className="w-full h-1 bg-black mt-2"></div>
             </div>
           </div>
         );
@@ -367,19 +373,24 @@ export default function Home() {
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col justify-center">
               <div className="mb-8">
-                <input
-                  type="text"
-                  placeholder="What would your partner like to improve about your relationship..."
-                  value={activityGeneratorState.partner2Input}
-                  onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner2Input: e.target.value }))}
-                  className="w-full p-4 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50"
-                  style={{ 
-                    backgroundColor: 'transparent',
-                    color: '#000'
-                  }}
-                  maxLength={300}
-                />
-                <span className="animate-blink ml-1 text-2xl font-bold">|</span>
+                <div className="relative">
+                  <textarea
+                    placeholder="What would your partner like to improve about your relationship..."
+                    value={activityGeneratorState.partner2Input}
+                    onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner2Input: e.target.value }))}
+                    className="w-full p-4 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-left resize-none"
+                    style={{ 
+                      backgroundColor: 'transparent',
+                      color: '#000',
+                      textAlign: 'left'
+                    }}
+                    rows={3}
+                    maxLength={300}
+                  />
+                  {!activityGeneratorState.partner2Input && (
+                    <span className="absolute top-4 left-4 animate-blink text-2xl font-bold text-black pointer-events-none">|</span>
+                  )}
+                </div>
               </div>
 
               {/* Partner Indicator */}
@@ -395,7 +406,7 @@ export default function Home() {
             {/* Bottom Button - Header Style */}
             <div className="text-center">
               <h2 
-                className="text-2xl font-black text-black mb-4 tracking-wide cursor-pointer hover:text-black/80 transition-colors"
+                className="text-2xl font-black text-black mb-4 tracking-wide cursor-pointer hover:text-black/80 transition-colors yellow-squiggly-underline inline-flex items-center gap-3"
                 onClick={handlePartner2Submit}
                 style={{ 
                   opacity: !activityGeneratorState.partner2Input.trim() ? 0.5 : 1,
@@ -403,8 +414,9 @@ export default function Home() {
                 }}
               >
                 GENERATE ACTIVITY
+                <Send className="w-6 h-6 text-yellow-500" />
               </h2>
-              <div className="w-full h-1 bg-black"></div>
+              <div className="w-full h-1 bg-black mt-2"></div>
             </div>
           </div>
         );
