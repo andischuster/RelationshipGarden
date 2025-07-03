@@ -348,9 +348,8 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
             {/* Bottom Button - Header Style */}
-            <div className="text-center">
+            <div className="text-center text-[1A1A1A]">
               <h2 
                 className="text-2xl font-black text-black mb-4 tracking-wide cursor-pointer hover:text-black/80 transition-colors yellow-squiggly-underline inline-flex items-center gap-3"
                 onClick={handlePartner1Submit}
