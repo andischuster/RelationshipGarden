@@ -428,9 +428,6 @@ export default function Home() {
             
 
             <div className="flex-1 overflow-y-auto mb-6">
-              <h4 className="text-xl font-black text-black mb-4">
-                {activityGeneratorState.generatedActivity.title}
-              </h4>
               <p className="text-lg font-medium text-black/80 mb-4 leading-relaxed">
                 {activityGeneratorState.generatedActivity.description}
               </p>
@@ -652,7 +649,11 @@ export default function Home() {
                                     borderColor: '#1A1A1A'
                                   }}
                                 >
-                                  <h3 className="font-bold tracking-wide text-[#171717] text-[22px]">GROW TOGETHER</h3>
+                                  <h3 className="font-bold tracking-wide text-[#171717] text-[22px]">
+                                    {activityGeneratorState.currentStep === 'result' && activityGeneratorState.generatedActivity 
+                                      ? activityGeneratorState.generatedActivity.title 
+                                      : 'GROW TOGETHER'}
+                                  </h3>
                                 </div>
 
                                 {/* Content Area */}
