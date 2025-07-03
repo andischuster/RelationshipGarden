@@ -2,12 +2,10 @@ import type { Express } from "express";
 import { storage } from "./storage";
 import { insertPreorderSchema, insertActivitySuggestionSchema } from "@shared/schema";
 import { googleFormsService } from "./google-forms";
-import OpenAI from 'openai';
+import { GoogleGenAI } from '@google/genai';
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize Gemini client
+const genai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
 export async function registerRoutes(app: Express): Promise<void> {
   // put application routes here
@@ -119,7 +117,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
 }
 
-// AI-powered activity generation function
+// AI-powered activity generation function using Gemini
 async function generateActivity(partner1Input: string, partner2Input: string) {
   try {
     const prompt = `You are a relationship counseling expert creating personalized activities for couples. Based on the following inputs from two partners, create a unique relationship activity that addresses their specific interests and needs.
@@ -143,25 +141,32 @@ Please create a personalized relationship activity that considers both partners'
 
 Make the activity specific to their inputs - reference their interests, concerns, or goals when relevant. Keep the tone warm, supportive, and relationship-focused.`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only."
-        },
-        {
-          role: "user",
-          content: prompt
+    const response = await genai.models.generateContent({
+      model: "gemini-2.5-flash",
+      config: {
+        systemInstruction: "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only.",
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "object",
+          properties: {
+            title: { type: "string" },
+            description: { type: "string" },
+            conversationPrompts: {
+              type: "array",
+              items: { type: "string" }
+            },
+            estimatedTime: { type: "string" },
+            category: { type: "string" }
+          },
+          required: ["title", "description", "conversationPrompts", "estimatedTime", "category"]
         }
-      ],
-      temperature: 0.8,
-      max_tokens: 800
+      },
+      contents: prompt
     });
 
-    const responseContent = completion.choices[0].message.content;
+    const responseContent = response.text;
     if (!responseContent) {
-      throw new Error("No response from OpenAI");
+      throw new Error("No response from Gemini");
     }
 
     // Parse the JSON response
