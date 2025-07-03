@@ -41,7 +41,7 @@ Growing Us is a relationship card game landing page designed to promote and sell
 ## Page Structure
 
 ### 1. Header/Navigation
-- **Logo**: Flower icon + "Relationship Game" text
+- **Logo**: Flower icon + "Relationship Retrospective" text
 - **Sticky behavior**: Transforms on scroll with backdrop blur
 - **CTA Button**: "Play Now" - opens pre-order modal
 - **Responsive**: Collapses gracefully on mobile
