@@ -324,7 +324,7 @@ export default function Home() {
                     placeholder="Tell us what you would like to improve about your relationship..."
                     value={activityGeneratorState.partner1Input}
                     onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
-                    className="w-full p-4 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-left resize-none"
+                    className="w-full p-2 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-left resize-none"
                     style={{ 
                       backgroundColor: 'transparent',
                       color: '#000',
@@ -334,7 +334,7 @@ export default function Home() {
                     maxLength={300}
                   />
                   {!activityGeneratorState.partner1Input && (
-                    <span className="absolute top-4 left-4 animate-blink text-2xl font-bold text-black pointer-events-none">|</span>
+                    <span className="absolute top-2 left-2 animate-blink text-2xl font-bold text-black pointer-events-none">|</span>
                   )}
                 </div>
               </div>
@@ -378,7 +378,7 @@ export default function Home() {
                     placeholder="What would your partner like to improve about your relationship..."
                     value={activityGeneratorState.partner2Input}
                     onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner2Input: e.target.value }))}
-                    className="w-full p-4 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-left resize-none"
+                    className="w-full p-2 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-left resize-none"
                     style={{ 
                       backgroundColor: 'transparent',
                       color: '#000',
@@ -388,7 +388,7 @@ export default function Home() {
                     maxLength={300}
                   />
                   {!activityGeneratorState.partner2Input && (
-                    <span className="absolute top-4 left-4 animate-blink text-2xl font-bold text-black pointer-events-none">|</span>
+                    <span className="absolute top-2 left-2 animate-blink text-2xl font-bold text-black pointer-events-none">|</span>
                   )}
                 </div>
               </div>
