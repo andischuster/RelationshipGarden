@@ -654,6 +654,18 @@ export default function Home() {
                                   border: '4px solid #1A1A1A'
                                 }}
                               >
+                                {/* Header */}
+                                <div 
+                                  className="text-center py-3 border-b-2"
+                                  style={{ 
+                                    backgroundColor: '#8B4513',
+                                    color: '#FEFBF6',
+                                    borderColor: '#1A1A1A'
+                                  }}
+                                >
+                                  <h3 className="text-sm font-bold tracking-wide">ACTIVITY GENERATOR</h3>
+                                </div>
+                                
                                 {/* Content Area */}
                                 <div 
                                   className="flex-1 p-4 bg-[#f5e4c2]"
@@ -661,6 +673,8 @@ export default function Home() {
                                 >
                                   {renderActivityGeneratorContent()}
                                 </div>
+                                
+                                
                               </div>
                             </div>
                           </div>
