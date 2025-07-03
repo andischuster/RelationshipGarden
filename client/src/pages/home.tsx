@@ -315,29 +315,29 @@ export default function Home() {
     switch (activityGeneratorState.currentStep) {
       case 'partner1':
         return (
-          <div className="flex flex-col h-full justify-between">
-            <div className="text-center mb-4">
-              <Heart className="w-6 h-6 mx-auto text-soft-tangerine mb-3" />
-              <h3 className="text-base font-bold text-deep-green mb-2">Let's Start</h3>
-              <p className="text-xs text-gray-600 px-2">What would you like to improve or experience in your relationship?</p>
+          <div className="flex flex-col h-full">
+            <div className="text-center mb-6">
+              <Heart className="w-8 h-8 mx-auto text-soft-tangerine mb-3" />
+              <h3 className="text-lg font-bold text-deep-green mb-2">Get started for free</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">What would you like to improve or experience in your relationship?</p>
             </div>
             
-            <div className="flex-1 mb-4">
+            <div className="flex-1 mb-6">
               <textarea
-                placeholder="Type what you'd like to improve together..."
+                placeholder="I'd like to improve..."
                 value={activityGeneratorState.partner1Input}
                 onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
-                className="w-full h-20 p-2 border border-gray-300 rounded-lg resize-none text-xs"
-                maxLength={150}
+                className="w-full h-24 p-3 border-2 border-gray-200 rounded-xl resize-none text-sm focus:border-deep-green focus:outline-none"
+                maxLength={200}
               />
-              <div className="text-xs text-gray-400 text-right mt-1">
-                {activityGeneratorState.partner1Input.length}/150
+              <div className="text-xs text-gray-400 text-right mt-2">
+                {activityGeneratorState.partner1Input.length}/200
               </div>
             </div>
 
             <Button
               onClick={handlePartner1Submit}
-              className="w-full bg-deep-green hover:bg-deep-green/90 text-white text-sm py-2"
+              className="w-full bg-deep-green hover:bg-deep-green/90 text-white text-base py-3 rounded-xl"
             >
               Continue
             </Button>
@@ -346,41 +346,39 @@ export default function Home() {
 
       case 'partner2':
         return (
-          <div className="flex flex-col h-full justify-between">
-            <div className="text-center mb-4">
-              <Heart className="w-6 h-6 mx-auto text-soft-tangerine mb-3" />
-              <h3 className="text-base font-bold text-deep-green mb-2">Step 2</h3>
-              <p className="text-xs text-gray-600 px-2">What would your partner like to improve?</p>
+          <div className="flex flex-col h-full">
+            <div className="text-center mb-6">
+              <Heart className="w-8 h-8 mx-auto text-soft-tangerine mb-3" />
+              <h3 className="text-lg font-bold text-deep-green mb-2">Almost there!</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">What would your partner like to improve or experience?</p>
             </div>
             
-            <div className="flex-1 mb-4">
+            <div className="flex-1 mb-6">
               <textarea
-                placeholder="What your partner wants to improve..."
+                placeholder="My partner would like to improve..."
                 value={activityGeneratorState.partner2Input}
                 onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner2Input: e.target.value }))}
-                className="w-full h-20 p-2 border border-gray-300 rounded-lg resize-none text-xs"
-                maxLength={150}
+                className="w-full h-24 p-3 border-2 border-gray-200 rounded-xl resize-none text-sm focus:border-deep-green focus:outline-none"
+                maxLength={200}
               />
-              <div className="text-xs text-gray-400 text-right mt-1">
-                {activityGeneratorState.partner2Input.length}/150
+              <div className="text-xs text-gray-400 text-right mt-2">
+                {activityGeneratorState.partner2Input.length}/200
               </div>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <Button
                 onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'partner1' }))}
                 variant="outline"
-                className="flex-1 text-xs py-2"
-                size="sm"
+                className="flex-1 text-sm py-3 rounded-xl border-2"
               >
                 Back
               </Button>
               <Button
                 onClick={handlePartner2Submit}
-                className="flex-1 bg-deep-green hover:bg-deep-green/90 text-white text-xs py-2"
-                size="sm"
+                className="flex-1 bg-deep-green hover:bg-deep-green/90 text-white text-sm py-3 rounded-xl"
               >
-                Generate
+                Generate Activity
               </Button>
             </div>
           </div>
@@ -536,89 +534,78 @@ export default function Home() {
 
           {/* Interactive Card Stack with Flip */}
           <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
-            {/* Card Flip Container */}
-            <div className="activity-generator-container">
-              <div className={`card-flip-container ${isCardFlipped ? 'flipped' : ''}`}>
-                <div className="card-flip-inner">
-                  {/* Front - Card Stack */}
-                  <div className="card-front">
-                    <div 
-                      className="flex justify-center items-center cursor-pointer"
-                      onClick={() => setCurrentCard((currentCard + 1) % cardData.length)}
-                      style={{ 
-                        height: '500px',
-                        width: '100%',
-                        padding: '20px'
-                      }}
-                    >
-                      <div className="relative">
-                        {cardData.map((card, index) => {
-                          const offset = index - currentCard;
-                          const isActive = index === currentCard;
-                          const isVisible = Math.abs(offset) <= 2;
+            {/* Card Stack Container with Flip Animation */}
+            <div 
+              className="flex justify-center items-center activity-generator-container"
+              style={{ 
+                height: '500px',
+                width: '100%',
+                padding: '20px'
+              }}
+            >
+              <div className={`card-flip-inner ${isCardFlipped ? 'flipped' : ''}`}>
+                {/* Front - Card Stack */}
+                <div className="card-front">
+                  <div 
+                    className="relative cursor-pointer"
+                    onClick={() => setCurrentCard((currentCard + 1) % cardData.length)}
+                  >
+                    {cardData.map((card, index) => {
+                      const offset = index - currentCard;
+                      const isActive = index === currentCard;
+                      const isVisible = Math.abs(offset) <= 2;
 
-                          if (!isVisible) return null;
+                      if (!isVisible) return null;
 
-                          return (
-                            <div
-                              key={card.id}
-                              className="absolute transition-all duration-1000 ease-out"
-                              style={{
-                                transform: `
-                                  translateX(${offset * 8}px)
-                                  translateY(${offset * 4}px)
-                                  rotate(${offset * 3}deg)
-                                  scale(${isActive ? 1 : 0.95})
-                                `,
-                                zIndex: isActive ? 10 : 10 - Math.abs(offset),
-                                left: '-144px',
-                                top: '-216px'
-                              }}
-                            >
-                              <div
-                                className="card-stack-item rounded-2xl border-4 border-deep-black shadow-2xl transition-all duration-300"
-                                style={{
-                                  width: '288px',
-                                  height: '432px',
-                                  backgroundImage: `url(${card.image})`,
-                                  backgroundSize: 'cover',
-                                  backgroundPosition: 'center',
-                                  backgroundRepeat: 'no-repeat',
-                                  filter: isActive ? 'none' : 'brightness(0.85)',
-                                  opacity: isActive ? 1 : 0.9
-                                }}
-                                role="img"
-                                aria-label={card.title}
-                              />
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Back - Activity Generator */}
-                  <div className="card-back">
-                    <div 
-                      className="flex justify-center items-center"
-                      style={{ 
-                        height: '500px',
-                        width: '100%',
-                        padding: '20px'
-                      }}
-                    >
-                      <div className="relative" style={{ left: '-144px', top: '-216px' }}>
-                        {/* Single clean card interface */}
+                      return (
                         <div
-                          className="bg-warm-white border-4 border-deep-black rounded-2xl shadow-2xl p-6 flex flex-col"
+                          key={card.id}
+                          className="absolute transition-all duration-1000 ease-out"
                           style={{
-                            width: '288px',
-                            height: '432px'
+                            transform: `
+                              translateX(${offset * 8}px)
+                              translateY(${offset * 4}px)
+                              rotate(${offset * 3}deg)
+                              scale(${isActive ? 1 : 0.95})
+                            `,
+                            zIndex: isActive ? 10 : 10 - Math.abs(offset),
+                            left: '-144px',
+                            top: '-216px'
                           }}
                         >
-                          {renderActivityGeneratorContent()}
+                          <div
+                            className="card-stack-item rounded-2xl border-4 border-deep-black shadow-2xl transition-all duration-300"
+                            style={{
+                              width: '288px',
+                              height: '432px',
+                              backgroundImage: `url(${card.image})`,
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center',
+                              backgroundRepeat: 'no-repeat',
+                              filter: isActive ? 'none' : 'brightness(0.85)',
+                              opacity: isActive ? 1 : 0.9
+                            }}
+                            role="img"
+                            aria-label={card.title}
+                          />
                         </div>
-                      </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Back - Clean Activity Generator Interface */}
+                <div className="card-back">
+                  <div className="relative" style={{ left: '-144px', top: '-216px' }}>
+                    {/* Clean, simple card interface matching card aesthetic */}
+                    <div
+                      className="bg-warm-white border-4 border-deep-black rounded-2xl shadow-2xl p-6 flex flex-col"
+                      style={{
+                        width: '288px',
+                        height: '432px'
+                      }}
+                    >
+                      {renderActivityGeneratorContent()}
                     </div>
                   </div>
                 </div>
