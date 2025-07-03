@@ -324,7 +324,7 @@ export default function Home() {
                   placeholder="Tell us what you would like to improve about your relationship..."
                   value={activityGeneratorState.partner1Input}
                   onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
-                  className="w-full p-4 border-4 border-black rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50"
+                  className="w-full p-4 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50"
                   style={{ 
                     backgroundColor: 'transparent',
                     color: '#000'
@@ -336,7 +336,7 @@ export default function Home() {
 
               {/* Partner Indicator */}
               <div className="mb-6">
-                <div className="inline-flex items-center px-4 py-2 bg-black text-white rounded-full">
+                <div className="inline-flex items-center px-4 py-2 bg-transparent border-2 border-black text-black rounded-full">
                   <Users className="w-4 h-4 mr-2" />
                   <span className="text-sm font-bold">Partner 1</span>
                   <ChevronDown className="w-4 h-4 ml-2" />
@@ -344,14 +344,20 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Bottom Button */}
-            <Button
-              onClick={handlePartner1Submit}
-              className="w-full py-4 bg-black text-white font-bold text-lg hover:bg-black/90 transition-colors rounded-none border-4 border-black"
-              disabled={!activityGeneratorState.partner1Input.trim()}
-            >
-              Continue
-            </Button>
+            {/* Bottom Button - Header Style */}
+            <div className="text-center">
+              <h2 
+                className="text-2xl font-black text-black mb-4 tracking-wide cursor-pointer hover:text-black/80 transition-colors"
+                onClick={handlePartner1Submit}
+                style={{ 
+                  opacity: !activityGeneratorState.partner1Input.trim() ? 0.5 : 1,
+                  pointerEvents: !activityGeneratorState.partner1Input.trim() ? 'none' : 'auto'
+                }}
+              >
+                CONTINUE
+              </h2>
+              <div className="w-full h-1 bg-black"></div>
+            </div>
           </div>
         );
 
@@ -361,28 +367,24 @@ export default function Home() {
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col justify-center">
               <div className="mb-8">
-                <p className="text-xl font-bold text-black leading-relaxed mb-6">
-                  What would your partner like to improve about your relationship
-                  <span className="animate-pulse">...</span>
-                  <span className="animate-blink ml-1 text-2xl font-bold">|</span>
-                </p>
-                
-                <textarea
-                  placeholder=""
+                <input
+                  type="text"
+                  placeholder="What would your partner like to improve about your relationship..."
                   value={activityGeneratorState.partner2Input}
                   onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner2Input: e.target.value }))}
-                  className="w-full h-32 p-4 border-4 border-black rounded-none resize-none text-lg font-medium focus:outline-none bg-transparent placeholder:text-black/40"
+                  className="w-full p-4 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50"
                   style={{ 
                     backgroundColor: 'transparent',
                     color: '#000'
                   }}
                   maxLength={300}
                 />
+                <span className="animate-blink ml-1 text-2xl font-bold">|</span>
               </div>
 
               {/* Partner Indicator */}
               <div className="mb-6">
-                <div className="inline-flex items-center px-4 py-2 bg-black text-white rounded-full">
+                <div className="inline-flex items-center px-4 py-2 bg-transparent border-2 border-black text-black rounded-full">
                   <Users className="w-4 h-4 mr-2" />
                   <span className="text-sm font-bold">Partner 2</span>
                   <ChevronDown className="w-4 h-4 ml-2" />
@@ -390,14 +392,20 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Bottom Button */}
-            <Button
-              onClick={handlePartner2Submit}
-              className="w-full py-4 bg-black text-white font-bold text-lg hover:bg-black/90 transition-colors rounded-none border-4 border-black"
-              disabled={!activityGeneratorState.partner2Input.trim()}
-            >
-              Generate activity
-            </Button>
+            {/* Bottom Button - Header Style */}
+            <div className="text-center">
+              <h2 
+                className="text-2xl font-black text-black mb-4 tracking-wide cursor-pointer hover:text-black/80 transition-colors"
+                onClick={handlePartner2Submit}
+                style={{ 
+                  opacity: !activityGeneratorState.partner2Input.trim() ? 0.5 : 1,
+                  pointerEvents: !activityGeneratorState.partner2Input.trim() ? 'none' : 'auto'
+                }}
+              >
+                GENERATE ACTIVITY
+              </h2>
+              <div className="w-full h-1 bg-black"></div>
+            </div>
           </div>
         );
 
