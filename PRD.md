@@ -24,7 +24,7 @@ Growing Us is a relationship card game landing page designed to promote and sell
   --sunflower: #FFC700;
   --soft-tangerine: #F9A870;
   --deep-black: #1A1A1A;
-  --soft-brown: #f5e4c2;
+  --soft-brown: #e3cca1;
 }
 ```
 

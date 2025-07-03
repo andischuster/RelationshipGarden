@@ -362,7 +362,6 @@ export default function Home() {
                 CONTINUE
                 <Send className="w-6 h-6 text-yellow-500" />
               </h2>
-              <div className="w-full h-1 bg-black mt-2"></div>
             </div>
           </div>
         );
