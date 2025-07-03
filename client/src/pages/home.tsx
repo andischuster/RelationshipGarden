@@ -427,10 +427,7 @@ export default function Home() {
         
         return (
           <div className="flex flex-col h-full">
-            <div className="text-center mb-4">
-              <Sun className="w-8 h-8 mx-auto mb-2" style={{ color: '#F9A870' }} />
-              <h3 className="text-lg font-bold" style={{ color: '#8B4513' }}>Perfect!</h3>
-            </div>
+            
             
             <div className="flex-1 overflow-y-auto mb-4">
               <div className="p-4 rounded-lg mb-3" style={{ backgroundColor: '#F9A870', opacity: 0.3 }}>
