@@ -713,7 +713,7 @@ export default function Home() {
           <div className={`${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.6s'}}>
             <Button 
               onClick={() => setActivityGeneratorState(prev => ({ ...prev, isFlipped: true }))}
-              className="bg-deep-green hover:bg-deep-green/90 text-white font-semibold text-lg sm:text-xl px-8 sm:px-12 py-3 sm:py-4 rounded-full hover-lift"
+              className="bg-gradient-to-r from-sunflower to-soft-tangerine hover:from-sunflower/90 hover:to-soft-tangerine/90 text-deep-green font-semibold text-lg sm:text-xl px-8 sm:px-12 py-3 sm:py-4 rounded-full hover-lift shadow-lg"
             >
               Start Growing For Free
             </Button>
