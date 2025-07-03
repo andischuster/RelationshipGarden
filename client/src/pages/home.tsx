@@ -334,7 +334,7 @@ export default function Home() {
                     maxLength={300}
                   />
                   {!activityGeneratorState.partner1Input && (
-                    <span className="absolute top-2 left-2 animate-blink text-2xl font-bold text-black pointer-events-none">|</span>
+                    <span className="absolute top-[-1px] left-0 animate-blink text-2xl font-bold text-black pointer-events-none">|</span>
                   )}
                 </div>
               </div>
@@ -386,7 +386,7 @@ export default function Home() {
                     maxLength={300}
                   />
                   {!activityGeneratorState.partner2Input && (
-                    <span className="absolute top-2 left-2 animate-blink text-2xl font-bold text-black pointer-events-none">|</span>
+                    <span className="absolute top-[-1px] left-0 animate-blink text-2xl font-bold text-black pointer-events-none">|</span>
                   )}
                 </div>
               </div>
