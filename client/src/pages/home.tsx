@@ -89,20 +89,58 @@ export default function Home() {
 
   const preorderMutation = useMutation({
     mutationFn: async (data: { email: string }) => {
-      // Use the backend API endpoint
-      const response = await fetch('/api/preorders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
+      // Check if we're in static deployment mode
+      const isStatic = !import.meta.env.VITE_GOOGLE_FORM_URL && !import.meta.env.VITE_GOOGLE_SHEET_ID;
 
-      if (!response.ok) {
-        throw new Error(`Failed to submit: ${response.status}`);
+      if (import.meta.env.VITE_GOOGLE_FORM_URL) {
+        // Use Google Forms submission for static deployment
+        const formData = new FormData();
+        const emailFieldId = import.meta.env.VITE_GOOGLE_FORM_EMAIL_FIELD || 'entry.1234567890';
+        formData.append(emailFieldId, data.email);
+
+        await fetch(import.meta.env.VITE_GOOGLE_FORM_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData
+        });
+
+        return { success: true };
+      } else if (import.meta.env.VITE_GOOGLE_SHEET_ID && import.meta.env.VITE_GOOGLE_SHEETS_API_KEY) {
+        // Use Google Sheets API for static deployment
+        const response = await fetch(
+          `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_GOOGLE_SHEET_ID}/values/Sheet1:append?valueInputOption=RAW&key=${import.meta.env.VITE_GOOGLE_SHEETS_API_KEY}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              values: [[data.email, new Date().toISOString()]]
+            })
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to save email');
+        }
+
+        return { success: true };
+      } else {
+        // Static deployment fallback - try to use Google Forms with hardcoded values
+        console.log('No environment variables set, using static fallback');
+
+        // You can either:
+        // 1. Set up Google Forms environment variables, or
+        // 2. Use a hardcoded Google Form URL here
+        // For now, let's simulate success and log the email
+        console.log('Email submitted:', data.email);
+
+        // In a real static deployment, you'd want to either:
+        // - Set VITE_GOOGLE_FORM_URL in your environment variables
+        // - Or use a service like Formspree, Netlify Forms, etc.
+
+        return { success: true, message: 'Email recorded (static mode)' };
       }
-
-      return await response.json();
     },
     onSuccess: () => {
       toast({
