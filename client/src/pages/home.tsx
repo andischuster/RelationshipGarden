@@ -319,23 +319,19 @@ export default function Home() {
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col justify-center">
               <div className="mb-8">
-                <p className="text-xl font-bold text-black leading-relaxed mb-6">
-                  Tell us what you would like to improve about your relationship
-                  <span className="animate-pulse">...</span>
-                  <span className="animate-blink ml-1 text-2xl font-bold">|</span>
-                </p>
-                
-                <textarea
-                  placeholder=""
+                <input
+                  type="text"
+                  placeholder="Tell us what you would like to improve about your relationship..."
                   value={activityGeneratorState.partner1Input}
                   onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
-                  className="w-full h-32 p-4 border-4 border-black rounded-none resize-none text-lg font-medium focus:outline-none bg-transparent placeholder:text-black/40"
+                  className="w-full p-4 border-4 border-black rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50"
                   style={{ 
                     backgroundColor: 'transparent',
                     color: '#000'
                   }}
                   maxLength={300}
                 />
+                <span className="animate-blink ml-1 text-2xl font-bold">|</span>
               </div>
 
               {/* Partner Indicator */}
