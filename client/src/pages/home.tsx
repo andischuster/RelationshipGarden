@@ -324,7 +324,7 @@ export default function Home() {
                   placeholder="Tell us what you would like to improve about your relationship..."
                   value={activityGeneratorState.partner1Input}
                   onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
-                  className="w-full p-4 border-4 border-black rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50"
+                  className="w-full p-4 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-center"
                   style={{ 
                     backgroundColor: 'transparent',
                     color: '#000'
@@ -336,7 +336,7 @@ export default function Home() {
 
               {/* Partner Indicator */}
               <div className="mb-6">
-                <div className="inline-flex items-center px-4 py-2 bg-black text-white rounded-full">
+                <div className="inline-flex items-center px-4 py-2 bg-transparent text-black rounded-full border border-black/30">
                   <Users className="w-4 h-4 mr-2" />
                   <span className="text-sm font-bold">Partner 1</span>
                   <ChevronDown className="w-4 h-4 ml-2" />
@@ -347,7 +347,7 @@ export default function Home() {
             {/* Bottom Button */}
             <Button
               onClick={handlePartner1Submit}
-              className="w-full py-4 bg-black text-white font-bold text-lg hover:bg-black/90 transition-colors rounded-none border-4 border-black"
+              className="w-full py-4 bg-transparent text-black font-bold text-lg hover:bg-black/10 transition-colors rounded-none border-2 border-black/30"
               disabled={!activityGeneratorState.partner1Input.trim()}
             >
               Continue
@@ -358,39 +358,27 @@ export default function Home() {
       case 'partner2':
         return (
           <div className="flex flex-col h-full p-6">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-black text-black mb-4 tracking-wide">
-                GROW TOGETHER
-              </h2>
-              <div className="w-full h-1 bg-black mb-6"></div>
-            </div>
-            
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col justify-center">
               <div className="mb-8">
-                <p className="text-xl font-bold text-black leading-relaxed mb-6">
-                  What would your partner like to improve about your relationship
-                  <span className="animate-pulse">...</span>
-                  <span className="animate-blink ml-1 text-2xl font-bold">|</span>
-                </p>
-                
-                <textarea
-                  placeholder=""
+                <input
+                  type="text"
+                  placeholder="What would your partner like to improve about your relationship..."
                   value={activityGeneratorState.partner2Input}
                   onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner2Input: e.target.value }))}
-                  className="w-full h-32 p-4 border-4 border-black rounded-none resize-none text-lg font-medium focus:outline-none bg-transparent placeholder:text-black/40"
+                  className="w-full p-4 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-center"
                   style={{ 
                     backgroundColor: 'transparent',
                     color: '#000'
                   }}
                   maxLength={300}
                 />
+                <span className="animate-blink ml-1 text-2xl font-bold">|</span>
               </div>
 
               {/* Partner Indicator */}
               <div className="mb-6">
-                <div className="inline-flex items-center px-4 py-2 bg-black text-white rounded-full">
+                <div className="inline-flex items-center px-4 py-2 bg-transparent text-black rounded-full border border-black/30">
                   <Users className="w-4 h-4 mr-2" />
                   <span className="text-sm font-bold">Partner 2</span>
                   <ChevronDown className="w-4 h-4 ml-2" />
@@ -401,7 +389,7 @@ export default function Home() {
             {/* Bottom Button */}
             <Button
               onClick={handlePartner2Submit}
-              className="w-full py-4 bg-black text-white font-bold text-lg hover:bg-black/90 transition-colors rounded-none border-4 border-black"
+              className="w-full py-4 bg-transparent text-black font-bold text-lg hover:bg-black/10 transition-colors rounded-none border-2 border-black/30"
               disabled={!activityGeneratorState.partner2Input.trim()}
             >
               Generate activity
@@ -648,26 +636,14 @@ export default function Home() {
                               <div
                                 className="flex flex-col w-full h-full rounded-2xl shadow-2xl overflow-hidden"
                                 style={{ 
-                                  backgroundColor: '#F5E6D3',
+                                  backgroundColor: 'transparent',
                                   border: '4px solid #1A1A1A'
                                 }}
                               >
-                                {/* Header */}
-                                <div 
-                                  className="text-center py-3 border-b-2 bg-[#8b451300]"
-                                  style={{ 
-                                    backgroundColor: '#8B4513',
-                                    color: '#FEFBF6',
-                                    borderColor: '#1A1A1A'
-                                  }}
-                                >
-                                  <h3 className="font-bold tracking-wide text-[#171717] text-[22px]">GROW TOGETHER</h3>
-                                </div>
-                                
                                 {/* Content Area */}
                                 <div 
-                                  className="flex-1 p-4 bg-[#f5e4c2]"
-                                  style={{ backgroundColor: '#F5E6D3' }}
+                                  className="flex-1 p-4"
+                                  style={{ backgroundColor: 'transparent' }}
                                 >
                                   {renderActivityGeneratorContent()}
                                 </div>
