@@ -315,29 +315,29 @@ export default function Home() {
     switch (activityGeneratorState.currentStep) {
       case 'partner1':
         return (
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full justify-between">
             <div className="text-center mb-4">
-              <Heart className="w-8 h-8 mx-auto text-soft-tangerine mb-2" />
-              <h3 className="text-lg font-bold text-deep-green">Let's Start Your Journey</h3>
-              <p className="text-sm text-gray-600">What would you like to improve or experience?</p>
+              <Heart className="w-6 h-6 mx-auto text-soft-tangerine mb-3" />
+              <h3 className="text-base font-bold text-deep-green mb-2">Let's Start</h3>
+              <p className="text-xs text-gray-600 px-2">What would you like to improve or experience in your relationship?</p>
             </div>
             
             <div className="flex-1 mb-4">
               <textarea
-                placeholder="Share what you'd like to improve or experience together..."
+                placeholder="Type what you'd like to improve together..."
                 value={activityGeneratorState.partner1Input}
                 onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
-                className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none text-sm"
-                maxLength={200}
+                className="w-full h-20 p-2 border border-gray-300 rounded-lg resize-none text-xs"
+                maxLength={150}
               />
-              <div className="text-xs text-gray-500 text-right mt-1">
-                {activityGeneratorState.partner1Input.length}/200
+              <div className="text-xs text-gray-400 text-right mt-1">
+                {activityGeneratorState.partner1Input.length}/150
               </div>
             </div>
 
             <Button
               onClick={handlePartner1Submit}
-              className="w-full bg-deep-green hover:bg-deep-green/90 text-white"
+              className="w-full bg-deep-green hover:bg-deep-green/90 text-white text-sm py-2"
             >
               Continue
             </Button>
@@ -346,23 +346,23 @@ export default function Home() {
 
       case 'partner2':
         return (
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full justify-between">
             <div className="text-center mb-4">
-              <Heart className="w-8 h-8 mx-auto text-soft-tangerine mb-2" />
-              <h3 className="text-lg font-bold text-deep-green">Almost There!</h3>
-              <p className="text-sm text-gray-600">What would your partner like to improve?</p>
+              <Heart className="w-6 h-6 mx-auto text-soft-tangerine mb-3" />
+              <h3 className="text-base font-bold text-deep-green mb-2">Step 2</h3>
+              <p className="text-xs text-gray-600 px-2">What would your partner like to improve?</p>
             </div>
             
             <div className="flex-1 mb-4">
               <textarea
-                placeholder="What would your partner want to improve or experience..."
+                placeholder="What your partner wants to improve..."
                 value={activityGeneratorState.partner2Input}
                 onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner2Input: e.target.value }))}
-                className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none text-sm"
-                maxLength={200}
+                className="w-full h-20 p-2 border border-gray-300 rounded-lg resize-none text-xs"
+                maxLength={150}
               />
-              <div className="text-xs text-gray-500 text-right mt-1">
-                {activityGeneratorState.partner2Input.length}/200
+              <div className="text-xs text-gray-400 text-right mt-1">
+                {activityGeneratorState.partner2Input.length}/150
               </div>
             </div>
 
@@ -370,13 +370,15 @@ export default function Home() {
               <Button
                 onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'partner1' }))}
                 variant="outline"
-                className="flex-1"
+                className="flex-1 text-xs py-2"
+                size="sm"
               >
                 Back
               </Button>
               <Button
                 onClick={handlePartner2Submit}
-                className="flex-1 bg-deep-green hover:bg-deep-green/90 text-white"
+                className="flex-1 bg-deep-green hover:bg-deep-green/90 text-white text-xs py-2"
+                size="sm"
               >
                 Generate
               </Button>
@@ -387,10 +389,10 @@ export default function Home() {
       case 'generation':
         return (
           <div className="flex flex-col h-full justify-center items-center">
-            <Sprout className="w-12 h-12 mx-auto text-sunflower animate-pulse mb-4" />
-            <h3 className="text-lg font-bold text-deep-green mb-2">Creating Your Perfect Activity</h3>
-            <p className="text-sm text-gray-600 text-center mb-4">Crafting something special just for you both...</p>
-            <div className="w-6 h-6 border-2 border-deep-green border-t-transparent rounded-full animate-spin"></div>
+            <Sprout className="w-10 h-10 mx-auto text-sunflower animate-pulse mb-4" />
+            <h3 className="text-base font-bold text-deep-green mb-2">Creating Activity</h3>
+            <p className="text-xs text-gray-600 text-center px-4 mb-4">Crafting something special for you both...</p>
+            <div className="w-5 h-5 border-2 border-deep-green border-t-transparent rounded-full animate-spin"></div>
           </div>
         );
 
@@ -398,31 +400,31 @@ export default function Home() {
         if (!activityGeneratorState.generatedActivity) return null;
         
         return (
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full justify-between">
             <div className="text-center mb-3">
-              <Sun className="w-8 h-8 mx-auto text-sunflower mb-2" />
-              <h3 className="text-lg font-bold text-deep-green">Your Perfect Activity</h3>
+              <Sun className="w-6 h-6 mx-auto text-sunflower mb-2" />
+              <h3 className="text-base font-bold text-deep-green">Your Activity</h3>
             </div>
             
             <div className="flex-1 overflow-y-auto mb-4">
               <div className="bg-soft-tangerine/20 p-3 rounded-lg mb-3">
-                <h4 className="font-semibold text-deep-green text-sm mb-1">
+                <h4 className="font-semibold text-deep-green text-xs mb-1">
                   {activityGeneratorState.generatedActivity.title}
                 </h4>
-                <p className="text-xs text-gray-700 mb-2">
-                  {activityGeneratorState.generatedActivity.description}
+                <p className="text-xs text-gray-700 mb-2 leading-relaxed">
+                  {activityGeneratorState.generatedActivity.description.slice(0, 120)}...
                 </p>
                 <div className="text-xs text-gray-600">
-                  Time: {activityGeneratorState.generatedActivity.estimatedTime}
+                  {activityGeneratorState.generatedActivity.estimatedTime}
                 </div>
               </div>
 
               {activityGeneratorState.generatedActivity.conversationPrompts?.length > 0 && (
-                <div className="bg-warm-white border border-gray-200 p-3 rounded-lg">
-                  <h5 className="font-semibold text-deep-green text-xs mb-2">Conversation Starters:</h5>
+                <div className="bg-warm-white border border-gray-200 p-2 rounded-lg">
+                  <h5 className="font-semibold text-deep-green text-xs mb-1">Conversation Starters:</h5>
                   <ul className="space-y-1 text-xs">
-                    {activityGeneratorState.generatedActivity.conversationPrompts.slice(0, 2).map((prompt: string, index: number) => (
-                      <li key={index} className="text-gray-700">• {prompt}</li>
+                    {activityGeneratorState.generatedActivity.conversationPrompts.slice(0, 1).map((prompt: string, index: number) => (
+                      <li key={index} className="text-gray-700">• {prompt.slice(0, 60)}...</li>
                     ))}
                   </ul>
                 </div>
@@ -431,7 +433,7 @@ export default function Home() {
 
             <Button
               onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'email' }))}
-              className="w-full bg-deep-green hover:bg-deep-green/90 text-white"
+              className="w-full bg-deep-green hover:bg-deep-green/90 text-white text-xs py-2"
             >
               Send to Email
             </Button>
@@ -440,11 +442,11 @@ export default function Home() {
 
       case 'email':
         return (
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full justify-between">
             <div className="text-center mb-4">
-              <Mail className="w-8 h-8 mx-auto text-soft-tangerine mb-2" />
-              <h3 className="text-lg font-bold text-deep-green">Save Your Activity</h3>
-              <p className="text-sm text-gray-600">We'll send it to your email</p>
+              <Mail className="w-6 h-6 mx-auto text-soft-tangerine mb-3" />
+              <h3 className="text-base font-bold text-deep-green mb-2">Save Activity</h3>
+              <p className="text-xs text-gray-600 px-2">We'll send it to your email</p>
             </div>
             
             <div className="flex-1 mb-4">
@@ -453,21 +455,22 @@ export default function Home() {
                 placeholder="your@email.com"
                 value={activityGeneratorState.email}
                 onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, email: e.target.value }))}
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm text-center"
+                className="w-full p-2 border border-gray-300 rounded-lg text-xs text-center"
               />
             </div>
 
             {activityGeneratorState.emailCaptured ? (
               <div className="text-center space-y-3">
-                <div className="text-green-600 font-medium text-sm">
+                <div className="text-green-600 font-medium text-xs">
                   ✓ Activity sent successfully!
                 </div>
                 <Button
                   onClick={() => setIsPreorderModalOpen(true)}
                   variant="outline"
-                  className="border-deep-green text-deep-green hover:bg-deep-green hover:text-white"
+                  className="border-deep-green text-deep-green hover:bg-deep-green hover:text-white text-xs py-2"
+                  size="sm"
                 >
-                  Explore Our Card Game
+                  Explore Card Game
                 </Button>
               </div>
             ) : (
@@ -475,14 +478,16 @@ export default function Home() {
                 <Button
                   onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'result' }))}
                   variant="outline"
-                  className="flex-1"
+                  className="flex-1 text-xs py-2"
+                  size="sm"
                 >
                   Back
                 </Button>
                 <Button
                   onClick={handleEmailSubmit}
                   disabled={emailCaptureMutation.isPending}
-                  className="flex-1 bg-deep-green hover:bg-deep-green/90 text-white"
+                  className="flex-1 bg-deep-green hover:bg-deep-green/90 text-white text-xs py-2"
+                  size="sm"
                 >
                   {emailCaptureMutation.isPending ? 'Sending...' : 'Send'}
                 </Button>
@@ -602,8 +607,15 @@ export default function Home() {
                         padding: '20px'
                       }}
                     >
-                      <div className="w-full max-w-md">
-                        <div className="bg-warm-white border-4 border-deep-green rounded-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6 h-[432px] flex flex-col">
+                      <div className="relative" style={{ left: '-144px', top: '-216px' }}>
+                        {/* Single clean card interface */}
+                        <div
+                          className="bg-warm-white border-4 border-deep-black rounded-2xl shadow-2xl p-6 flex flex-col"
+                          style={{
+                            width: '288px',
+                            height: '432px'
+                          }}
+                        >
                           {renderActivityGeneratorContent()}
                         </div>
                       </div>
