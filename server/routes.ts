@@ -146,10 +146,10 @@ Partner 2 shared: "${partner2Input}"
 Please create a personalized relationship activity that considers both partners' inputs. Return your response as a JSON object with this exact structure:
 
 {
-  "title": "A creative, engaging title for the activity (3 words max)",
-  "description": "A short description of the activity that incorporates elements from both partners' inputs (30 words max)",
+  "title": "A creative, engaging title for the activity (23 characters max)",
+  "description": "A short description of the activity that incorporates elements from both partners' inputs (25 words max)",
   "conversationPrompts": [
-    "Thoughtful question based on their shared interests that helps them connect deeper. (short succinct)",
+    "Thoughtful question based on their shared interests that helps them connect deeper. (short succinct, 10 words max)",
   ],
   "category": "One of: communication, intimacy, fun, or growth"
 }
