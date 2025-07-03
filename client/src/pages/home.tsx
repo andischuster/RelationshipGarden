@@ -591,7 +591,7 @@ export default function Home() {
                     <div
                       key={card.id}
                       className={`card-stack-item ${
-                        isTopCard ? 'cursor-pointer hover:scale-110' : ''
+                        isTopCard && !activityGeneratorState.isFlipped ? 'cursor-pointer hover:scale-110' : ''
                       } transition-all duration-300 ease-out`}
                       style={{
                         position: 'absolute',
