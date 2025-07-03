@@ -359,7 +359,7 @@ export default function Home() {
                 }}
               >
                 CONTINUE
-                <Send className="w-6 h-6 text-yellow-500" />
+                <Send className="w-6 h-6 text-deep-teal" />
               </h2>
             </div>
           </div>
@@ -412,7 +412,7 @@ export default function Home() {
                 }}
               >
                 GENERATE ACTIVITY
-                <Send className="w-6 h-6 text-yellow-500" />
+                <Send className="w-6 h-6 text-deep-teal" />
               </h2>
 
             </div>
@@ -664,9 +664,9 @@ export default function Home() {
                               >
                                 {/* Header */}
                                 <div 
-                                  className="text-center py-3 border-b-2 bg-[#8b451300]"
+                                  className="text-center py-3 border-b-2"
                                   style={{ 
-                                    backgroundColor: '#8B4513',
+                                    backgroundColor: 'transparent',
                                     color: '#FEFBF6',
                                     borderColor: '#1A1A1A'
                                   }}
