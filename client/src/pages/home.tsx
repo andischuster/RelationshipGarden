@@ -428,7 +428,7 @@ export default function Home() {
             
 
             <div className="flex-1 overflow-y-auto mb-6">
-              <p className="text-lg font-medium text-black/80 mb-4 leading-relaxed">
+              <p className="text-sm font-medium text-black/80 mb-3 leading-relaxed px-2">
                 {activityGeneratorState.generatedActivity.description}
               </p>
               <div className="text-sm font-bold text-black/60 mb-4">
