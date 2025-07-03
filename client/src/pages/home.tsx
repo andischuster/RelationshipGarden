@@ -339,14 +339,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Partner Indicator */}
-              <div className="mb-6">
-                <div className="inline-flex items-center px-2 py-1 bg-transparent border border-gray-400 text-gray-500 rounded-full">
-                  <Users className="w-3 h-3 mr-1" />
-                  <span className="text-xs font-medium">Partner 1</span>
-                  <ChevronDown className="w-3 h-3 ml-1" />
-                </div>
-              </div>
+
             </div>
             {/* Bottom Button - Header Style */}
             <div className="text-center text-[1A1A1A]">
@@ -391,14 +384,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Partner Indicator */}
-              <div className="mb-6">
-                <div className="inline-flex items-center px-4 py-2 bg-transparent border-2 border-black text-black rounded-full">
-                  <Users className="w-4 h-4 mr-2" />
-                  <span className="text-sm font-bold">Partner 2</span>
-                  <ChevronDown className="w-4 h-4 ml-2" />
-                </div>
-              </div>
+
             </div>
 
             {/* Bottom Button - Header Style */}
@@ -439,12 +425,7 @@ export default function Home() {
 
         return (
           <div className="flex flex-col h-full p-6">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-black text-black mb-4 tracking-wide">
-                YOUR ACTIVITY
-              </h2>
-              <div className="w-full h-1 bg-black mb-6"></div>
-            </div>
+            
 
             <div className="flex-1 overflow-y-auto mb-6">
               <h4 className="text-xl font-black text-black mb-4">
