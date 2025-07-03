@@ -80,6 +80,7 @@ export default function Home() {
   const [isPreorderModalOpen, setIsPreorderModalOpen] = useState(false);
   const [isCardFlipped, setIsCardFlipped] = useState(false);
   const [activityGeneratorState, setActivityGeneratorState] = useState({
+    isFlipped: false,
     currentStep: 'partner1' as 'partner1' | 'partner2' | 'generation' | 'result' | 'email',
     partner1Input: '',
     partner2Input: '',
@@ -315,29 +316,35 @@ export default function Home() {
     switch (activityGeneratorState.currentStep) {
       case 'partner1':
         return (
-          <div className="flex flex-col h-full justify-between">
-            <div className="text-center mb-4">
-              <Heart className="w-6 h-6 mx-auto text-soft-tangerine mb-3" />
-              <h3 className="text-base font-bold text-deep-green mb-2">Let's Start</h3>
-              <p className="text-xs text-gray-600 px-2">What would you like to improve or experience in your relationship?</p>
+          <div className="flex flex-col h-full">
+            <div className="text-center mb-3">
+              <p className="text-sm text-gray-700 leading-relaxed">Tell us what you would like to improve about your relationship...</p>
             </div>
             
-            <div className="flex-1 mb-4">
+            <div className="flex-1 mb-3">
               <textarea
                 placeholder="Type what you'd like to improve together..."
                 value={activityGeneratorState.partner1Input}
                 onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
-                className="w-full h-20 p-2 border border-gray-300 rounded-lg resize-none text-xs"
+                className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none text-sm focus:outline-none focus:ring-2 focus:ring-deep-green"
                 maxLength={150}
               />
-              <div className="text-xs text-gray-400 text-right mt-1">
+              <div className="text-xs text-gray-500 text-right mt-1">
                 {activityGeneratorState.partner1Input.length}/150
+              </div>
+            </div>
+
+            <div className="bg-soft-tangerine/20 rounded-lg p-3 mb-3">
+              <div className="flex items-center text-xs text-gray-600">
+                <div className="w-2 h-2 bg-deep-green rounded-full mr-2"></div>
+                Partner 1
               </div>
             </div>
 
             <Button
               onClick={handlePartner1Submit}
-              className="w-full bg-deep-green hover:bg-deep-green/90 text-white text-sm py-2"
+              className="w-full bg-deep-green hover:bg-deep-green/90 text-white py-3 rounded-lg"
+              disabled={!activityGeneratorState.partner1Input.trim()}
             >
               Continue
             </Button>
@@ -346,23 +353,28 @@ export default function Home() {
 
       case 'partner2':
         return (
-          <div className="flex flex-col h-full justify-between">
-            <div className="text-center mb-4">
-              <Heart className="w-6 h-6 mx-auto text-soft-tangerine mb-3" />
-              <h3 className="text-base font-bold text-deep-green mb-2">Step 2</h3>
-              <p className="text-xs text-gray-600 px-2">What would your partner like to improve?</p>
+          <div className="flex flex-col h-full">
+            <div className="text-center mb-3">
+              <p className="text-sm text-gray-700 leading-relaxed">What would your partner like to improve or experience?</p>
             </div>
             
-            <div className="flex-1 mb-4">
+            <div className="flex-1 mb-3">
               <textarea
                 placeholder="What your partner wants to improve..."
                 value={activityGeneratorState.partner2Input}
                 onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner2Input: e.target.value }))}
-                className="w-full h-20 p-2 border border-gray-300 rounded-lg resize-none text-xs"
+                className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none text-sm focus:outline-none focus:ring-2 focus:ring-deep-green"
                 maxLength={150}
               />
-              <div className="text-xs text-gray-400 text-right mt-1">
+              <div className="text-xs text-gray-500 text-right mt-1">
                 {activityGeneratorState.partner2Input.length}/150
+              </div>
+            </div>
+
+            <div className="bg-soft-tangerine/20 rounded-lg p-3 mb-3">
+              <div className="flex items-center text-xs text-gray-600">
+                <div className="w-2 h-2 bg-soft-tangerine rounded-full mr-2"></div>
+                Partner 2
               </div>
             </div>
 
@@ -370,15 +382,14 @@ export default function Home() {
               <Button
                 onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'partner1' }))}
                 variant="outline"
-                className="flex-1 text-xs py-2"
-                size="sm"
+                className="flex-1 py-2"
               >
                 Back
               </Button>
               <Button
                 onClick={handlePartner2Submit}
-                className="flex-1 bg-deep-green hover:bg-deep-green/90 text-white text-xs py-2"
-                size="sm"
+                className="flex-1 bg-deep-green hover:bg-deep-green/90 text-white py-2"
+                disabled={!activityGeneratorState.partner2Input.trim()}
               >
                 Generate
               </Button>
@@ -389,10 +400,10 @@ export default function Home() {
       case 'generation':
         return (
           <div className="flex flex-col h-full justify-center items-center">
-            <Sprout className="w-10 h-10 mx-auto text-sunflower animate-pulse mb-4" />
-            <h3 className="text-base font-bold text-deep-green mb-2">Creating Activity</h3>
-            <p className="text-xs text-gray-600 text-center px-4 mb-4">Crafting something special for you both...</p>
-            <div className="w-5 h-5 border-2 border-deep-green border-t-transparent rounded-full animate-spin"></div>
+            <Sprout className="w-12 h-12 mx-auto text-sunflower animate-pulse mb-4" />
+            <h3 className="text-lg font-bold text-deep-green mb-3">Creating Your Activity</h3>
+            <p className="text-sm text-gray-600 text-center px-2 mb-6">Crafting something special for you both...</p>
+            <div className="w-6 h-6 border-2 border-deep-green border-t-transparent rounded-full animate-spin"></div>
           </div>
         );
 
@@ -400,77 +411,77 @@ export default function Home() {
         if (!activityGeneratorState.generatedActivity) return null;
         
         return (
-          <div className="flex flex-col h-full justify-between">
-            <div className="text-center mb-3">
-              <Sun className="w-6 h-6 mx-auto text-sunflower mb-2" />
-              <h3 className="text-base font-bold text-deep-green">Your Activity</h3>
+          <div className="flex flex-col h-full">
+            <div className="text-center mb-4">
+              <Sun className="w-8 h-8 mx-auto text-sunflower mb-2" />
+              <h3 className="text-lg font-bold text-deep-green">Perfect!</h3>
             </div>
             
             <div className="flex-1 overflow-y-auto mb-4">
-              <div className="bg-soft-tangerine/20 p-3 rounded-lg mb-3">
-                <h4 className="font-semibold text-deep-green text-xs mb-1">
+              <div className="bg-soft-tangerine/20 p-4 rounded-lg mb-3">
+                <h4 className="font-semibold text-deep-green text-sm mb-2">
                   {activityGeneratorState.generatedActivity.title}
                 </h4>
-                <p className="text-xs text-gray-700 mb-2 leading-relaxed">
-                  {activityGeneratorState.generatedActivity.description.slice(0, 120)}...
+                <p className="text-sm text-gray-700 mb-3 leading-relaxed">
+                  {activityGeneratorState.generatedActivity.description.slice(0, 150)}...
                 </p>
-                <div className="text-xs text-gray-600">
-                  {activityGeneratorState.generatedActivity.estimatedTime}
+                <div className="text-xs text-gray-600 font-medium">
+                  ⏱️ {activityGeneratorState.generatedActivity.estimatedTime}
                 </div>
               </div>
 
               {activityGeneratorState.generatedActivity.conversationPrompts?.length > 0 && (
-                <div className="bg-warm-white border border-gray-200 p-2 rounded-lg">
-                  <h5 className="font-semibold text-deep-green text-xs mb-1">Conversation Starters:</h5>
-                  <ul className="space-y-1 text-xs">
-                    {activityGeneratorState.generatedActivity.conversationPrompts.slice(0, 1).map((prompt: string, index: number) => (
-                      <li key={index} className="text-gray-700">• {prompt.slice(0, 60)}...</li>
-                    ))}
-                  </ul>
+                <div className="bg-warm-white border border-gray-200 p-3 rounded-lg">
+                  <h5 className="font-semibold text-deep-green text-sm mb-2">💬 Conversation Starter:</h5>
+                  <p className="text-sm text-gray-700 italic">
+                    "{activityGeneratorState.generatedActivity.conversationPrompts[0].slice(0, 100)}..."
+                  </p>
                 </div>
               )}
             </div>
 
             <Button
               onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'email' }))}
-              className="w-full bg-deep-green hover:bg-deep-green/90 text-white text-xs py-2"
+              className="w-full bg-deep-green hover:bg-deep-green/90 text-white py-3 rounded-lg"
             >
-              Send to Email
+              💌 Send to Email
             </Button>
           </div>
         );
 
       case 'email':
         return (
-          <div className="flex flex-col h-full justify-between">
+          <div className="flex flex-col h-full">
             <div className="text-center mb-4">
-              <Mail className="w-6 h-6 mx-auto text-soft-tangerine mb-3" />
-              <h3 className="text-base font-bold text-deep-green mb-2">Save Activity</h3>
-              <p className="text-xs text-gray-600 px-2">We'll send it to your email</p>
+              <Mail className="w-8 h-8 mx-auto text-soft-tangerine mb-3" />
+              <h3 className="text-lg font-bold text-deep-green mb-2">Save Your Activity</h3>
+              <p className="text-sm text-gray-600">We'll send the full details to your email</p>
             </div>
             
             <div className="flex-1 mb-4">
               <input
                 type="email"
-                placeholder="your@email.com"
+                placeholder="Enter your email address"
                 value={activityGeneratorState.email}
                 onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, email: e.target.value }))}
-                className="w-full p-2 border border-gray-300 rounded-lg text-xs text-center"
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-deep-green"
               />
             </div>
 
             {activityGeneratorState.emailCaptured ? (
-              <div className="text-center space-y-3">
-                <div className="text-green-600 font-medium text-xs">
-                  ✓ Activity sent successfully!
+              <div className="text-center space-y-4">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="text-green-700 font-medium text-sm mb-2">
+                    ✅ Activity sent successfully!
+                  </div>
+                  <p className="text-green-600 text-xs">Check your inbox for the full activity details.</p>
                 </div>
                 <Button
                   onClick={() => setIsPreorderModalOpen(true)}
                   variant="outline"
-                  className="border-deep-green text-deep-green hover:bg-deep-green hover:text-white text-xs py-2"
-                  size="sm"
+                  className="w-full border-deep-green text-deep-green hover:bg-deep-green hover:text-white py-3"
                 >
-                  Explore Card Game
+                  🎯 Want More Activities? Explore Our Card Game
                 </Button>
               </div>
             ) : (
@@ -478,18 +489,16 @@ export default function Home() {
                 <Button
                   onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'result' }))}
                   variant="outline"
-                  className="flex-1 text-xs py-2"
-                  size="sm"
+                  className="flex-1 py-3"
                 >
                   Back
                 </Button>
                 <Button
                   onClick={handleEmailSubmit}
-                  disabled={emailCaptureMutation.isPending}
-                  className="flex-1 bg-deep-green hover:bg-deep-green/90 text-white text-xs py-2"
-                  size="sm"
+                  disabled={emailCaptureMutation.isPending || !activityGeneratorState.email.trim()}
+                  className="flex-1 bg-deep-green hover:bg-deep-green/90 text-white py-3"
                 >
-                  {emailCaptureMutation.isPending ? 'Sending...' : 'Send'}
+                  {emailCaptureMutation.isPending ? 'Sending...' : 'Send Activity'}
                 </Button>
               </div>
             )}
@@ -537,91 +546,116 @@ export default function Home() {
           {/* Interactive Card Stack with Flip */}
           <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
             {/* Card Flip Container */}
-            <div className="activity-generator-container">
-              <div className={`card-flip-container ${isCardFlipped ? 'flipped' : ''}`}>
-                <div className="card-flip-inner">
-                  {/* Front - Card Stack */}
-                  <div className="card-front">
-                    <div 
-                      className="flex justify-center items-center cursor-pointer"
-                      onClick={() => setCurrentCard((currentCard + 1) % cardData.length)}
-                      style={{ 
-                        height: '500px',
-                        width: '100%',
-                        padding: '20px'
+            <div className="relative flex justify-center items-center mb-8" style={{ height: '500px' }}>
+              {/* Card Stack Container */}
+              <div className="card-stack">
+                {cardData.map((card, index) => {
+                  const offset = index - currentCard;
+                  const isTopCard = index === currentCard;
+                  const isVisible = Math.abs(offset) <= 2;
+                  
+                  if (!isVisible) return null;
+                  
+                  return (
+                    <div
+                      key={card.id}
+                      className={`card-stack-item ${
+                        isTopCard ? 'cursor-pointer hover:scale-105' : ''
+                      } transition-all duration-1000 ease-out`}
+                      style={{
+                        position: 'absolute',
+                        width: '288px',
+                        height: '432px',
+                        left: '50%',
+                        top: '50%',
+                        marginLeft: '-144px',
+                        marginTop: '-216px',
+                        zIndex: isTopCard ? 10 : Math.max(0, 5 - Math.abs(offset)),
+                        transform: `
+                          translateX(${offset * 8}px)
+                          translateY(${offset * 4}px)
+                          rotate(${offset * 3}deg)
+                          scale(${isTopCard ? 1 : 0.95})
+                        `,
+                        opacity: isTopCard ? 1 : 0.9,
+                        filter: isTopCard ? 'none' : 'brightness(0.85)',
+                        pointerEvents: isTopCard ? 'auto' : 'none'
                       }}
+                      onClick={isTopCard ? (() => setCurrentCard((currentCard + 1) % cardData.length)) : undefined}
                     >
-                      <div className="relative">
-                        {cardData.map((card, index) => {
-                          const offset = index - currentCard;
-                          const isActive = index === currentCard;
-                          const isVisible = Math.abs(offset) <= 2;
-
-                          if (!isVisible) return null;
-
-                          return (
-                            <div
-                              key={card.id}
-                              className="absolute transition-all duration-1000 ease-out"
-                              style={{
-                                transform: `
-                                  translateX(${offset * 8}px)
-                                  translateY(${offset * 4}px)
-                                  rotate(${offset * 3}deg)
-                                  scale(${isActive ? 1 : 0.95})
-                                `,
-                                zIndex: isActive ? 10 : 10 - Math.abs(offset),
-                                left: '-144px',
-                                top: '-216px'
+                      {/* Card Flip Container - Only for top card */}
+                      {isTopCard ? (
+                        <div 
+                          className="card-flip-container w-full h-full"
+                          style={{
+                            perspective: '1000px',
+                            transformStyle: 'preserve-3d'
+                          }}
+                        >
+                          <div 
+                            className="card-flip-inner w-full h-full"
+                            style={{
+                              transition: 'transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1)',
+                              transformStyle: 'preserve-3d',
+                              transform: activityGeneratorState.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
+                            }}
+                          >
+                            {/* Front - Card Image */}
+                            <div 
+                              className="card-front w-full h-full"
+                              style={{ 
+                                backfaceVisibility: 'hidden',
+                                position: 'absolute',
+                                backgroundImage: `url(${card.image})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                borderRadius: '1rem',
+                                border: '4px solid #1A1A1A',
+                                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+                              }}
+                            />
+                            
+                            {/* Back - Chatbox Interface */}
+                            <div 
+                              className="card-back w-full h-full"
+                              style={{ 
+                                backfaceVisibility: 'hidden',
+                                transform: 'rotateY(180deg)',
+                                position: 'absolute'
                               }}
                             >
                               <div
-                                className="card-stack-item rounded-2xl border-4 border-deep-black shadow-2xl transition-all duration-300"
-                                style={{
-                                  width: '288px',
-                                  height: '432px',
-                                  backgroundImage: `url(${card.image})`,
-                                  backgroundSize: 'cover',
-                                  backgroundPosition: 'center',
-                                  backgroundRepeat: 'no-repeat',
-                                  filter: isActive ? 'none' : 'brightness(0.85)',
-                                  opacity: isActive ? 1 : 0.9
-                                }}
-                                role="img"
-                                aria-label={card.title}
-                              />
+                                className="bg-warm-white border-4 border-deep-black rounded-2xl shadow-2xl flex flex-col w-full h-full"
+                                style={{ borderColor: '#1A1A1A' }}
+                              >
+                                {/* Header */}
+                                <div className="bg-deep-green text-white text-center py-3 rounded-t-lg border-b-2 border-deep-black">
+                                  <h3 className="text-sm font-bold tracking-wide">ACTIVITY GENERATOR</h3>
+                                </div>
+                                
+                                {/* Content Area */}
+                                <div className="flex-1 p-4">
+                                  {renderActivityGeneratorContent()}
+                                </div>
+                              </div>
                             </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Back - Activity Generator */}
-                  <div className="card-back">
-                    <div 
-                      className="flex justify-center items-center"
-                      style={{ 
-                        height: '500px',
-                        width: '100%',
-                        padding: '20px'
-                      }}
-                    >
-                      <div className="relative" style={{ left: '-144px', top: '-216px' }}>
-                        {/* Single clean card interface */}
-                        <div
-                          className="bg-warm-white border-4 border-deep-black rounded-2xl shadow-2xl p-6 flex flex-col"
-                          style={{
-                            width: '288px',
-                            height: '432px'
-                          }}
-                        >
-                          {renderActivityGeneratorContent()}
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        /* Regular card for non-top cards */
+                        <div
+                          className="w-full h-full rounded-2xl border-4 border-deep-black shadow-2xl"
+                          style={{
+                            backgroundImage: `url(${card.image})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            borderColor: '#1A1A1A'
+                          }}
+                        />
+                      )}
                     </div>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -642,7 +676,7 @@ export default function Home() {
           {/* Primary CTA - Start Activity Generator */}
           <div className={`${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.6s'}}>
             <Button 
-              onClick={() => setIsCardFlipped(true)}
+              onClick={() => setActivityGeneratorState(prev => ({ ...prev, isFlipped: true }))}
               className="bg-deep-green hover:bg-deep-green/90 text-white font-semibold text-lg sm:text-xl px-8 sm:px-12 py-3 sm:py-4 rounded-full hover-lift"
             >
               Start to Grow Together for Free
