@@ -12,7 +12,6 @@ import { insertPreorderSchema } from '@shared/schema';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import Blob from '@/components/Blob';
-import ActivityGenerator from '@/components/ActivityGenerator';
 
 // Import card images
 import elephantCard from "@assets/Elephant in the Room_1749555023557.png";
@@ -79,6 +78,15 @@ export default function Home() {
   const [isIntersecting, setIsIntersecting] = useState<{ [key: string]: boolean }>({});
   const [scrolled, setScrolled] = useState(false);
   const [isPreorderModalOpen, setIsPreorderModalOpen] = useState(false);
+  const [isCardFlipped, setIsCardFlipped] = useState(false);
+  const [activityGeneratorState, setActivityGeneratorState] = useState({
+    currentStep: 'partner1' as 'partner1' | 'partner2' | 'generation' | 'result' | 'email',
+    partner1Input: '',
+    partner2Input: '',
+    generatedActivity: null as any,
+    emailCaptured: false,
+    email: ''
+  });
   const { toast } = useToast();
 
   const form = useForm({
@@ -177,6 +185,50 @@ export default function Home() {
     preorderMutation.mutate(data);
   };
 
+  // Activity Generator Mutations
+  const generateActivityMutation = useMutation({
+    mutationFn: async (inputs: { partner1Input: string; partner2Input: string }) => {
+      const response = await apiRequest('POST', '/api/activities/generate', inputs);
+      return response.json();
+    },
+    onSuccess: (data) => {
+      setActivityGeneratorState(prev => ({ 
+        ...prev, 
+        generatedActivity: data.activity,
+        currentStep: 'result'
+      }));
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to generate activity. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const emailCaptureMutation = useMutation({
+    mutationFn: async (data: { email: string; activityId: string }) => {
+      const response = await apiRequest('POST', '/api/activities/email', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      setActivityGeneratorState(prev => ({ ...prev, emailCaptured: true }));
+      toast({
+        title: "Activity Sent!",
+        description: "Check your email for your personalized activity.",
+        variant: "default"
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to send email. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+
   // Removed auto-cycling - cards now change only on click
 
   useEffect(() => {
@@ -209,6 +261,239 @@ export default function Home() {
 
   const handlePurchase = () => {
     setIsPreorderModalOpen(true);
+  };
+
+  // Activity Generator Step Handlers
+  const handlePartner1Submit = () => {
+    if (!activityGeneratorState.partner1Input.trim()) {
+      toast({
+        title: "Required Field",
+        description: "Please share what you'd like to improve in your relationship.",
+        variant: "destructive"
+      });
+      return;
+    }
+    setActivityGeneratorState(prev => ({ ...prev, currentStep: 'partner2' }));
+  };
+
+  const handlePartner2Submit = () => {
+    if (!activityGeneratorState.partner2Input.trim()) {
+      toast({
+        title: "Required Field",
+        description: "Please share what your partner might want to improve.",
+        variant: "destructive"
+      });
+      return;
+    }
+    setActivityGeneratorState(prev => ({ ...prev, currentStep: 'generation' }));
+    generateActivityMutation.mutate({
+      partner1Input: activityGeneratorState.partner1Input,
+      partner2Input: activityGeneratorState.partner2Input
+    });
+  };
+
+  const handleEmailSubmit = () => {
+    if (!activityGeneratorState.email.trim()) {
+      toast({
+        title: "Required Field",
+        description: "Please enter your email address.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (!activityGeneratorState.generatedActivity) return;
+
+    emailCaptureMutation.mutate({
+      email: activityGeneratorState.email,
+      activityId: activityGeneratorState.generatedActivity.id
+    });
+  };
+
+  // Render Activity Generator Content
+  const renderActivityGeneratorContent = () => {
+    switch (activityGeneratorState.currentStep) {
+      case 'partner1':
+        return (
+          <div className="flex flex-col h-full">
+            <div className="text-center mb-4">
+              <Heart className="w-8 h-8 mx-auto text-soft-tangerine mb-2" />
+              <h3 className="text-lg font-bold text-deep-green">Let's Start Your Journey</h3>
+              <p className="text-sm text-gray-600">What would you like to improve or experience?</p>
+            </div>
+            
+            <div className="flex-1 mb-4">
+              <textarea
+                placeholder="Share what you'd like to improve or experience together..."
+                value={activityGeneratorState.partner1Input}
+                onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
+                className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none text-sm"
+                maxLength={200}
+              />
+              <div className="text-xs text-gray-500 text-right mt-1">
+                {activityGeneratorState.partner1Input.length}/200
+              </div>
+            </div>
+
+            <Button
+              onClick={handlePartner1Submit}
+              className="w-full bg-deep-green hover:bg-deep-green/90 text-white"
+            >
+              Continue
+            </Button>
+          </div>
+        );
+
+      case 'partner2':
+        return (
+          <div className="flex flex-col h-full">
+            <div className="text-center mb-4">
+              <Heart className="w-8 h-8 mx-auto text-soft-tangerine mb-2" />
+              <h3 className="text-lg font-bold text-deep-green">Almost There!</h3>
+              <p className="text-sm text-gray-600">What would your partner like to improve?</p>
+            </div>
+            
+            <div className="flex-1 mb-4">
+              <textarea
+                placeholder="What would your partner want to improve or experience..."
+                value={activityGeneratorState.partner2Input}
+                onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner2Input: e.target.value }))}
+                className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none text-sm"
+                maxLength={200}
+              />
+              <div className="text-xs text-gray-500 text-right mt-1">
+                {activityGeneratorState.partner2Input.length}/200
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'partner1' }))}
+                variant="outline"
+                className="flex-1"
+              >
+                Back
+              </Button>
+              <Button
+                onClick={handlePartner2Submit}
+                className="flex-1 bg-deep-green hover:bg-deep-green/90 text-white"
+              >
+                Generate
+              </Button>
+            </div>
+          </div>
+        );
+
+      case 'generation':
+        return (
+          <div className="flex flex-col h-full justify-center items-center">
+            <Sprout className="w-12 h-12 mx-auto text-sunflower animate-pulse mb-4" />
+            <h3 className="text-lg font-bold text-deep-green mb-2">Creating Your Perfect Activity</h3>
+            <p className="text-sm text-gray-600 text-center mb-4">Crafting something special just for you both...</p>
+            <div className="w-6 h-6 border-2 border-deep-green border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        );
+
+      case 'result':
+        if (!activityGeneratorState.generatedActivity) return null;
+        
+        return (
+          <div className="flex flex-col h-full">
+            <div className="text-center mb-3">
+              <Sun className="w-8 h-8 mx-auto text-sunflower mb-2" />
+              <h3 className="text-lg font-bold text-deep-green">Your Perfect Activity</h3>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto mb-4">
+              <div className="bg-soft-tangerine/20 p-3 rounded-lg mb-3">
+                <h4 className="font-semibold text-deep-green text-sm mb-1">
+                  {activityGeneratorState.generatedActivity.title}
+                </h4>
+                <p className="text-xs text-gray-700 mb-2">
+                  {activityGeneratorState.generatedActivity.description}
+                </p>
+                <div className="text-xs text-gray-600">
+                  Time: {activityGeneratorState.generatedActivity.estimatedTime}
+                </div>
+              </div>
+
+              {activityGeneratorState.generatedActivity.conversationPrompts?.length > 0 && (
+                <div className="bg-warm-white border border-gray-200 p-3 rounded-lg">
+                  <h5 className="font-semibold text-deep-green text-xs mb-2">Conversation Starters:</h5>
+                  <ul className="space-y-1 text-xs">
+                    {activityGeneratorState.generatedActivity.conversationPrompts.slice(0, 2).map((prompt: string, index: number) => (
+                      <li key={index} className="text-gray-700">• {prompt}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <Button
+              onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'email' }))}
+              className="w-full bg-deep-green hover:bg-deep-green/90 text-white"
+            >
+              Send to Email
+            </Button>
+          </div>
+        );
+
+      case 'email':
+        return (
+          <div className="flex flex-col h-full">
+            <div className="text-center mb-4">
+              <Mail className="w-8 h-8 mx-auto text-soft-tangerine mb-2" />
+              <h3 className="text-lg font-bold text-deep-green">Save Your Activity</h3>
+              <p className="text-sm text-gray-600">We'll send it to your email</p>
+            </div>
+            
+            <div className="flex-1 mb-4">
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={activityGeneratorState.email}
+                onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, email: e.target.value }))}
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm text-center"
+              />
+            </div>
+
+            {activityGeneratorState.emailCaptured ? (
+              <div className="text-center space-y-3">
+                <div className="text-green-600 font-medium text-sm">
+                  ✓ Activity sent successfully!
+                </div>
+                <Button
+                  onClick={() => setIsPreorderModalOpen(true)}
+                  variant="outline"
+                  className="border-deep-green text-deep-green hover:bg-deep-green hover:text-white"
+                >
+                  Explore Our Card Game
+                </Button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'result' }))}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Back
+                </Button>
+                <Button
+                  onClick={handleEmailSubmit}
+                  disabled={emailCaptureMutation.isPending}
+                  className="flex-1 bg-deep-green hover:bg-deep-green/90 text-white"
+                >
+                  {emailCaptureMutation.isPending ? 'Sending...' : 'Send'}
+                </Button>
+              </div>
+            )}
+          </div>
+        );
+
+      default:
+        return null;
+    }
   };
 
   return (
@@ -244,69 +529,96 @@ export default function Home() {
             Get a personalized activity suggestion in 2 minutes
           </p>
 
-          {/* Interactive Card Stack */}
+          {/* Interactive Card Stack with Flip */}
           <div className={`mb-5 ${isIntersecting['section-hero'] ? 'fade-in staggered-animation' : ''}`}>
-            {/* Card Stack Container */}
-            <div 
-              className="flex justify-center items-center cursor-pointer"
-              onClick={() => setCurrentCard((currentCard + 1) % cardData.length)}
-              style={{ 
-                height: '500px',
-                width: '100%',
-                padding: '20px'
-              }}
-            >
-              <div className="relative">
-                {cardData.map((card, index) => {
-                  const offset = index - currentCard;
-                  const isActive = index === currentCard;
-                  const isVisible = Math.abs(offset) <= 2;
-
-                  if (!isVisible) return null;
-
-                  return (
-                    <div
-                      key={card.id}
-                      className="absolute transition-all duration-1000 ease-out"
-                      style={{
-                        transform: `
-                          translateX(${offset * 8}px)
-                          translateY(${offset * 4}px)
-                          rotate(${offset * 3}deg)
-                          scale(${isActive ? 1 : 0.95})
-                        `,
-                        zIndex: isActive ? 10 : 10 - Math.abs(offset),
-                        left: '-144px',
-                        top: '-216px'
+            {/* Card Flip Container */}
+            <div className="activity-generator-container">
+              <div className={`card-flip-container ${isCardFlipped ? 'flipped' : ''}`}>
+                <div className="card-flip-inner">
+                  {/* Front - Card Stack */}
+                  <div className="card-front">
+                    <div 
+                      className="flex justify-center items-center cursor-pointer"
+                      onClick={() => setCurrentCard((currentCard + 1) % cardData.length)}
+                      style={{ 
+                        height: '500px',
+                        width: '100%',
+                        padding: '20px'
                       }}
                     >
-                      <div
-                        className="card-stack-item rounded-2xl border-4 border-deep-black shadow-2xl transition-all duration-300"
-                        style={{
-                          width: '288px',
-                          height: '432px',
-                          backgroundImage: `url(${card.image})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
-                          backgroundRepeat: 'no-repeat',
-                          filter: isActive ? 'none' : 'brightness(0.85)',
-                          opacity: isActive ? 1 : 0.9
-                        }}
-                        role="img"
-                        aria-label={card.title}
-                      />
+                      <div className="relative">
+                        {cardData.map((card, index) => {
+                          const offset = index - currentCard;
+                          const isActive = index === currentCard;
+                          const isVisible = Math.abs(offset) <= 2;
+
+                          if (!isVisible) return null;
+
+                          return (
+                            <div
+                              key={card.id}
+                              className="absolute transition-all duration-1000 ease-out"
+                              style={{
+                                transform: `
+                                  translateX(${offset * 8}px)
+                                  translateY(${offset * 4}px)
+                                  rotate(${offset * 3}deg)
+                                  scale(${isActive ? 1 : 0.95})
+                                `,
+                                zIndex: isActive ? 10 : 10 - Math.abs(offset),
+                                left: '-144px',
+                                top: '-216px'
+                              }}
+                            >
+                              <div
+                                className="card-stack-item rounded-2xl border-4 border-deep-black shadow-2xl transition-all duration-300"
+                                style={{
+                                  width: '288px',
+                                  height: '432px',
+                                  backgroundImage: `url(${card.image})`,
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center',
+                                  backgroundRepeat: 'no-repeat',
+                                  filter: isActive ? 'none' : 'brightness(0.85)',
+                                  opacity: isActive ? 1 : 0.9
+                                }}
+                                role="img"
+                                aria-label={card.title}
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  );
-                })}
+                  </div>
+
+                  {/* Back - Activity Generator */}
+                  <div className="card-back">
+                    <div 
+                      className="flex justify-center items-center"
+                      style={{ 
+                        height: '500px',
+                        width: '100%',
+                        padding: '20px'
+                      }}
+                    >
+                      <div className="w-full max-w-md">
+                        <div className="bg-warm-white border-4 border-deep-green rounded-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6 h-[432px] flex flex-col">
+                          {renderActivityGeneratorContent()}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-
-
 
             {/* Card Description */}
             <div className="text-center max-w-md mx-auto px-4">
               <p className="text-lg sm:text-xl md:text-2xl text-deep-green/90 font-medium italic">
-                {cardData[currentCard].hasUnderline ? (
+                {isCardFlipped ? (
+                  "Get your personalized activity suggestion"
+                ) : cardData[currentCard].hasUnderline ? (
                   <span className="squiggly-underline mt-[16px] mb-[16px]">{cardData[currentCard].description}</span>
                 ) : (
                   cardData[currentCard].description
@@ -315,9 +627,14 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Primary CTA - Activity Generator */}
-          <div className={`max-w-lg mx-auto ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.6s'}}>
-            <ActivityGenerator onClose={() => setIsPreorderModalOpen(true)} />
+          {/* Primary CTA - Start Activity Generator */}
+          <div className={`${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.6s'}}>
+            <Button 
+              onClick={() => setIsCardFlipped(true)}
+              className="bg-deep-green hover:bg-deep-green/90 text-white font-semibold text-lg sm:text-xl px-8 sm:px-12 py-3 sm:py-4 rounded-full hover-lift"
+            >
+              Start to Grow Together for Free
+            </Button>
           </div>
 
           {/* Secondary CTA - Card Game */}
