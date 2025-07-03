@@ -468,7 +468,6 @@ export default function Home() {
               <h3 className="text-lg font-bold mb-2" style={{ color: '#8B4513' }}>Save Your Activity</h3>
               <p className="text-sm" style={{ color: '#5D4037' }}>We'll send the full details to your email</p>
             </div>
-            
             <div className="flex-1 mb-4">
               <input
                 type="email"
@@ -483,14 +482,13 @@ export default function Home() {
                 }}
               />
             </div>
-
             {activityGeneratorState.emailCaptured ? (
               <div className="text-center space-y-4">
                 <div className="border rounded-lg p-4" style={{ backgroundColor: '#E8F5E8', borderColor: '#4CAF50' }}>
                   <div className="font-medium text-sm mb-2" style={{ color: '#2E7D32' }}>
                     ✅ Activity sent successfully!
                   </div>
-                  <p className="text-xs" style={{ color: '#388E3C' }}>Check your inbox for the full activity details.</p>
+                  <p className="text-xs" style={{ color: '#388E3C' }}>Check your inbox for the full activity details. Want more activities?</p>
                 </div>
                 <Button
                   onClick={() => setIsPreorderModalOpen(true)}
@@ -687,7 +685,7 @@ export default function Home() {
                         </div>
                       ) : (
                         /* Regular card for non-top cards */
-                        <div
+                        (<div
                           className="w-full h-full rounded-2xl border-4 border-deep-black shadow-2xl"
                           style={{
                             backgroundImage: `url(${card.image})`,
@@ -695,7 +693,7 @@ export default function Home() {
                             backgroundPosition: 'center',
                             borderColor: '#1A1A1A'
                           }}
-                        />
+                        />)
                       )}
                     </div>
                   );
