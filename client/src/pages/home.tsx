@@ -656,7 +656,7 @@ export default function Home() {
                               >
                                 {/* Header */}
                                 <div 
-                                  className="text-center py-3 border-b-2"
+                                  className="text-center py-3 border-b-2 bg-[#8b451300]"
                                   style={{ 
                                     backgroundColor: '#8B4513',
                                     color: '#FEFBF6',
