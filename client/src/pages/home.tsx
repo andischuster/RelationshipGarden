@@ -668,7 +668,7 @@ export default function Home() {
                                 
                                 {/* Content Area */}
                                 <div 
-                                  className="flex-1 p-4"
+                                  className="flex-1 p-4 bg-[#f5e4c2]"
                                   style={{ backgroundColor: '#F5E6D3' }}
                                 >
                                   {renderActivityGeneratorContent()}
