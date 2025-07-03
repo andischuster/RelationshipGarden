@@ -425,7 +425,7 @@ export default function Home() {
 
         return (
           <div className="flex flex-col h-full p-3">
-            
+
 
             <div className="flex-1 overflow-y-auto mb-3">
               <p className="text-sm font-medium text-black/80 mb-2 leading-relaxed px-1">
@@ -499,7 +499,7 @@ export default function Home() {
               <Button
                 onClick={handleEmailSubmit}
                 disabled={emailCaptureMutation.isPending || !activityGeneratorState.email.trim()}
-                className="w-full py-2 bg-black text-white font-bold text-sm hover:bg-black/90 transition-colors rounded-none border-4 border-black"
+                className="w-full py-2 bg-gradient-to-r from-sunflower to-soft-tangerine hover:from-sunflower/90 hover:to-soft-tangerine/90 text-deep-green font-bold text-sm hover-lift shadow-lg rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {emailCaptureMutation.isPending ? 'Sending...' : 'Send Activity'}
               </Button>
