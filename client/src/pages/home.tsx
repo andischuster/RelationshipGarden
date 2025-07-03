@@ -78,7 +78,6 @@ export default function Home() {
   const [isIntersecting, setIsIntersecting] = useState<{ [key: string]: boolean }>({});
   const [scrolled, setScrolled] = useState(false);
   const [isPreorderModalOpen, setIsPreorderModalOpen] = useState(false);
-  const [isCardFlipped, setIsCardFlipped] = useState(false);
   const [activityGeneratorState, setActivityGeneratorState] = useState({
     isFlipped: false,
     currentStep: 'partner1' as 'partner1' | 'partner2' | 'generation' | 'result' | 'email',
@@ -318,7 +317,7 @@ export default function Home() {
         return (
           <div className="flex flex-col h-full">
             <div className="text-center mb-3">
-              <p className="text-sm leading-relaxed" style={{ color: '#5D4037' }}>Tell us what you would like to improve about your relationship...</p>
+              <p className="text-sm leading-relaxed" style={{ color: '#5D4037' }}>Get started for free. What would you like to improve or experience in your relationship?</p>
             </div>
             
             <div className="flex-1 mb-3">
@@ -565,13 +564,18 @@ export default function Home() {
         <div className="mx-auto text-center w-full">
 
           {/* Main Title */}
-          <h1 className={`font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-deep-green mb-5 max-w-6xl mx-auto leading-tight ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
-            Discover Your Next Meaningful Moment Together
+          <h1 className={`font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-deep-green mb-6 max-w-6xl mx-auto leading-tight ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
+            Growing Us
           </h1>
 
           {/* Tagline */}
-          <p className={`text-base sm:text-lg md:text-xl text-deep-green/70 mb-6 sm:mb-9 max-w-4xl mx-auto leading-relaxed px-4 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.2s'}}>
-            Get a personalized activity suggestion in 2 minutes
+          <p className={`text-lg sm:text-xl md:text-2xl text-deep-green/80 mb-4 max-w-4xl mx-auto leading-relaxed px-4 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.2s'}}>
+            Every connection needs care, space, and warmth. These prompts help you nurture your relationship garden.
+          </p>
+
+          {/* Sub-Tagline */}
+          <p className={`text-base sm:text-lg text-deep-green/70 mb-8 max-w-3xl mx-auto leading-relaxed px-4 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.4s'}}>
+            <span className="squiggly-underline">Discover Your Next Meaningful Moment Together.</span>
           </p>
 
           {/* Interactive Card Stack with Flip */}
@@ -667,7 +671,7 @@ export default function Home() {
                                   className="text-center py-3 border-b-2"
                                   style={{ 
                                     backgroundColor: '#8B4513',
-                                    color: '#1A1A1A',
+                                    color: '#FEFBF6',
                                     borderColor: '#1A1A1A'
                                   }}
                                 >
@@ -682,16 +686,7 @@ export default function Home() {
                                   {renderActivityGeneratorContent()}
                                 </div>
                                 
-                                {/* Bottom CTA Section */}
-                                <div 
-                                  className="py-3 text-center border-t-2"
-                                  style={{ 
-                                    backgroundColor: '#F9A870',
-                                    borderColor: '#1A1A1A'
-                                  }}
-                                >
-                                  <div className="text-sm font-bold text-black">CTA Button</div>
-                                </div>
+                                
                               </div>
                             </div>
                           </div>
@@ -717,7 +712,7 @@ export default function Home() {
             {/* Card Description */}
             <div className="text-center max-w-md mx-auto px-4">
               <p className="text-lg sm:text-xl md:text-2xl text-deep-green/90 font-medium italic">
-                {isCardFlipped ? (
+                {activityGeneratorState.isFlipped ? (
                   "Get your personalized activity suggestion"
                 ) : cardData[currentCard].hasUnderline ? (
                   <span className="squiggly-underline mt-[16px] mb-[16px]">{cardData[currentCard].description}</span>
@@ -734,7 +729,7 @@ export default function Home() {
               onClick={() => setActivityGeneratorState(prev => ({ ...prev, isFlipped: true }))}
               className="bg-deep-green hover:bg-deep-green/90 text-white font-semibold text-lg sm:text-xl px-8 sm:px-12 py-3 sm:py-4 rounded-full hover-lift"
             >
-              Start to Grow Together for Free
+              Start Growing For Free
             </Button>
           </div>
 
@@ -745,11 +740,11 @@ export default function Home() {
               variant="outline"
               className="text-deep-green border-deep-green hover:bg-deep-green hover:text-white font-semibold text-lg px-8 py-3 rounded-full"
             >
-              Explore Our Card Game – $25
+              Order Card Game – $25
             </Button>
             <p className="text-sm text-deep-green/70 mt-3">
-              <Truck className="inline w-4 h-4 text-sunflower mr-2" />
-              Free shipping on orders of 2+ games
+              <Gift className="inline w-4 h-4 text-sunflower mr-2" />
+              Free shipping notice
             </p>
           </div>
         </div>
