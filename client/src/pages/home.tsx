@@ -12,6 +12,7 @@ import { insertPreorderSchema } from '@shared/schema';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import Blob from '@/components/Blob';
+import ActivityGenerator from '@/components/ActivityGenerator';
 
 // Import card images
 import elephantCard from "@assets/Elephant in the Room_1749555023557.png";
@@ -234,13 +235,13 @@ export default function Home() {
         <div className="mx-auto text-center w-full">
 
           {/* Main Title */}
-          <h1 className={`font-serif text-5xl sm:text-6xl md:text-8xl font-bold text-deep-green mb-5 whitespace-nowrap ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
-            Growing Us
+          <h1 className={`font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-deep-green mb-5 max-w-6xl mx-auto leading-tight ${isIntersecting['section-hero'] ? 'fade-in' : ''}`}>
+            Discover Your Next Meaningful Moment Together
           </h1>
 
           {/* Tagline */}
           <p className={`text-base sm:text-lg md:text-xl text-deep-green/70 mb-6 sm:mb-9 max-w-4xl mx-auto leading-relaxed px-4 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.2s'}}>
-            Every connection needs care, space, and warmth. These prompts help you nurture your relationship garden.
+            Get a personalized activity suggestion in 2 minutes
           </p>
 
           {/* Interactive Card Stack */}
@@ -314,13 +315,19 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Primary CTA */}
-          <div className={`${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.6s'}}>
+          {/* Primary CTA - Activity Generator */}
+          <div className={`max-w-lg mx-auto ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.6s'}}>
+            <ActivityGenerator onClose={() => setIsPreorderModalOpen(true)} />
+          </div>
+
+          {/* Secondary CTA - Card Game */}
+          <div className={`mt-8 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.8s'}}>
             <Button 
               onClick={handlePurchase}
-              className="btn-primary text-deep-green font-semibold text-lg sm:text-xl px-8 sm:px-12 py-3 sm:py-4 rounded-full hover-lift"
+              variant="outline"
+              className="text-deep-green border-deep-green hover:bg-deep-green hover:text-white font-semibold text-lg px-8 py-3 rounded-full"
             >
-              Let's Grow Together – $25
+              Explore Our Card Game – $25
             </Button>
             <p className="text-sm text-deep-green/70 mt-3">
               <Truck className="inline w-4 h-4 text-sunflower mr-2" />
