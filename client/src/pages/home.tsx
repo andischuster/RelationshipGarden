@@ -591,8 +591,8 @@ export default function Home() {
                     <div
                       key={card.id}
                       className={`card-stack-item ${
-                        isTopCard && !activityGeneratorState.isFlipped ? 'cursor-pointer hover:scale-110' : ''
-                      } transition-all duration-300 ease-out`}
+                        isTopCard && !activityGeneratorState.isFlipped ? 'cursor-pointer hover:scale-110 transition-all duration-300 ease-out' : 'transition-all duration-1000 ease-out'
+                      }`}
                       style={{
                         position: 'absolute',
                         width: '288px',
@@ -610,7 +610,7 @@ export default function Home() {
                         `,
                         opacity: isTopCard ? 1 : 0.9,
                         filter: isTopCard ? 'none' : 'brightness(0.85)',
-                        pointerEvents: isTopCard ? 'auto' : 'none'
+                        pointerEvents: isTopCard && !activityGeneratorState.isFlipped ? 'auto' : 'none'
                       }}
                       onClick={isTopCard ? (() => setCurrentCard((currentCard + 1) % cardData.length)) : undefined}
                     >
