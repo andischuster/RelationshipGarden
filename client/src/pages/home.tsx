@@ -415,7 +415,7 @@ export default function Home() {
                 GENERATE ACTIVITY
                 <Send className="w-6 h-6 text-yellow-500" />
               </h2>
-              <div className="w-full h-1 bg-black mt-2"></div>
+
             </div>
           </div>
         );
@@ -659,7 +659,7 @@ export default function Home() {
                               <div
                                 className="flex flex-col w-full h-full rounded-2xl shadow-2xl overflow-hidden"
                                 style={{ 
-                                  backgroundColor: '#F5E6D3',
+                                  backgroundColor: '#e3cca1',
                                   border: '4px solid #1A1A1A'
                                 }}
                               >
@@ -677,8 +677,8 @@ export default function Home() {
                                 
                                 {/* Content Area */}
                                 <div 
-                                  className="flex-1 p-4 bg-[#f5e4c2]"
-                                  style={{ backgroundColor: '#F5E6D3' }}
+                                  className="flex-1 p-4"
+                                  style={{ backgroundColor: '#e3cca1' }}
                                 >
                                   {renderActivityGeneratorContent()}
                                 </div>
