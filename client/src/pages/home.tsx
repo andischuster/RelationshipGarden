@@ -498,9 +498,7 @@ export default function Home() {
                     borderColor: '#8B4513',
                     color: '#8B4513'
                   }}
-                >
-                  🎯 Want More Activities? Explore Our Card Game
-                </Button>
+                >Explore Our Card Game</Button>
               </div>
             ) : (
               <div className="flex gap-2">
