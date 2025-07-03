@@ -673,7 +673,7 @@ export default function Home() {
                                     borderColor: '#1A1A1A'
                                   }}
                                 >
-                                  <h3 className="text-sm font-bold tracking-wide">ACTIVITY GENERATOR</h3>
+                                  <h3 className="font-bold tracking-wide text-[#171717] text-[22px]">GROW TOGETHER</h3>
                                 </div>
                                 
                                 {/* Content Area */}
