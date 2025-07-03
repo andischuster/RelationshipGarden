@@ -315,16 +315,16 @@ export default function Home() {
     switch (activityGeneratorState.currentStep) {
       case 'partner1':
         return (
-          <div className="flex flex-col h-full p-6">
+          <div className="flex flex-col h-full p-3">
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col justify-center">
-              <div className="mb-8">
+              <div className="mb-4">
                 <div className="relative">
                   <textarea
                     placeholder="Tell us what you would like to improve about your relationship..."
                     value={activityGeneratorState.partner1Input}
                     onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner1Input: e.target.value }))}
-                    className="w-full p-2 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-left resize-none"
+                    className="w-full p-1 border-none rounded-none text-lg font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-left resize-none"
                     style={{ 
                       backgroundColor: 'transparent',
                       color: '#000',
@@ -334,7 +334,7 @@ export default function Home() {
                     maxLength={300}
                   />
                   {!activityGeneratorState.partner1Input && (
-                    <span className="absolute top-0 left-[1px] animate-blink text-2xl font-bold text-black pointer-events-none">|</span>
+                    <span className="absolute top-0 left-[1px] animate-blink text-xl font-bold text-black pointer-events-none">|</span>
                   )}
                 </div>
               </div>
@@ -344,7 +344,7 @@ export default function Home() {
             {/* Bottom Button - Header Style */}
             <div className="text-center text-[1A1A1A]">
               <h2 
-                className="text-2xl font-black text-black mb-4 tracking-wide cursor-pointer hover:text-black/80 transition-colors yellow-squiggly-underline inline-flex items-center gap-3"
+                className="text-xl font-black text-black mb-2 tracking-wide cursor-pointer hover:text-black/80 transition-colors yellow-squiggly-underline inline-flex items-center gap-2"
                 onClick={handlePartner1Submit}
                 style={{ 
                   opacity: !activityGeneratorState.partner1Input.trim() ? 0.5 : 1,
@@ -352,7 +352,7 @@ export default function Home() {
                 }}
               >
                 CONTINUE
-                <Send className="w-6 h-6 text-deep-teal" />
+                <Send className="w-5 h-5 text-deep-teal" />
               </h2>
             </div>
           </div>
@@ -360,16 +360,16 @@ export default function Home() {
 
       case 'partner2':
         return (
-          <div className="flex flex-col h-full p-6">
+          <div className="flex flex-col h-full p-3">
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col justify-center">
-              <div className="mb-8">
+              <div className="mb-4">
                 <div className="relative">
                   <textarea
                     placeholder="What would your partner like to improve about your relationship..."
                     value={activityGeneratorState.partner2Input}
                     onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, partner2Input: e.target.value }))}
-                    className="w-full p-2 border-none rounded-none text-xl font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-left resize-none"
+                    className="w-full p-1 border-none rounded-none text-lg font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-left resize-none"
                     style={{ 
                       backgroundColor: 'transparent',
                       color: '#000',
@@ -379,7 +379,7 @@ export default function Home() {
                     maxLength={300}
                   />
                   {!activityGeneratorState.partner2Input && (
-                    <span className="absolute top-0 left-[1px] animate-blink text-2xl font-bold text-black pointer-events-none">|</span>
+                    <span className="absolute top-0 left-[1px] animate-blink text-xl font-bold text-black pointer-events-none">|</span>
                   )}
                 </div>
               </div>
@@ -390,7 +390,7 @@ export default function Home() {
             {/* Bottom Button - Header Style */}
             <div className="text-center">
               <h2 
-                className="text-2xl font-black text-black mb-4 tracking-wide cursor-pointer hover:text-black/80 transition-colors yellow-squiggly-underline inline-flex items-center gap-3"
+                className="text-xl font-black text-black mb-2 tracking-wide cursor-pointer hover:text-black/80 transition-colors yellow-squiggly-underline inline-flex items-center gap-2"
                 onClick={handlePartner2Submit}
                 style={{ 
                   opacity: !activityGeneratorState.partner2Input.trim() ? 0.5 : 1,
@@ -398,7 +398,7 @@ export default function Home() {
                 }}
               >
                 GENERATE ACTIVITY
-                <Send className="w-6 h-6 text-deep-teal" />
+                <Send className="w-5 h-5 text-deep-teal" />
               </h2>
 
             </div>
@@ -407,13 +407,13 @@ export default function Home() {
 
       case 'generation':
         return (
-          <div className="flex flex-col h-full justify-center items-center p-6">
+          <div className="flex flex-col h-full justify-center items-center p-3">
             <div className="text-center">
-              <div className="w-16 h-16 border-4 border-black border-t-transparent rounded-full animate-spin mb-6"></div>
-              <h3 className="text-2xl font-black text-black mb-4">
+              <div className="w-12 h-12 border-4 border-black border-t-transparent rounded-full animate-spin mb-3"></div>
+              <h3 className="text-xl font-black text-black mb-2">
                 Creating Your Activity
               </h3>
-              <p className="text-lg font-bold text-black/70">
+              <p className="text-sm font-bold text-black/70">
                 Crafting something special for you both...
               </p>
             </div>
@@ -424,18 +424,18 @@ export default function Home() {
         if (!activityGeneratorState.generatedActivity) return null;
 
         return (
-          <div className="flex flex-col h-full p-6">
+          <div className="flex flex-col h-full p-3">
             
 
-            <div className="flex-1 overflow-y-auto mb-6">
-              <p className="text-sm font-medium text-black/80 mb-3 leading-relaxed px-2">
+            <div className="flex-1 overflow-y-auto mb-3">
+              <p className="text-sm font-medium text-black/80 mb-2 leading-relaxed px-1">
                 {activityGeneratorState.generatedActivity.description}
               </p>
 
               {activityGeneratorState.generatedActivity.conversationPrompts?.length > 0 && (
-                <div className="border-4 border-black p-4 mb-4">
-                  <h5 className="font-black text-black mb-2">Conversation Starter:</h5>
-                  <p className="text-lg font-medium text-black/80 italic">
+                <div className="mb-2">
+                  <h5 className="font-black text-black mb-1 text-sm">Conversation Starter:</h5>
+                  <p className="text-sm font-medium text-black/80 italic">
                     "{activityGeneratorState.generatedActivity.conversationPrompts[0]}"
                   </p>
                 </div>
@@ -444,7 +444,7 @@ export default function Home() {
 
             <Button
               onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'email' }))}
-              className="w-full py-4 bg-black text-white font-bold text-lg hover:bg-black/90 transition-colors rounded-none border-4 border-black"
+              className="w-full py-2 bg-black text-white font-bold text-sm hover:bg-black/90 transition-colors rounded-none border-4 border-black"
             >
               💌 Send to Email
             </Button>
@@ -453,24 +453,24 @@ export default function Home() {
 
       case 'email':
         return (
-          <div className="flex flex-col h-full p-6">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-black text-black mb-4 tracking-wide">
+          <div className="flex flex-col h-full p-3">
+            <div className="text-center mb-4">
+              <h2 className="text-xl font-black text-black mb-2 tracking-wide">
                 SAVE ACTIVITY
               </h2>
-              <div className="w-full h-1 bg-black mb-6"></div>
-              <p className="text-lg font-bold text-black/80">
+              <div className="w-full h-1 bg-black mb-3"></div>
+              <p className="text-sm font-bold text-black/80">
                 We'll send the full details to your email
               </p>
             </div>
 
-            <div className="flex-1 flex flex-col justify-center mb-6">
+            <div className="flex-1 flex flex-col justify-center mb-3">
               <input
                 type="email"
                 placeholder="Enter your email address"
                 value={activityGeneratorState.email}
                 onChange={(e) => setActivityGeneratorState(prev => ({ ...prev, email: e.target.value }))}
-                className="w-full p-4 border-4 border-black rounded-none text-lg font-medium text-center focus:outline-none bg-transparent placeholder:text-black/50"
+                className="w-full p-2 border-4 border-black rounded-none text-sm font-medium text-center focus:outline-none bg-transparent placeholder:text-black/50"
                 style={{ 
                   backgroundColor: 'transparent',
                   color: '#000'
@@ -479,18 +479,18 @@ export default function Home() {
             </div>
 
             {activityGeneratorState.emailCaptured ? (
-              <div className="text-center space-y-6">
-                <div className="border-4 border-black p-4">
-                  <div className="font-black text-xl text-black mb-2">
+              <div className="text-center space-y-3">
+                <div className="border-4 border-black p-2">
+                  <div className="font-black text-lg text-black mb-1">
                     ✅ Activity sent successfully!
                   </div>
-                  <p className="text-lg font-bold text-black/70 mb-4">
+                  <p className="text-sm font-bold text-black/70 mb-2">
                     Check your inbox for the full activity details.
                   </p>
                 </div>
                 <Button
                   onClick={() => setIsPreorderModalOpen(true)}
-                  className="w-full py-4 bg-transparent border-4 border-black text-black font-bold text-lg hover:bg-black hover:text-white transition-colors rounded-none"
+                  className="w-full py-2 bg-transparent border-4 border-black text-black font-bold text-sm hover:bg-black hover:text-white transition-colors rounded-none"
                 >
                   Explore Our Card Game
                 </Button>
@@ -499,7 +499,7 @@ export default function Home() {
               <Button
                 onClick={handleEmailSubmit}
                 disabled={emailCaptureMutation.isPending || !activityGeneratorState.email.trim()}
-                className="w-full py-4 bg-black text-white font-bold text-lg hover:bg-black/90 transition-colors rounded-none border-4 border-black"
+                className="w-full py-2 bg-black text-white font-bold text-sm hover:bg-black/90 transition-colors rounded-none border-4 border-black"
               >
                 {emailCaptureMutation.isPending ? 'Sending...' : 'Send Activity'}
               </Button>
@@ -639,23 +639,25 @@ export default function Home() {
                               >
                                 {/* Header */}
                                 <div 
-                                  className="text-center py-3 border-b-2"
+                                  className="text-center py-2 border-b-2"
                                   style={{ 
                                     backgroundColor: 'transparent',
                                     color: '#FEFBF6',
                                     borderColor: '#1A1A1A'
                                   }}
                                 >
-                                  <h3 className="font-bold tracking-wide text-[#171717] text-[22px]">
+                                  <h3 className="font-bold tracking-wide text-[#171717] text-[18px]">
                                     {activityGeneratorState.currentStep === 'result' && activityGeneratorState.generatedActivity 
-                                      ? activityGeneratorState.generatedActivity.title 
+                                      ? (activityGeneratorState.generatedActivity.title.length > 23 
+                                         ? activityGeneratorState.generatedActivity.title.substring(0, 23) 
+                                         : activityGeneratorState.generatedActivity.title)
                                       : 'GROW TOGETHER'}
                                   </h3>
                                 </div>
 
                                 {/* Content Area */}
                                 <div 
-                                  className="flex-1 p-4"
+                                  className="flex-1 p-2"
                                   style={{ backgroundColor: '#e3cca1' }}
                                 >
                                   {renderActivityGeneratorContent()}
