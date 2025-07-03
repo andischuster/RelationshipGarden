@@ -388,27 +388,14 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <Button
-                onClick={() => setActivityGeneratorState(prev => ({ ...prev, currentStep: 'partner1' }))}
-                className="flex-1 py-2 rounded-lg border-2 hover:opacity-80 transition-opacity"
-                style={{ 
-                  backgroundColor: 'transparent',
-                  borderColor: '#8D6E63',
-                  color: '#5D4037'
-                }}
-              >
-                Back
-              </Button>
-              <Button
-                onClick={handlePartner2Submit}
-                className="flex-1 py-2 rounded-lg text-white font-medium hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: '#8B4513' }}
-                disabled={!activityGeneratorState.partner2Input.trim()}
-              >
-                Generate
-              </Button>
-            </div>
+            <Button
+              onClick={handlePartner2Submit}
+              className="w-full py-2 rounded-lg text-white font-medium hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: '#8B4513' }}
+              disabled={!activityGeneratorState.partner2Input.trim()}
+            >
+              Generate
+            </Button>
           </div>
         );
 
