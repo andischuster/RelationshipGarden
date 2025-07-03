@@ -301,7 +301,7 @@ export default function Home() {
       });
       return;
     }
-    
+
     if (!activityGeneratorState.generatedActivity) return;
 
     emailCaptureMutation.mutate({
@@ -330,7 +330,7 @@ export default function Home() {
                       color: '#000',
                       textAlign: 'left'
                     }}
-                    rows={3}
+                    rows={4}
                     maxLength={300}
                   />
                   {!activityGeneratorState.partner1Input && (
@@ -382,7 +382,7 @@ export default function Home() {
                       color: '#000',
                       textAlign: 'left'
                     }}
-                    rows={3}
+                    rows={4}
                     maxLength={300}
                   />
                   {!activityGeneratorState.partner2Input && (
@@ -436,7 +436,7 @@ export default function Home() {
 
       case 'result':
         if (!activityGeneratorState.generatedActivity) return null;
-        
+
         return (
           <div className="flex flex-col h-full p-6">
             <div className="text-center mb-6">
@@ -445,7 +445,7 @@ export default function Home() {
               </h2>
               <div className="w-full h-1 bg-black mb-6"></div>
             </div>
-            
+
             <div className="flex-1 overflow-y-auto mb-6">
               <h4 className="text-xl font-black text-black mb-4">
                 {activityGeneratorState.generatedActivity.title}
@@ -488,7 +488,7 @@ export default function Home() {
                 We'll send the full details to your email
               </p>
             </div>
-            
+
             <div className="flex-1 flex flex-col justify-center mb-6">
               <input
                 type="email"
@@ -502,7 +502,7 @@ export default function Home() {
                 }}
               />
             </div>
-            
+
             {activityGeneratorState.emailCaptured ? (
               <div className="text-center space-y-6">
                 <div className="border-4 border-black p-4">
@@ -584,9 +584,9 @@ export default function Home() {
                   const offset = index - currentCard;
                   const isTopCard = index === currentCard;
                   const isVisible = Math.abs(offset) <= 2;
-                  
+
                   if (!isVisible) return null;
-                  
+
                   return (
                     <div
                       key={card.id}
@@ -645,7 +645,7 @@ export default function Home() {
                                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
                               }}
                             />
-                            
+
                             {/* Back - Chatbox Interface */}
                             <div 
                               className="card-back w-full h-full"
@@ -673,7 +673,7 @@ export default function Home() {
                                 >
                                   <h3 className="font-bold tracking-wide text-[#171717] text-[22px]">GROW TOGETHER</h3>
                                 </div>
-                                
+
                                 {/* Content Area */}
                                 <div 
                                   className="flex-1 p-4"
@@ -681,8 +681,8 @@ export default function Home() {
                                 >
                                   {renderActivityGeneratorContent()}
                                 </div>
-                                
-                                
+
+
                               </div>
                             </div>
                           </div>
