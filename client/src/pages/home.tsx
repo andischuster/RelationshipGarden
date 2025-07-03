@@ -484,12 +484,10 @@ export default function Home() {
             </div>
             {activityGeneratorState.emailCaptured ? (
               <div className="text-center space-y-4">
-                <div className="border rounded-lg p-4" style={{ backgroundColor: '#E8F5E8', borderColor: '#4CAF50' }}>
-                  <div className="font-medium text-sm mb-2" style={{ color: '#2E7D32' }}>
-                    ✅ Activity sent successfully!
-                  </div>
-                  <p className="text-xs" style={{ color: '#388E3C' }}>Check your inbox for the full activity details. Want more activities?</p>
+                <div className="font-medium text-sm mb-2" style={{ color: '#8B4513' }}>
+                  ✅ Activity sent successfully!
                 </div>
+                <p className="text-xs mb-4" style={{ color: '#5D4037' }}>Check your inbox for the full activity details. Want more activities?</p>
                 <Button
                   onClick={() => setIsPreorderModalOpen(true)}
                   className="w-full py-3 rounded-lg border-2 hover:opacity-80 transition-opacity"
