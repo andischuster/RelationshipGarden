@@ -316,14 +316,6 @@ export default function Home() {
       case 'partner1':
         return (
           <div className="flex flex-col h-full p-6">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-black text-black mb-4 tracking-wide">
-                GROW TOGETHER
-              </h2>
-              <div className="w-full h-1 bg-black mb-6"></div>
-            </div>
-            
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col justify-center">
               <div className="mb-8">
