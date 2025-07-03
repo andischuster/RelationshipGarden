@@ -610,9 +610,9 @@ export default function Home() {
                         `,
                         opacity: isTopCard ? 1 : 0.9,
                         filter: isTopCard ? 'none' : 'brightness(0.85)',
-                        pointerEvents: isTopCard && !activityGeneratorState.isFlipped ? 'auto' : 'none'
+                        pointerEvents: isTopCard ? 'auto' : 'none'
                       }}
-                      onClick={isTopCard ? (() => setCurrentCard((currentCard + 1) % cardData.length)) : undefined}
+                      onClick={isTopCard && !activityGeneratorState.isFlipped ? (() => setCurrentCard((currentCard + 1) % cardData.length)) : undefined}
                     >
                       {/* Card Flip Container - Only for top card */}
                       {isTopCard ? (
