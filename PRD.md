@@ -270,4 +270,191 @@ CREATE TABLE preorders (
 - **Environment Variables**: Google Forms/Sheets integration
 - **Build Process**: TypeScript compilation and asset optimization
 
-This PRD provides complete specifications for recreating the Growing Us website with all interactive elements, including the detailed clickable card functionality in the hero section.
+## Interactive Activity Generator Feature
+
+### Overview
+A new interactive feature that transforms the main CTA from "Let's Grow Together – $25" to "Start to Grow Together for Free". When clicked, the existing card stack performs a flipping animation to reveal an activity generator interface that helps couples get personalized relationship activity suggestions.
+
+### Feature Specifications
+
+#### Card Flip Animation
+- **Trigger**: Click on "Start to Grow Together for Free" button
+- **Animation**: 3D card flip effect using CSS transforms
+- **Duration**: 800ms with easing function
+- **Behavior**: Current card stack container flips to reveal input interface
+- **Fallback**: Graceful degradation for reduced motion preferences
+
+#### Activity Generator Interface
+
+**Input Collection**:
+- **Partner 1 Prompt**: "What would you like to improve or experience in your relationship?"
+- **Partner 2 Prompt**: "What would your partner like to improve or experience?"
+- **Input Method**: Text areas with placeholder text and character limits
+- **Validation**: Required fields with helpful error messaging
+- **Progressive Disclosure**: Show Partner 2 input after Partner 1 completion
+
+**Activity Generation**:
+- **Processing State**: Loading animation with encouraging messages
+- **Activity Suggestion**: Personalized romantic/meaningful activity based on combined input
+- **Conversation Prompts**: Include tailored discussion starters with each activity
+- **Visual Design**: Maintain card aesthetic with new content
+
+**Email Capture**:
+- **CTA**: "Send this activity to your email"
+- **Form**: Simple email input with validation
+- **Optional Newsletter**: Checkbox for relationship tips signup
+- **Delivery**: Send activity details via existing email system
+
+#### Technical Implementation
+
+**Component Structure**:
+```typescript
+interface ActivityGeneratorState {
+  isFlipped: boolean;
+  partner1Input: string;
+  partner2Input: string;
+  generatedActivity: ActivitySuggestion | null;
+  emailCaptured: boolean;
+}
+
+interface ActivitySuggestion {
+  id: string;
+  title: string;
+  description: string;
+  conversationPrompts: string[];
+  estimatedTime: string;
+  category: 'communication' | 'intimacy' | 'fun' | 'growth';
+}
+```
+
+**Animation CSS**:
+```css
+.card-flip-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.card-flip-inner {
+  transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.card-flip-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  backface-visibility: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+```
+
+**Activity Database Schema**:
+```typescript
+interface ActivityTemplate {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  conversationPrompts: string[];
+  estimatedTime: string;
+  category: ActivityCategory;
+  difficultyLevel: 'easy' | 'medium' | 'deep';
+}
+```
+
+#### User Flow Updates
+
+**New Primary Flow**:
+1. **Landing**: User sees "Start to Grow Together for Free" CTA
+2. **Flip Animation**: Click triggers card stack flip animation
+3. **Partner 1 Input**: First partner enters relationship goal/desire
+4. **Partner 2 Input**: Second partner enters their input
+5. **Generation**: Brief processing with encouraging messaging
+6. **Activity Display**: Show personalized activity with conversation prompts
+7. **Email Capture**: Optional email submission for activity delivery
+8. **Soft Conversion**: Present card game offer as "Want more activities like this?"
+
+**Secondary Flow (Existing)**:
+- Maintain existing product showcase and purchase flow
+- Position as "explore more" or secondary navigation option
+- Keep existing pricing section and testimonials
+
+#### Content Requirements
+
+**Activity Templates** (Sample Categories):
+- **Communication**: Deep conversation starters, active listening exercises
+- **Intimacy**: Physical and emotional connection activities
+- **Fun**: Playful adventures, shared hobbies, date ideas
+- **Growth**: Goal-setting exercises, vision alignment activities
+
+**Messaging Updates**:
+- **Hero Headline**: "Discover Your Next Meaningful Moment Together"
+- **Subheading**: "Get a personalized activity suggestion in 2 minutes"
+- **Primary CTA**: "Start to Grow Together for Free"
+- **Secondary CTA**: "Explore Our Card Game" (existing purchase flow)
+
+**Email Templates**:
+- **Subject**: "Your personalized relationship activity from Growing Us"
+- **Content**: Activity details, conversation prompts, soft product introduction
+- **Follow-up**: Nurture sequence introducing the card game
+
+#### Success Metrics
+
+**Engagement Metrics**:
+- Click-through rate on new primary CTA
+- Completion rate of activity generator flow
+- Time spent on activity generator interface
+- Email capture conversion rate
+
+**Lead Generation Metrics**:
+- Email signups from activity generator
+- Newsletter subscription rate
+- Follow-up email engagement rates
+- Conversion from leads to product purchases
+
+**User Experience Metrics**:
+- Activity generator satisfaction ratings
+- User feedback on suggested activities
+- Bounce rate comparison before/after implementation
+- Mobile vs desktop usage patterns
+
+#### Implementation Phases
+
+**Phase 1: Core Functionality**
+- Card flip animation implementation
+- Basic input collection interface
+- Simple activity suggestion algorithm
+- Email capture integration
+
+**Phase 2: Enhanced Experience**
+- Improved activity matching logic
+- Better visual design and animations
+- A/B testing for conversion optimization
+- Analytics implementation
+
+**Phase 3: Advanced Features**
+- User accounts for saving activities
+- More sophisticated personalization
+- Integration with existing pre-order system
+- Performance optimization
+
+#### Mobile Considerations
+- **Touch-friendly**: Large tap targets for mobile users
+- **Responsive Animation**: Optimized flip animation for mobile devices
+- **Input Experience**: Mobile-optimized text areas and keyboards
+- **Performance**: Smooth animations on lower-end devices
+
+#### Accessibility Requirements
+- **Screen Reader Support**: Proper ARIA labels for flip animation states
+- **Keyboard Navigation**: Full keyboard accessibility for input flow
+- **Reduced Motion**: Respect `prefers-reduced-motion` settings
+- **Color Contrast**: Maintain WCAG compliance in new interface elements
+
+This PRD provides complete specifications for recreating the Growing Us website with all interactive elements, including the detailed clickable card functionality in the hero section and the new interactive activity generator feature.
