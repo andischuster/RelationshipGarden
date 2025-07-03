@@ -575,7 +575,6 @@ export default function Home() {
 
           {/* Sub-Tagline */}
           <p className={`text-base sm:text-lg text-deep-green/70 mb-8 max-w-3xl mx-auto leading-relaxed px-4 ${isIntersecting['section-hero'] ? 'fade-in' : ''}`} style={{animationDelay: '0.4s'}}>
-            <span className="squiggly-underline">Discover Your Next Meaningful Moment Together.</span>
           </p>
 
           {/* Interactive Card Stack with Flip */}
