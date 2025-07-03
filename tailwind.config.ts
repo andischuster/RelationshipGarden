@@ -61,6 +61,14 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        // Growing Us custom colors
+        "warm-white": "var(--warm-white)",
+        "deep-green": "var(--deep-green)",
+        "sunflower": "var(--sunflower)",
+        "soft-tangerine": "var(--soft-tangerine)",
+        "deep-teal": "var(--deep-teal)",
+        "deep-black": "var(--deep-black)",
+        "soft-brown": "var(--soft-brown)",
       },
       keyframes: {
         "accordion-down": {
