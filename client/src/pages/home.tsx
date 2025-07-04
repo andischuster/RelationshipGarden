@@ -498,24 +498,25 @@ export default function Home() {
               <p className="text-base font-medium text-black/80 mb-1 leading-relaxed px-1">
                 {activityGeneratorState.generatedActivity.description}
               </p>
-
-              {activityGeneratorState.generatedActivity.conversationPrompts
-                ?.length > 0 && (
-                <div className="mb-1">
-                  <h5 className="font-black text-black mb-1 text-lg px-4">
-                    Conversation Starter
-                  </h5>
-                  <p className="text-base font-medium text-black/80 italic">
-                    "
-                    {
-                      activityGeneratorState.generatedActivity
-                        .conversationPrompts[0]
-                    }
-                    "
-                  </p>
-                </div>
-              )}
             </div>
+
+            {/* Conversation starter moved to bottom */}
+            {activityGeneratorState.generatedActivity.conversationPrompts
+              ?.length > 0 && (
+              <div className="mb-3">
+                <h5 className="font-black text-black mb-1 text-lg px-4">
+                  Conversation Starter
+                </h5>
+                <p className="text-base font-medium text-black/80 italic">
+                  "
+                  {
+                    activityGeneratorState.generatedActivity
+                      .conversationPrompts[0]
+                  }
+                  "
+                </p>
+              </div>
+            )}
 
             <Button
               onClick={() =>
