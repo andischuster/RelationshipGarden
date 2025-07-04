@@ -552,6 +552,7 @@ export default function Home() {
                   backgroundColor: "transparent",
                   color: "#000",
                 }}
+                autoFocus
               />
             </div>
 
@@ -579,7 +580,7 @@ export default function Home() {
                   emailCaptureMutation.isPending ||
                   !activityGeneratorState.email.trim()
                 }
-                className="w-full py-2 bg-gradient-to-r from-sunflower to-soft-tangerine hover:from-sunflower/90 hover:to-soft-tangerine/90 text-deep-green font-bold text-sm hover-lift shadow-lg rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 py-2 bg-sunflower border-4 border-black text-black hover:bg-sunflower/90 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {emailCaptureMutation.isPending
                   ? "Sending..."
@@ -714,10 +715,17 @@ export default function Home() {
                         }}
                         onClick={
                           isTopCard && !activityGeneratorState.isFlipped
-                            ? () =>
+                            ? () => {
                                 setCurrentCard(
                                   (currentCard + 1) % cardData.length,
                                 )
+                                // Immediately focus when card is selected
+                                if (activityGeneratorState.currentStep === 'partner1') {
+                                  document.querySelector('textarea[placeholder="Tell us what you would like to improve about your relationship..."]')?.focus();
+                                } else if (activityGeneratorState.currentStep === 'partner2') {
+                                  document.querySelector('textarea[placeholder="What would your partner like to improve about your relationship..."]')?.focus();
+                                }
+                              }
                             : undefined
                         }
                       >
@@ -880,9 +888,9 @@ export default function Home() {
         </section>
         {/* Section Divider */}
         <div className="section-divider">
-          <div className="section-divider-icon">
-            <Flower className="w-6 h-6 text-deep-teal" />
-          </div>
+          <svg width="100%" height="24">
+            <path d="M0,12 Q20,4 40,12 T80,12 T120,12 T160,12 T200,12 T240,12 T280,12 T320,12 T360,12 T400,12 T440,12 T480,12 T520,12 T560,12 T600,12 T640,12 T680,12 T720,12 T760,12 T800,12 T840,12 T880,12 T920,12 T960,12 T1000,12" stroke="#008080" strokeWidth="2" fill="none" />
+          </svg>
         </div>
         {/* How To Play Section */}
         <section
@@ -1020,9 +1028,9 @@ export default function Home() {
         </section>
         {/* Section Divider */}
         <div className="section-divider">
-          <div className="section-divider-icon">
-            <Heart className="w-6 h-6 text-deep-teal" />
-          </div>
+          <svg width="100%" height="24">
+            <path d="M0,12 Q20,4 40,12 T80,12 T120,12 T160,12 T200,12 T240,12 T280,12 T320,12 T360,12 T400,12 T440,12 T480,12 T520,12 T560,12 T600,12 T640,12 T680,12 T720,12 T760,12 T800,12 T840,12 T880,12 T920,12 T960,12 T1000,12" stroke="#008080" strokeWidth="2" fill="none" />
+          </svg>
         </div>
         {/* Pricing Section */}
         <section
@@ -1134,9 +1142,9 @@ export default function Home() {
         </section>
         {/* Section Divider */}
         <div className="section-divider">
-          <div className="section-divider-icon">
-            <Sprout className="w-6 h-6 text-deep-teal" />
-          </div>
+          <svg width="100%" height="24">
+            <path d="M0,12 Q20,4 40,12 T80,12 T120,12 T160,12 T200,12 T240,12 T280,12 T320,12 T360,12 T400,12 T440,12 T480,12 T520,12 T560,12 T600,12 T640,12 T680,12 T720,12 T760,12 T800,12 T840,12 T880,12 T920,12 T960,12 T1000,12" stroke="#008080" strokeWidth="2" fill="none" />
+          </svg>
         </div>
         {/* Testimonials Section */}
         <section
@@ -1259,9 +1267,9 @@ export default function Home() {
         </section>
         {/* Section Divider */}
         <div className="section-divider">
-          <div className="section-divider-icon">
-            <Leaf className="w-6 h-6 text-deep-teal" />
-          </div>
+          <svg width="100%" height="24">
+            <path d="M0,12 Q20,4 40,12 T80,12 T120,12 T160,12 T200,12 T240,12 T280,12 T320,12 T360,12 T400,12 T440,12 T480,12 T520,12 T560,12 T600,12 T640,12 T680,12 T720,12 T760,12 T800,12 T840,12 T880,12 T920,12 T960,12 T1000,12" stroke="#008080" strokeWidth="2" fill="none" />
+          </svg>
         </div>
         {/* Footer */}
         <footer className="py-12 px-4 bg-deep-green text-warm-white">
