@@ -1257,6 +1257,12 @@ export default function Home() {
             </div>
           </div>
         </section>
+        {/* Section Divider */}
+        <div className="section-divider">
+          <div className="section-divider-icon">
+            <Leaf className="w-6 h-6 text-deep-teal" />
+          </div>
+        </div>
         {/* Footer */}
         <footer className="py-12 px-4 bg-deep-green text-warm-white">
           <div className="container mx-auto max-w-4xl text-center">
