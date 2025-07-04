@@ -6,9 +6,15 @@ import {
 } from "@shared/schema";
 import { googleFormsService } from "./google-forms";
 import { GoogleGenAI } from "@google/genai";
+import OpenAI from "openai";
 
 // Initialize Gemini client
 const genai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY || "",
+});
 
 export async function registerRoutes(app: Express): Promise<void> {
   // put application routes here
@@ -70,17 +76,31 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   // Activity Generator Routes
   app.post("/api/activities/generate", async (req, res) => {
+    console.log("🎯 Activity generation request received");
     try {
       const { partner1Input, partner2Input } = req.body;
+      console.log("📝 Request inputs:", { 
+        partner1Length: partner1Input?.length || 0,
+        partner2Length: partner2Input?.length || 0,
+        partner1Preview: partner1Input?.substring(0, 50) + "...",
+        partner2Preview: partner2Input?.substring(0, 50) + "..."
+      });
 
       if (!partner1Input || !partner2Input) {
+        console.log("❌ Missing required inputs");
         return res
           .status(400)
           .json({ error: "Both partner inputs are required" });
       }
 
-      // Simple activity generation logic - will enhance with AI later
+      console.log("🚀 Starting activity generation...");
       const activity = await generateActivity(partner1Input, partner2Input);
+      console.log("✅ Activity generated successfully:", {
+        title: activity.title,
+        category: activity.category,
+        estimatedTime: activity.estimatedTime,
+        promptCount: activity.conversationPrompts?.length || 0
+      });
 
       // Save the suggestion to database
       const suggestionData = {
@@ -93,8 +113,10 @@ export async function registerRoutes(app: Express): Promise<void> {
         email: null, // Will be updated when email is captured
       };
 
+      console.log("💾 Saving to database...");
       const savedSuggestion =
         await storage.createActivitySuggestion(suggestionData);
+      console.log("✅ Saved to database with ID:", savedSuggestion.id);
 
       res.json({
         success: true,
@@ -104,7 +126,7 @@ export async function registerRoutes(app: Express): Promise<void> {
         },
       });
     } catch (error) {
-      console.error("Error generating activity:", error);
+      console.error("💥 Error generating activity:", error);
       res.status(500).json({ error: "Failed to generate activity" });
     }
   });
@@ -135,10 +157,37 @@ export async function registerRoutes(app: Express): Promise<void> {
   });
 }
 
-// AI-powered activity generation function using Gemini
+// AI-powered activity generation function with Gemini and OpenAI fallback
 async function generateActivity(partner1Input: string, partner2Input: string) {
+  console.log("🤖 Starting AI activity generation...");
+  
+  // Try Gemini first
   try {
-    const prompt = `You are a relationship counseling expert creating personalized activities for couples. Based on the following inputs from two partners, create a unique relationship activity that addresses their specific interests and needs.
+    console.log("🔮 Attempting Gemini API call...");
+    const activity = await generateWithGemini(partner1Input, partner2Input);
+    console.log("✅ Gemini API successful");
+    return activity;
+  } catch (geminiError) {
+    console.error("❌ Gemini API failed:", geminiError);
+    console.log("🔄 Falling back to OpenAI...");
+    
+    // Try OpenAI as fallback
+    try {
+      const activity = await generateWithOpenAI(partner1Input, partner2Input);
+      console.log("✅ OpenAI API successful");
+      return activity;
+    } catch (openaiError) {
+      console.error("❌ OpenAI API also failed:", openaiError);
+      console.log("🔄 Using static fallback...");
+      
+      // Final fallback to static content
+      return generateStaticFallback(partner1Input, partner2Input);
+    }
+  }
+}
+
+async function generateWithGemini(partner1Input: string, partner2Input: string) {
+  const prompt = `You are a relationship counseling expert creating personalized activities for couples. Based on the following inputs from two partners, create a unique relationship activity that addresses their specific interests and needs.
 
 Partner 1 shared: "${partner1Input}"
 Partner 2 shared: "${partner2Input}"
@@ -150,73 +199,171 @@ Please create a personalized relationship activity that considers both partners'
   "description": "A short description of the activity that incorporates elements from both partners' inputs (25 words max)",
   "conversationPrompts": [
     "Thoughtful question based on their shared interests that helps them connect deeper. (short succinct, 10 words max)",
+    "Another meaningful question to deepen their connection. (short succinct, 10 words max)",
+    "A final question to help them grow together. (short succinct, 10 words max)"
   ],
-  "category": "One of: communication, intimacy, fun, or growth"
+  "category": "One of: communication, intimacy, fun, or growth",
+  "estimatedTime": "A time estimate like '30 minutes' or '1 hour'"
 }
 
 Make the activity specific to their inputs - reference their interests, concerns, or goals when relevant. Keep the tone warm, supportive, and relationship-focused.`;
 
-    const response = await genai.models.generateContent({
-      model: "gemini-2.5-flash",
-      config: {
-        systemInstruction:
-          "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only.",
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: "object",
-          properties: {
-            title: { type: "string" },
-            description: { type: "string" },
-            conversationPrompts: {
-              type: "array",
-              items: { type: "string" },
-            },
-            category: { type: "string" },
+  console.log("📤 Sending request to Gemini...");
+  const startTime = Date.now();
+  
+  const response = await genai.models.generateContent({
+    model: "gemini-2.5-flash",
+    config: {
+      systemInstruction:
+        "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only.",
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: "object",
+        properties: {
+          title: { type: "string" },
+          description: { type: "string" },
+          conversationPrompts: {
+            type: "array",
+            items: { type: "string" },
           },
-          required: [
-            "title",
-            "description",
-            "conversationPrompts",
-            "category",
-          ],
+          category: { type: "string" },
+          estimatedTime: { type: "string" },
         },
+        required: [
+          "title",
+          "description",
+          "conversationPrompts",
+          "category",
+          "estimatedTime",
+        ],
       },
-      contents: prompt,
-    });
+    },
+    contents: prompt,
+  });
 
-    const responseContent = response.text;
-    if (!responseContent) {
-      throw new Error("No response from Gemini");
-    }
+  const duration = Date.now() - startTime;
+  console.log(`📥 Gemini response received in ${duration}ms`);
 
-    // Parse the JSON response
-    const activity = JSON.parse(responseContent);
-
-    // Validate the response has required fields
-    if (
-      !activity.title ||
-      !activity.description ||
-      !activity.conversationPrompts ||
-      !activity.estimatedTime ||
-      !activity.category
-    ) {
-      throw new Error("Invalid activity structure from AI");
-    }
-
-    return activity;
-  } catch (error) {
-    console.error("Error generating AI activity:", error);
-
-    // Fallback to a simple personalized activity if AI fails
-    return {
-      title: "Personalized Connection Time",
-      description: `Based on what you both shared, spend time discussing your thoughts and feelings together. Create a comfortable space where you can both express yourselves openly.`,
-      conversationPrompts: [
-        `Reflecting on what you shared - "${partner1Input}" - how do you think we can explore this together?`,
-        `You mentioned "${partner2Input}" - what would make this meaningful for our relationship?`,
-        "What's one thing we could do together that combines both of our interests?",
-      ],
-      category: "communication",
-    };
+  const responseContent = response.text;
+  if (!responseContent) {
+    throw new Error("No response content from Gemini");
   }
+
+  console.log("📄 Raw Gemini response:", responseContent.substring(0, 200) + "...");
+
+  // Parse the JSON response
+  const activity = JSON.parse(responseContent);
+  console.log("📊 Parsed activity structure:", {
+    hasTitle: !!activity.title,
+    hasDescription: !!activity.description,
+    hasPrompts: !!activity.conversationPrompts,
+    hasCategory: !!activity.category,
+    hasEstimatedTime: !!activity.estimatedTime,
+    promptCount: activity.conversationPrompts?.length || 0
+  });
+
+  // Validate the response has required fields
+  if (
+    !activity.title ||
+    !activity.description ||
+    !activity.conversationPrompts ||
+    !activity.estimatedTime ||
+    !activity.category
+  ) {
+    throw new Error("Invalid activity structure from Gemini - missing required fields");
+  }
+
+  return activity;
+}
+
+async function generateWithOpenAI(partner1Input: string, partner2Input: string) {
+  const prompt = `You are a relationship counseling expert creating personalized activities for couples. Based on the following inputs from two partners, create a unique relationship activity that addresses their specific interests and needs.
+
+Partner 1 shared: "${partner1Input}"
+Partner 2 shared: "${partner2Input}"
+
+Please create a personalized relationship activity that considers both partners' inputs. Return your response as a JSON object with this exact structure:
+
+{
+  "title": "A creative, engaging title for the activity (23 characters max)",
+  "description": "A short description of the activity that incorporates elements from both partners' inputs (25 words max)",
+  "conversationPrompts": [
+    "Thoughtful question based on their shared interests that helps them connect deeper. (short succinct, 10 words max)",
+    "Another meaningful question to deepen their connection. (short succinct, 10 words max)",
+    "A final question to help them grow together. (short succinct, 10 words max)"
+  ],
+  "category": "One of: communication, intimacy, fun, or growth",
+  "estimatedTime": "A time estimate like '30 minutes' or '1 hour'"
+}
+
+Make the activity specific to their inputs - reference their interests, concerns, or goals when relevant. Keep the tone warm, supportive, and relationship-focused.`;
+
+  console.log("📤 Sending request to OpenAI...");
+  const startTime = Date.now();
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "system",
+        content: "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only."
+      },
+      {
+        role: "user",
+        content: prompt
+      }
+    ],
+    response_format: { type: "json_object" },
+    temperature: 0.7,
+  });
+
+  const duration = Date.now() - startTime;
+  console.log(`📥 OpenAI response received in ${duration}ms`);
+
+  const responseContent = response.choices[0]?.message?.content;
+  if (!responseContent) {
+    throw new Error("No response content from OpenAI");
+  }
+
+  console.log("📄 Raw OpenAI response:", responseContent.substring(0, 200) + "...");
+
+  // Parse the JSON response
+  const activity = JSON.parse(responseContent);
+  console.log("📊 Parsed activity structure:", {
+    hasTitle: !!activity.title,
+    hasDescription: !!activity.description,
+    hasPrompts: !!activity.conversationPrompts,
+    hasCategory: !!activity.category,
+    hasEstimatedTime: !!activity.estimatedTime,
+    promptCount: activity.conversationPrompts?.length || 0
+  });
+
+  // Validate the response has required fields
+  if (
+    !activity.title ||
+    !activity.description ||
+    !activity.conversationPrompts ||
+    !activity.estimatedTime ||
+    !activity.category
+  ) {
+    throw new Error("Invalid activity structure from OpenAI - missing required fields");
+  }
+
+  return activity;
+}
+
+function generateStaticFallback(partner1Input: string, partner2Input: string) {
+  console.log("🛡️ Using static fallback activity");
+  
+  return {
+    title: "Connection Time",
+    description: `Based on what you both shared, spend time discussing your thoughts and feelings together. Create a comfortable space where you can both express yourselves openly.`,
+    conversationPrompts: [
+      `How can we explore "${partner1Input.substring(0, 30)}..." together?`,
+      `What makes "${partner2Input.substring(0, 30)}..." meaningful for us?`,
+      "What's one thing we could do together that combines both interests?",
+    ],
+    category: "communication",
+    estimatedTime: "30 minutes",
+  };
 }
