@@ -494,8 +494,9 @@ export default function Home() {
 
         return (
           <div className="flex flex-col h-full p-3">
-            <div className="flex-1 overflow-y-auto mb-3">
-              <p className="text-base font-medium text-black/80 mb-1 leading-relaxed px-1">
+            {/* Centered activity description */}
+            <div className="flex-1 flex items-center justify-center mb-3">
+              <p className="text-base font-medium text-black/80 leading-relaxed px-1 text-center">
                 {activityGeneratorState.generatedActivity.description}
               </p>
             </div>
