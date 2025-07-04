@@ -405,7 +405,7 @@ export default function Home() {
                 onClick={handlePartner1Submit}
                 style={{
                   opacity: !activityGeneratorState.partner1Input.trim()
-                    ? 0.5
+                    ? 1
                     : 1,
                   pointerEvents: !activityGeneratorState.partner1Input.trim()
                     ? "none"
@@ -413,7 +413,7 @@ export default function Home() {
                 }}
               >
                 CONTINUE
-                <Send className="w-5 h-5 text-deep-teal" />
+                <Send className="w-5 h-6 text-black" />
               </h2>
             </div>
           </div>
@@ -460,14 +460,14 @@ export default function Home() {
                 onClick={handlePartner2Submit}
                 style={{
                   opacity: !activityGeneratorState.partner2Input.trim()
-                    ? 0.5
+                    ? 1
                     : 1,
                   pointerEvents: !activityGeneratorState.partner2Input.trim()
                     ? "none"
                     : "auto",
                 }}
               >
-                GENERATE ACTIVITY
+                GIVE US IDEAS
                 <Send className="w-5 h-5 text-deep-teal" />
               </h2>
             </div>
