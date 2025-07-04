@@ -171,7 +171,6 @@ Make the activity specific to their inputs - reference their interests, concerns
               type: "array",
               items: { type: "string" },
             },
-            estimatedTime: { type: "string" },
             category: { type: "string" },
           },
           required: [
@@ -217,7 +216,6 @@ Make the activity specific to their inputs - reference their interests, concerns
         `You mentioned "${partner2Input}" - what would make this meaningful for our relationship?`,
         "What's one thing we could do together that combines both of our interests?",
       ],
-      estimatedTime: "45-60 minutes",
       category: "communication",
     };
   }
