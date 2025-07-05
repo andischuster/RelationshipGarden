@@ -121,7 +121,31 @@ export default function Home() {
     emailCaptured: false,
     email: "",
   });
+  const [imagesPreloaded, setImagesPreloaded] = useState(false);
   const { toast } = useToast();
+
+  // Preload card images for faster loading
+  useEffect(() => {
+    const imageUrls = [elephantCard, sunflowerCard, lemonsCard, foolCard, growingUsCard, magicBeanCard];
+    let loadedCount = 0;
+    
+    const preloadImage = (src: string) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          loadedCount++;
+          if (loadedCount === imageUrls.length) {
+            setImagesPreloaded(true);
+          }
+          resolve(img);
+        };
+        img.onerror = reject;
+        img.src = src;
+      });
+    };
+
+    Promise.all(imageUrls.map(preloadImage)).catch(console.error);
+  }, []);
 
   const form = useForm({
     resolver: zodResolver(insertPreorderSchema),
@@ -675,6 +699,15 @@ export default function Home() {
                 className="relative flex justify-center items-center mb-8"
                 style={{ height: "500px" }}
               >
+                {/* Loading indicator while images preload */}
+                {!imagesPreloaded && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-warm-white/80 backdrop-blur-sm rounded-2xl z-20">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-deep-teal mx-auto mb-2"></div>
+                      <p className="text-deep-green/70 font-medium">Loading cards...</p>
+                    </div>
+                  </div>
+                )}
                 {/* Card Stack Container */}
                 <div className="card-stack">
                   {cardData.map((card, index) => {
@@ -720,11 +753,15 @@ export default function Home() {
                                   (currentCard + 1) % cardData.length,
                                 )
                                 // Immediately focus when card is selected
-                                if (activityGeneratorState.currentStep === 'partner1') {
-                                  document.querySelector('textarea[placeholder="Tell us what you would like to improve about your relationship..."]')?.focus();
-                                } else if (activityGeneratorState.currentStep === 'partner2') {
-                                  document.querySelector('textarea[placeholder="What would your partner like to improve about your relationship..."]')?.focus();
-                                }
+                                setTimeout(() => {
+                                  if (activityGeneratorState.currentStep === 'partner1') {
+                                    const textarea = document.querySelector('textarea[placeholder="Tell us what you would like to improve about your relationship..."]') as HTMLTextAreaElement;
+                                    textarea?.focus();
+                                  } else if (activityGeneratorState.currentStep === 'partner2') {
+                                    const textarea = document.querySelector('textarea[placeholder="What would your partner like to improve about your relationship..."]') as HTMLTextAreaElement;
+                                    textarea?.focus();
+                                  }
+                                }, 100);
                               }
                             : undefined
                         }
@@ -751,19 +788,26 @@ export default function Home() {
                             >
                               {/* Front - Card Image */}
                               <div
-                                className="card-front w-full h-full"
+                                className="card-front w-full h-full rounded-2xl border-4 border-[#1A1A1A] overflow-hidden"
                                 style={{
                                   backfaceVisibility: "hidden",
                                   position: "absolute",
-                                  backgroundImage: `url(${card.image})`,
-                                  backgroundSize: "cover",
-                                  backgroundPosition: "center",
-                                  borderRadius: "1rem",
-                                  border: "4px solid #1A1A1A",
                                   boxShadow:
                                     "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
                                 }}
-                              />
+                              >
+                                <img
+                                  src={card.image}
+                                  alt={card.title}
+                                  loading="eager"
+                                  decoding="async"
+                                  className="w-full h-full object-cover"
+                                  style={{
+                                    opacity: imagesPreloaded ? 1 : 0.7,
+                                    transition: "opacity 0.3s ease-in-out"
+                                  }}
+                                />
+                              </div>
 
                               {/* Back - Chatbox Interface */}
                               <div
@@ -819,15 +863,19 @@ export default function Home() {
                           </div>
                         ) : (
                           /* Regular card for non-top cards */
-                          <div
-                            className="w-full h-full rounded-2xl border-4 border-deep-black shadow-2xl"
-                            style={{
-                              backgroundImage: `url(${card.image})`,
-                              backgroundSize: "cover",
-                              backgroundPosition: "center",
-                              borderColor: "#1A1A1A",
-                            }}
-                          />
+                          <div className="w-full h-full rounded-2xl border-4 border-[#1A1A1A] shadow-2xl overflow-hidden">
+                            <img
+                              src={card.image}
+                              alt={card.title}
+                              loading="lazy"
+                              decoding="async"
+                              className="w-full h-full object-cover"
+                              style={{
+                                opacity: imagesPreloaded ? 1 : 0.7,
+                                transition: "opacity 0.3s ease-in-out"
+                              }}
+                            />
+                          </div>
                         )}
                       </div>
                     );
@@ -1129,9 +1177,13 @@ export default function Home() {
                   <img
                     src={magicBeanCard}
                     alt="Magic Bean card example"
+                    loading="lazy"
+                    decoding="async"
                     style={{
                       width: "320px",
                       height: "auto",
+                      opacity: imagesPreloaded ? 1 : 0.7,
+                      transition: "opacity 0.3s ease-in-out"
                     }}
                     className="rounded-2xl border-4 border-deep-black shadow-2xl transform rotate-3 hover:rotate-[20deg] hover:scale-105 transition-all duration-300 animate-float"
                   />
