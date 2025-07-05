@@ -477,20 +477,21 @@ export default function Home() {
 
       case "generation":
         return (
-          <div className="flex flex-col h-full justify-center items-center p-3">
-            <div className="text-center">
+          <div className="flex flex-col h-full p-3 pulse-loading">
+            {/* Centered content area matching conversation starter layout */}
+            <div className="flex-1 flex flex-col justify-center items-center mb-3">
               <img 
                 src={writeActivityIcon}
                 alt="Creating activity"
-                className="w-16 h-16 mx-auto mb-3 pulse-loading"
+                className="w-24 h-24 mx-auto mb-3"
                 style={{
                   filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
                 }}
               />
-              <h3 className="text-xl font-black text-black mb-2">
+              <h5 className="font-black text-black mb-1 text-lg px-4">
                 Creating Your Activity
-              </h3>
-              <p className="text-sm font-bold text-black/70">
+              </h5>
+              <p className="text-base font-medium text-black/80 italic">
                 Crafting something special for you both...
               </p>
             </div>
