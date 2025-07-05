@@ -174,12 +174,10 @@
   /* Custom pulse animation for loading indicator */
   @keyframes gentle-pulse {
     0%, 100% { 
-      opacity: 0.7;
       transform: scale(1);
       z-index: 50;
     }
     50% { 
-      opacity: 1;
       transform: scale(1.05);
       z-index: 100;
     }
