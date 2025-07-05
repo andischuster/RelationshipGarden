@@ -106,14 +106,13 @@ Growing Us is a relationship card game landing page designed to promote and sell
 
 ## Changelog
 - January 3, 2025: Implemented comprehensive image loading optimizations
-  - Added image preloading for all card images to improve performance
-  - Replaced CSS background-image with optimized img tags for better loading control
-  - Added loading="eager" for visible images and loading="lazy" for off-screen images
-  - Implemented priority loading: current card loads first, background cards load after
-  - Replaced spinning wheel with custom pulsating writing activity icon
-  - Added opacity transitions for smooth image appearance
-  - Fixed TypeScript errors related to DOM element focus
-  - Added individual card loading states for better user feedback
+  - Removed loading animations from card stack for cleaner UX
+  - Implemented lazy loading with smooth transitions for all card images  
+  - Moved pulsating writing activity icon to activity generation loading state
+  - Simplified image loading logic for better performance
+  - Added loading="eager" for current card, loading="lazy" for background cards
+  - Fixed TypeScript errors and removed complex preloading dependencies
+  - Optimized image rendering with smooth opacity transitions
 - June 30, 2025. Initial setup
 
 ## User Preferences

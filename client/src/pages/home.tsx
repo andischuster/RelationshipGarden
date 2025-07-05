@@ -122,46 +122,7 @@ export default function Home() {
     emailCaptured: false,
     email: "",
   });
-  const [imagesPreloaded, setImagesPreloaded] = useState(false);
-  const [currentCardLoaded, setCurrentCardLoaded] = useState(false);
   const { toast } = useToast();
-
-  // Preload card images for faster loading - prioritize current card first
-  useEffect(() => {
-    const imageUrls = [elephantCard, sunflowerCard, lemonsCard, foolCard, growingUsCard, magicBeanCard];
-    let loadedCount = 0;
-    
-    const preloadImage = (src: string, isCurrentCard = false) => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => {
-          loadedCount++;
-          if (isCurrentCard) {
-            setCurrentCardLoaded(true);
-          }
-          if (loadedCount === imageUrls.length) {
-            setImagesPreloaded(true);
-          }
-          resolve(img);
-        };
-        img.onerror = reject;
-        img.src = src;
-      });
-    };
-
-    // Reset loading states when card changes
-    setCurrentCardLoaded(false);
-    
-    // Load the current card first, then the rest
-    const currentCardImage = imageUrls[currentCard];
-    const otherImages = imageUrls.filter((_, index) => index !== currentCard);
-    
-    // Preload current card immediately with priority
-    preloadImage(currentCardImage, true).then(() => {
-      // Then load the rest in the background
-      Promise.all(otherImages.map(url => preloadImage(url, false))).catch(console.error);
-    }).catch(console.error);
-  }, [currentCard]);
 
   const form = useForm({
     resolver: zodResolver(insertPreorderSchema),
@@ -518,7 +479,14 @@ export default function Home() {
         return (
           <div className="flex flex-col h-full justify-center items-center p-3">
             <div className="text-center">
-              <div className="w-12 h-12 border-4 border-black border-t-transparent rounded-full animate-spin mb-3"></div>
+              <img 
+                src={writeActivityIcon}
+                alt="Creating activity"
+                className="w-16 h-16 mx-auto mb-3 pulse-loading"
+                style={{
+                  filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
+                }}
+              />
               <h3 className="text-xl font-black text-black mb-2">
                 Creating Your Activity
               </h3>
@@ -715,22 +683,7 @@ export default function Home() {
                 className="relative flex justify-center items-center mb-8"
                 style={{ height: "500px" }}
               >
-                {/* Loading indicator while current card loads */}
-                {!currentCardLoaded && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-warm-white/80 backdrop-blur-sm rounded-2xl z-20">
-                    <div className="text-center">
-                      <img 
-                        src={writeActivityIcon}
-                        alt="Loading activity generator"
-                        className="w-16 h-16 mx-auto mb-2 pulse-loading"
-                        style={{
-                          filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
-                        }}
-                      />
-                      <p className="text-deep-green/70 font-medium">Loading cards...</p>
-                    </div>
-                  </div>
-                )}
+
                 {/* Card Stack Container */}
                 <div className="card-stack">
                   {cardData.map((card, index) => {
@@ -826,7 +779,6 @@ export default function Home() {
                                   decoding="async"
                                   className="w-full h-full object-cover"
                                   style={{
-                                    opacity: currentCardLoaded ? 1 : 0.3,
                                     transition: "opacity 0.3s ease-in-out"
                                   }}
                                 />
@@ -894,7 +846,6 @@ export default function Home() {
                               decoding="async"
                               className="w-full h-full object-cover"
                               style={{
-                                opacity: imagesPreloaded ? 1 : 0.5,
                                 transition: "opacity 0.3s ease-in-out"
                               }}
                             />
@@ -1204,9 +1155,7 @@ export default function Home() {
                     decoding="async"
                     style={{
                       width: "320px",
-                      height: "auto",
-                      opacity: imagesPreloaded ? 1 : 0.7,
-                      transition: "opacity 0.3s ease-in-out"
+                      height: "auto"
                     }}
                     className="rounded-2xl border-4 border-deep-black shadow-2xl transform rotate-3 hover:rotate-[20deg] hover:scale-105 transition-all duration-300 animate-float"
                   />
