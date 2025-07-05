@@ -171,6 +171,22 @@
     animation: blink 1s infinite;
   }
 
+  /* Custom pulse animation for loading indicator */
+  @keyframes gentle-pulse {
+    0%, 100% { 
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    50% { 
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+
+  .pulse-loading {
+    animation: gentle-pulse 1.5s ease-in-out infinite;
+  }
+
   .yellow-squiggly-underline {
     position: relative;
     display: inline-block;

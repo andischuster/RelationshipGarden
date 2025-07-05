@@ -47,6 +47,7 @@ import lemonsCard from "@assets/Life's Lemons_1749555039716.png";
 import foolCard from "@assets/Early Bird_1749555043033.png";
 import growingUsCard from "@assets/Background Deck Card_1749555051172.png";
 import magicBeanCard from "@assets/Magic Bean_1749555057354.png";
+import writeActivityIcon from "@assets/write activity_1751684867775.png";
 
 interface CardData {
   id: number;
@@ -122,18 +123,22 @@ export default function Home() {
     email: "",
   });
   const [imagesPreloaded, setImagesPreloaded] = useState(false);
+  const [currentCardLoaded, setCurrentCardLoaded] = useState(false);
   const { toast } = useToast();
 
-  // Preload card images for faster loading
+  // Preload card images for faster loading - prioritize current card first
   useEffect(() => {
     const imageUrls = [elephantCard, sunflowerCard, lemonsCard, foolCard, growingUsCard, magicBeanCard];
     let loadedCount = 0;
     
-    const preloadImage = (src: string) => {
+    const preloadImage = (src: string, isCurrentCard = false) => {
       return new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = () => {
           loadedCount++;
+          if (isCurrentCard) {
+            setCurrentCardLoaded(true);
+          }
           if (loadedCount === imageUrls.length) {
             setImagesPreloaded(true);
           }
@@ -144,8 +149,19 @@ export default function Home() {
       });
     };
 
-    Promise.all(imageUrls.map(preloadImage)).catch(console.error);
-  }, []);
+    // Reset loading states when card changes
+    setCurrentCardLoaded(false);
+    
+    // Load the current card first, then the rest
+    const currentCardImage = imageUrls[currentCard];
+    const otherImages = imageUrls.filter((_, index) => index !== currentCard);
+    
+    // Preload current card immediately with priority
+    preloadImage(currentCardImage, true).then(() => {
+      // Then load the rest in the background
+      Promise.all(otherImages.map(url => preloadImage(url, false))).catch(console.error);
+    }).catch(console.error);
+  }, [currentCard]);
 
   const form = useForm({
     resolver: zodResolver(insertPreorderSchema),
@@ -699,11 +715,18 @@ export default function Home() {
                 className="relative flex justify-center items-center mb-8"
                 style={{ height: "500px" }}
               >
-                {/* Loading indicator while images preload */}
-                {!imagesPreloaded && (
+                {/* Loading indicator while current card loads */}
+                {!currentCardLoaded && (
                   <div className="absolute inset-0 flex items-center justify-center bg-warm-white/80 backdrop-blur-sm rounded-2xl z-20">
                     <div className="text-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-deep-teal mx-auto mb-2"></div>
+                      <img 
+                        src={writeActivityIcon}
+                        alt="Loading activity generator"
+                        className="w-16 h-16 mx-auto mb-2 pulse-loading"
+                        style={{
+                          filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
+                        }}
+                      />
                       <p className="text-deep-green/70 font-medium">Loading cards...</p>
                     </div>
                   </div>
@@ -803,7 +826,7 @@ export default function Home() {
                                   decoding="async"
                                   className="w-full h-full object-cover"
                                   style={{
-                                    opacity: imagesPreloaded ? 1 : 0.7,
+                                    opacity: currentCardLoaded ? 1 : 0.3,
                                     transition: "opacity 0.3s ease-in-out"
                                   }}
                                 />
@@ -871,7 +894,7 @@ export default function Home() {
                               decoding="async"
                               className="w-full h-full object-cover"
                               style={{
-                                opacity: imagesPreloaded ? 1 : 0.7,
+                                opacity: imagesPreloaded ? 1 : 0.5,
                                 transition: "opacity 0.3s ease-in-out"
                               }}
                             />
