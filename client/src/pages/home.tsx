@@ -468,7 +468,7 @@ export default function Home() {
                     : "auto",
                 }}
               >
-                GIVE US IDEAS
+                DISCOVER MORE
                 <Send className="w-5 h-5 text-deep-teal" />
               </h2>
             </div>
@@ -537,7 +537,7 @@ export default function Home() {
               }
               className="w-full py-2 bg-gradient-to-r from-sunflower to-soft-tangerine hover:from-sunflower/90 hover:to-soft-tangerine/90 text-deep-green font-bold text-lg hover-lift rounded-full"
             >
-              Send to E-mail
+              SEND TO E-MAIL
             </Button>
           </div>
         );
