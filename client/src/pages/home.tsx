@@ -477,13 +477,13 @@ export default function Home() {
 
       case "generation":
         return (
-          <div className="flex flex-col h-full p-3 pulse-loading">
+          <div className="flex flex-col h-full p-3 pulse-loading cursor-pointer">
             {/* Centered content area matching conversation starter layout */}
             <div className="flex-1 flex flex-col justify-center items-center mb-3">
               <img 
                 src={writeActivityIcon}
                 alt="Creating activity"
-                className="w-24 h-24 mx-auto mb-3"
+                className="w-48 h-48 mx-auto mb-3"
                 style={{
                   filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
                 }}
