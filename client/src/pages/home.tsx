@@ -477,7 +477,7 @@ export default function Home() {
 
       case "generation":
         return (
-          <div className="flex flex-col h-full p-3 pulse-loading cursor-pointer">
+          <div className="flex flex-col h-full p-3 cursor-pointer">
             {/* Centered content area matching conversation starter layout */}
             <div className="flex-1 flex flex-col justify-center items-center mb-3">
               <img 
@@ -795,7 +795,9 @@ export default function Home() {
                                 }}
                               >
                                 <div
-                                  className="flex flex-col w-full h-full rounded-2xl shadow-2xl overflow-hidden"
+                                  className={`flex flex-col w-full h-full rounded-2xl shadow-2xl overflow-hidden ${
+                                    activityGeneratorState.currentStep === "generation" ? "pulse-loading" : ""
+                                  }`}
                                   style={{
                                     backgroundColor: "#e3cca1",
                                     border: "4px solid #1A1A1A",
