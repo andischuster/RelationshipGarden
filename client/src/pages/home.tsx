@@ -268,6 +268,20 @@ export default function Home() {
         description: "Check your email for your personalized activity.",
         variant: "default",
       });
+      
+      // Flip card back to front after 2 seconds
+      setTimeout(() => {
+        setActivityGeneratorState((prev) => ({
+          ...prev,
+          isFlipped: false,
+          currentStep: "partner1",
+          partner1Input: "",
+          partner2Input: "",
+          generatedActivity: null,
+          emailCaptured: false,
+          email: "",
+        }));
+      }, 2000);
     },
     onError: () => {
       toast({
@@ -400,13 +414,13 @@ export default function Home() {
               </div>
             </div>
             {/* Bottom Button - Header Style */}
-            <div className="text-center text-[1A1A1A]">
+            <div className="text-center">
               <h2
                 className="text-xl font-black text-black mb-2 tracking-wide cursor-pointer hover:text-black/80 transition-colors yellow-squiggly-underline inline-flex items-center gap-2"
                 onClick={handlePartner1Submit}
                 style={{
                   opacity: !activityGeneratorState.partner1Input.trim()
-                    ? 1
+                    ? 0.5
                     : 1,
                   pointerEvents: !activityGeneratorState.partner1Input.trim()
                     ? "none"
@@ -461,7 +475,7 @@ export default function Home() {
                 onClick={handlePartner2Submit}
                 style={{
                   opacity: !activityGeneratorState.partner2Input.trim()
-                    ? 1
+                    ? 0.5
                     : 1,
                   pointerEvents: !activityGeneratorState.partner2Input.trim()
                     ? "none"
@@ -528,17 +542,21 @@ export default function Home() {
               </div>
             )}
 
-            <Button
-              onClick={() =>
-                setActivityGeneratorState((prev) => ({
-                  ...prev,
-                  currentStep: "email",
-                }))
-              }
-              className="w-full py-2 bg-gradient-to-r from-sunflower to-soft-tangerine hover:from-sunflower/90 hover:to-soft-tangerine/90 text-deep-green font-bold text-lg hover-lift rounded-full"
-            >
-              SEND TO E-MAIL
-            </Button>
+            {/* Bottom Button - Header Style */}
+            <div className="text-center">
+              <h2
+                className="text-xl font-black text-black mb-2 tracking-wide cursor-pointer hover:text-black/80 transition-colors yellow-squiggly-underline inline-flex items-center gap-2 justify-center"
+                onClick={() =>
+                  setActivityGeneratorState((prev) => ({
+                    ...prev,
+                    currentStep: "email",
+                  }))
+                }
+              >
+                SEND TO E-MAIL
+                <Send className="w-5 h-5 text-deep-teal" />
+              </h2>
+            </div>
           </div>
         );
 
@@ -582,10 +600,10 @@ export default function Home() {
                 className="text-xl font-black text-black mb-2 tracking-wide cursor-pointer hover:text-black/80 transition-colors yellow-squiggly-underline inline-flex items-center gap-2"
                 onClick={handleEmailSubmit}
                 style={{
-                  opacity: !activityGeneratorState.email.trim()
-                    ? 1
+                  opacity: !activityGeneratorState.email.trim() || emailCaptureMutation.isPending
+                    ? 0.5
                     : 1,
-                  pointerEvents: !activityGeneratorState.email.trim()
+                  pointerEvents: !activityGeneratorState.email.trim() || emailCaptureMutation.isPending
                     ? "none"
                     : "auto",
                 }}
