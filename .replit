@@ -7,7 +7,7 @@ channel = "stable-24_05"
 
 [deployment]
 deploymentTarget = "static"
-build = ["sh", "-c", "npm run build:static"]
+build = ["sh", "-c", "npm run dev"]
 publicDir = "dist"
 
 [[ports]]
