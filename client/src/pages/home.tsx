@@ -544,67 +544,58 @@ export default function Home() {
 
       case "email":
         return (
-          <div className="flex flex-col h-full p-4">
-            <div className="flex-1 flex flex-col justify-center space-y-4">
-              <div className="text-center">
-                <h4 className="text-lg font-bold text-black mb-2">
-                  Save Your Activity
-                </h4>
-                <p className="text-sm text-black/70">
-                  We'll send your personalized activity to your email
-                </p>
+          <div className="flex flex-col h-full p-3">
+            {/* Main Content Area */}
+            <div className="flex-1 flex flex-col justify-center">
+              <div className="mb-4">
+                <div className="relative">
+                  <input
+                    type="email"
+                    placeholder="Enter your email address..."
+                    value={activityGeneratorState.email}
+                    onChange={(e) =>
+                      setActivityGeneratorState((prev) => ({
+                        ...prev,
+                        email: e.target.value,
+                      }))
+                    }
+                    className="w-full p-1 border-none rounded-none text-lg font-bold focus:outline-none bg-transparent placeholder:text-black/50 text-left"
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "#000",
+                      textAlign: "left",
+                    }}
+                    autoFocus
+                  />
+                  {!activityGeneratorState.email && (
+                    <span className="absolute top-0 left-[1px] animate-blink text-xl font-bold text-black pointer-events-none">
+                      |
+                    </span>
+                  )}
+                </div>
               </div>
-              <input
-                type="email"
-                placeholder="your@email.com"
-                value={activityGeneratorState.email}
-                onChange={(e) =>
-                  setActivityGeneratorState((prev) => ({
-                    ...prev,
-                    email: e.target.value,
-                  }))
-                }
-                className="w-full p-3 text-center bg-transparent text-black placeholder:text-black/50 focus:outline-none text-base font-medium"
-                style={{
-                  backgroundColor: "transparent",
-                  color: "#000",
-                  border: "none",
-                }}
-                autoFocus
-              />
             </div>
 
-            {activityGeneratorState.emailCaptured ? (
-              <div className="text-center space-y-4">
-                <div className="p-4">
-                  <div className="font-black text-lg text-black mb-1">
-                    ✅ Activity sent successfully!
-                  </div>
-                  <p className="text-sm font-medium text-black/70 mb-2">
-                    Check your inbox for the full activity details.
-                  </p>
-                </div>
-                <Button
-                  onClick={() => setIsPreorderModalOpen(true)}
-                  className="w-full py-3 bg-gradient-to-r from-sunflower to-soft-tangerine hover:from-sunflower/90 hover:to-soft-tangerine/90 text-deep-green font-bold text-base hover-lift rounded-full"
-                >
-                  Explore Our Card Game
-                </Button>
-              </div>
-            ) : (
-              <Button
+            {/* Bottom Button - Header Style */}
+            <div className="text-center">
+              <h2
+                className="text-xl font-black text-black mb-2 tracking-wide cursor-pointer hover:text-black/80 transition-colors yellow-squiggly-underline inline-flex items-center gap-2"
                 onClick={handleEmailSubmit}
-                disabled={
-                  emailCaptureMutation.isPending ||
-                  !activityGeneratorState.email.trim()
-                }
-                className="w-full py-3 bg-gradient-to-r from-sunflower to-soft-tangerine hover:from-sunflower/90 hover:to-soft-tangerine/90 text-deep-green font-bold text-base hover-lift rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  opacity: !activityGeneratorState.email.trim()
+                    ? 1
+                    : 1,
+                  pointerEvents: !activityGeneratorState.email.trim()
+                    ? "none"
+                    : "auto",
+                }}
               >
                 {emailCaptureMutation.isPending
-                  ? "Sending..."
-                  : "Send Activity"}
-              </Button>
-            )}
+                  ? "SENDING..."
+                  : "SEND ACTIVITY"}
+                <Send className="w-5 h-5 text-deep-teal" />
+              </h2>
+            </div>
           </div>
         );
 
