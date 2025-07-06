@@ -46,23 +46,12 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
 
   const generateActivityMutation = useMutation({
     mutationFn: async (inputs: { partner1Input: string; partner2Input: string }) => {
-      // For static deployments, always use client-side generation
-      if (window.location.hostname.includes('replit.app') || 
-          window.location.hostname.includes('repl.co') ||
-          window.location.hostname.includes('replit.dev')) {
-        console.log('Static deployment detected, using client-side generation');
-        const activity = generateStaticActivity(inputs.partner1Input, inputs.partner2Input);
-        return { success: true, activity };
-      }
-
       try {
         const response = await apiRequest('POST', '/api/activities/generate', inputs);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
         return response.json();
       } catch (error) {
-        console.log('API failed, using client-side fallback:', error);
+        // If API fails (like in static deployment), use client-side fallback
+        console.log('API failed, using client-side generation:', error);
         const activity = generateStaticActivity(inputs.partner1Input, inputs.partner2Input);
         return { success: true, activity };
       }
@@ -75,21 +64,9 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
       }));
     },
     onError: (error) => {
-      console.error('Activity generation failed, using emergency fallback:', error);
-      // Emergency fallback with basic activity
-      const activity = {
-        id: Date.now().toString(),
-        title: "Connection Conversation",
-        description: "Take time to share your thoughts with each other in a comfortable, distraction-free space.",
-        conversationPrompts: [
-          "What's something you're grateful for about our relationship?",
-          "How can we better support each other's goals?",
-          "What's one thing we could try together this week?"
-        ],
-        estimatedTime: "30 minutes",
-        category: "communication" as const
-      };
-      
+      console.error('Activity generation failed completely:', error);
+      // Last resort: generate a static activity directly
+      const activity = generateStaticActivity(state.partner1Input, state.partner2Input);
       setState(prev => ({ 
         ...prev, 
         generatedActivity: activity,
@@ -185,8 +162,8 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
   const generateStaticActivity = (input1: string, input2: string) => {
     const activities = [
       {
-        title: "Deep Connection Time",
-        description: "Create a meaningful dialogue about your shared hopes and individual perspectives.",
+        title: "Connection Conversation",
+        description: "Create a meaningful dialogue about your shared interests and individual perspectives on your relationship.",
         conversationPrompts: [
           "What drew you to share these specific thoughts?",
           "How can we better support each other's goals?",
@@ -196,8 +173,8 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
         estimatedTime: "30 minutes"
       },
       {
-        title: "Appreciation Circle",
-        description: "Share gratitude and explore what makes your relationship special.",
+        title: "Gratitude Exchange",
+        description: "Share appreciation for each other while exploring the topics you've both mentioned.",
         conversationPrompts: [
           "What about our relationship makes you feel grateful?",
           "How do our different perspectives strengthen us?",
@@ -207,70 +184,37 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
         estimatedTime: "25 minutes"
       },
       {
-        title: "Dream Together Session",
-        description: "Plan and envision your future based on your shared values and interests.",
+        title: "Future Building",
+        description: "Plan and dream together about incorporating your shared interests into your relationship.",
         conversationPrompts: [
           "Where do you see us growing in these areas?",
           "What would make you feel most supported?",
           "How can we make this a regular part of our connection?"
         ],
         category: "growth" as const,
-        estimatedTime: "40 minutes"
+        estimatedTime: "45 minutes"
       },
       {
-        title: "Adventure Planning",
-        description: "Discover new ways to connect and have fun together.",
+        title: "Shared Discovery",
+        description: "Explore new ways to connect based on what you both value and want to experience together.",
         conversationPrompts: [
-          "What excites you most about trying something new?",
-          "How can we explore this interest together?",
-          "What would make this experience meaningful for both of us?"
+          "What excites you most about this topic?",
+          "How can we explore this together?",
+          "What would success look like for us?"
         ],
         category: "fun" as const,
         estimatedTime: "35 minutes"
-      },
-      {
-        title: "Heart to Heart",
-        description: "Have an open conversation about what matters most to both of you.",
-        conversationPrompts: [
-          "What's something you've been thinking about lately?",
-          "How can we create more moments like this?",
-          "What makes you feel most connected to me?"
-        ],
-        category: "communication" as const,
-        estimatedTime: "25 minutes"
-      },
-      {
-        title: "Curiosity Exchange",
-        description: "Learn something new about each other and your relationship.",
-        conversationPrompts: [
-          "What's something about me you'd like to understand better?",
-          "How have we both grown since we've been together?",
-          "What's a memory of ours that always makes you smile?"
-        ],
-        category: "intimacy" as const,
-        estimatedTime: "30 minutes"
       }
     ];
 
-    // Use a combination of input lengths and current time for better variety
-    const combinedInput = (input1 + input2).toLowerCase();
-    const hash = combinedInput.length + Math.floor(Date.now() / 100000);
+    // Select activity based on input content and add some randomness
+    const hash = (input1 + input2).length;
     const selectedActivity = activities[hash % activities.length];
-
-    // Customize description based on input content
-    let customDescription = selectedActivity.description;
-    if (combinedInput.includes('communication') || combinedInput.includes('talk')) {
-      customDescription = "Focus on open, honest communication about the topics you both mentioned.";
-    } else if (combinedInput.includes('fun') || combinedInput.includes('enjoy')) {
-      customDescription = "Explore ways to have fun together while addressing what you both shared.";
-    } else if (combinedInput.includes('intimate') || combinedInput.includes('close')) {
-      customDescription = "Create intimate moments while discussing the important topics you both brought up.";
-    }
 
     return {
       id: Date.now().toString(),
       title: selectedActivity.title,
-      description: customDescription,
+      description: `Based on what you both shared, ${selectedActivity.description.toLowerCase()}`,
       conversationPrompts: selectedActivity.conversationPrompts,
       estimatedTime: selectedActivity.estimatedTime,
       category: selectedActivity.category
