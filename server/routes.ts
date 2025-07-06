@@ -23,6 +23,12 @@ export async function registerRoutes(app: Express): Promise<void> {
   // use storage to perform CRUD operations on the storage interface
   // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
 
+  // Test endpoint to verify routes are working
+  app.get("/api/test", (req, res) => {
+    console.log("🧪 Test endpoint hit");
+    res.json({ message: "API routes are working", timestamp: new Date().toISOString() });
+  });
+
   app.post("/api/preorders", async (req, res) => {
     try {
       const result = insertPreorderSchema.safeParse(req.body);
@@ -77,6 +83,10 @@ export async function registerRoutes(app: Express): Promise<void> {
   // Activity Generator Routes
   app.post("/api/activities/generate", async (req, res) => {
     console.log("🎯 Activity generation request received");
+    console.log("🔍 Request method:", req.method);
+    console.log("🔍 Request path:", req.path);
+    console.log("🔍 Request body:", req.body);
+    
     try {
       const { partner1Input, partner2Input } = req.body;
       console.log("📝 Request inputs:", { 
@@ -103,31 +113,46 @@ export async function registerRoutes(app: Express): Promise<void> {
       });
 
       // Save the suggestion to database
-      const suggestionData = {
-        partner1Input,
-        partner2Input,
-        generatedActivity: JSON.stringify(activity),
-        conversationPrompts: activity.conversationPrompts,
-        category: activity.category,
-        estimatedTime: activity.estimatedTime,
-        email: null, // Will be updated when email is captured
-      };
+      try {
+        const suggestionData = {
+          partner1Input,
+          partner2Input,
+          generatedActivity: JSON.stringify(activity),
+          conversationPrompts: activity.conversationPrompts,
+          category: activity.category,
+          estimatedTime: activity.estimatedTime,
+          email: null, // Will be updated when email is captured
+        };
 
-      console.log("💾 Saving to database...");
-      const savedSuggestion =
-        await storage.createActivitySuggestion(suggestionData);
-      console.log("✅ Saved to database with ID:", savedSuggestion.id);
+        console.log("💾 Saving to database...");
+        const savedSuggestion = await storage.createActivitySuggestion(suggestionData);
+        console.log("✅ Saved to database with ID:", savedSuggestion.id);
 
-      res.json({
-        success: true,
-        activity: {
-          ...activity,
-          id: savedSuggestion.id.toString(),
-        },
-      });
+        res.json({
+          success: true,
+          activity: {
+            ...activity,
+            id: savedSuggestion.id.toString(),
+          },
+        });
+      } catch (dbError) {
+        console.error("💾 Database save failed, returning activity without saving:", dbError);
+        // Still return the activity even if database save fails
+        res.json({
+          success: true,
+          activity: {
+            ...activity,
+            id: Date.now().toString(), // Use timestamp as fallback ID
+          },
+        });
+      }
     } catch (error) {
       console.error("💥 Error generating activity:", error);
-      res.status(500).json({ error: "Failed to generate activity" });
+      console.error("💥 Full error stack:", error.stack);
+      res.status(500).json({ 
+        error: "Failed to generate activity",
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      });
     }
   });
 
@@ -299,6 +324,12 @@ Please create a personalized relationship activity that considers both partners'
 Make the activity specific to their inputs - reference their interests, concerns, or goals when relevant. Keep the tone warm, supportive, and relationship-focused.`;
 
   console.log("📤 Sending request to OpenAI...");
+  console.log("🔑 API Key configured:", !!process.env.OPENAI_API_KEY);
+  
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error("OpenAI API key not configured");
+  }
+
   const startTime = Date.now();
 
   const response = await openai.chat.completions.create({

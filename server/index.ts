@@ -38,7 +38,9 @@ app.use((req, res, next) => {
 
 (async () => {
   // Register API routes BEFORE Vite middleware
+  console.log("📝 Registering API routes...");
   await registerRoutes(app);
+  console.log("✅ API routes registered successfully");
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
