@@ -547,11 +547,11 @@ export default function Home() {
           <div className="flex flex-col h-full p-4">
             <div className="flex-1 flex flex-col justify-center space-y-4">
               <div className="text-center">
-                <h4 className="text-lg font-bold text-black mb-2">
-                  Save Your Activity
-                </h4>
-                <p className="text-sm text-black/70">
-                  We'll send your personalized activity to your email
+                <div className="font-black text-lg text-black mb-1">
+                  ✅ Activity sent successfully!
+                </div>
+                <p className="text-sm font-medium text-black/70 mb-2">
+                  Check your inbox for the full activity details.
                 </p>
               </div>
               <input
