@@ -128,7 +128,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
       });
       return;
     }
-    
+
     if (!state.generatedActivity) return;
 
     emailCaptureMutation.mutate({
@@ -147,7 +147,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
               <h3 className="text-2xl font-bold text-black">Let's Start Your Journey</h3>
               <p className="text-black/70">Tell us what you'd like to improve or experience in your relationship</p>
             </div>
-            
+
             <div className="space-y-4">
               <Textarea
                 placeholder="Share what you'd like to improve or experience together..."
@@ -179,7 +179,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
               <h3 className="text-2xl font-bold text-black">Almost There!</h3>
               <p className="text-black/70">What would your partner like to improve or experience?</p>
             </div>
-            
+
             <div className="space-y-4">
               <Textarea
                 placeholder="What would your partner want to improve or experience together..."
@@ -219,7 +219,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
               <h3 className="text-2xl font-bold text-black">Creating Your Perfect Activity</h3>
               <p className="text-black/70">We're crafting something special just for you both...</p>
             </div>
-            
+
             <div className="flex justify-center">
               <Loader2 className="w-8 h-8 animate-spin text-black stroke-[3px]" />
             </div>
@@ -228,7 +228,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
 
       case 'result':
         if (!state.generatedActivity) return null;
-        
+
         return (
           <div className="space-y-6">
             <div className="text-center space-y-2">
@@ -236,7 +236,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
               <h3 className="text-2xl font-bold text-black">Your Perfect Activity</h3>
               <p className="text-black/70">Designed just for you both</p>
             </div>
-            
+
             <div className="space-y-4">
               <div className="bg-transparent p-6 rounded-2xl border-4 border-black">
                 <h4 className="text-xl font-bold text-black mb-2">
@@ -245,7 +245,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
                 <p className="text-black/80 mb-4">
                   {state.generatedActivity.description}
                 </p>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-black/70">Category:</span>
@@ -292,7 +292,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
               <h3 className="text-2xl font-bold text-black">Save Your Activity</h3>
               <p className="text-black/70">We'll send your personalized activity to your email</p>
             </div>
-            
+
             <div className="space-y-4">
               <Input
                 type="email"
@@ -326,7 +326,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
                 )}
               </Button>
             </div>
-            
+
             {state.emailCaptured && (
               <div className="text-center space-y-4">
                 <div className="text-black font-medium border-4 border-black p-3 rounded-lg">
@@ -349,6 +349,57 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
       default:
         return null;
     }
+  };
+
+  // Client-side static activity generation fallback
+  const generateStaticActivity = (input1: string, input2: string) => {
+    const activities = [
+      {
+        title: "Connection Conversation",
+        description: "Create a meaningful dialogue about your shared interests and individual perspectives on your relationship.",
+        conversationPrompts: [
+          "What drew you to share these specific thoughts?",
+          "How can we better support each other's goals?",
+          "What's one thing we could do together this week?"
+        ],
+        category: "communication" as const,
+        estimatedTime: "30 minutes"
+      },
+      {
+        title: "Gratitude Exchange",
+        description: "Share appreciation for each other while exploring the topics you've both mentioned.",
+        conversationPrompts: [
+          "What about our relationship makes you feel grateful?",
+          "How do our different perspectives strengthen us?",
+          "What's something new you'd like to try together?"
+        ],
+        category: "intimacy" as const,
+        estimatedTime: "25 minutes"
+      },
+      {
+        title: "Future Building",
+        description: "Plan and dream together about incorporating your shared interests into your relationship.",
+        conversationPrompts: [
+          "Where do you see us growing in these areas?",
+          "What would make you feel most supported?",
+          "How can we make this a regular part of our connection?"
+        ],
+        category: "growth" as const,
+        estimatedTime: "45 minutes"
+      }
+    ];
+
+    // Select activity based on input content
+    const selectedActivity = activities[Math.floor(Math.random() * activities.length)];
+
+    return {
+      id: Date.now().toString(),
+      title: selectedActivity.title,
+      description: `Based on what you both shared, ${selectedActivity.description.toLowerCase()}`,
+      conversationPrompts: selectedActivity.conversationPrompts,
+      estimatedTime: selectedActivity.estimatedTime,
+      category: selectedActivity.category
+    };
   };
 
   return (
