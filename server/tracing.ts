@@ -61,9 +61,10 @@ if (fs.existsSync(envPath)) {
   console.log('⚠️  .env file does not exist at expected location');
 }
 
-// Load environment variables with override to force overwrite existing values
-console.log('\n🔧 Loading dotenv with override: true');
-const dotenvResult = dotenv.config({ override: true });
+// Load environment variables. In production we do NOT override existing env vars supplied by Render.
+const shouldOverride = process.env.NODE_ENV !== 'production';
+console.log(`\n🔧 Loading dotenv with override: ${shouldOverride}`);
+const dotenvResult = dotenv.config({ override: shouldOverride });
 console.log('🔧 dotenv.config() result:', dotenvResult);
 
 // Check environment variables AFTER dotenv.config()
