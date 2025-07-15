@@ -8,3 +8,5 @@ src/.env
 src/sqlite.db
 src/sqlite.db-shm
 src/sqlite.db-wal
+src/tailwind.config.ts
+src/postcss.config.js
