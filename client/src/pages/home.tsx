@@ -673,14 +673,14 @@ export default function Home() {
           <div className="mx-auto text-center w-full">
             {/* Main Title */}
             <h1
-              className={`font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-deep-green mb-6 max-w-6xl mx-auto leading-tight ${isIntersecting["section-hero"] ? "fade-in" : ""}`}
+              className={`hero-title-responsive font-serif font-bold text-deep-green mb-6 max-w-6xl mx-auto leading-tight ${isIntersecting["section-hero"] ? "fade-in" : ""}`}
             >
               Growing Us
             </h1>
 
             {/* Tagline */}
             <p
-              className={`text-lg sm:text-xl md:text-2xl text-deep-green/80 mb-4 max-w-4xl mx-auto leading-relaxed px-4 ${isIntersecting["section-hero"] ? "fade-in" : ""}`}
+              className={`text-responsive text-deep-green/80 mb-4 max-w-4xl mx-auto leading-relaxed px-4 ${isIntersecting["section-hero"] ? "fade-in" : ""}`}
               style={{ animationDelay: "0.2s" }}
             >
               Every connection needs care, space, and warmth. These prompts help
@@ -699,12 +699,10 @@ export default function Home() {
             >
               {/* Card Flip Container */}
               <div
-                className="relative flex justify-center items-center mb-8"
-                style={{ height: "500px" }}
+                className="card-stack-responsive relative flex justify-center items-center mb-8"
               >
-
                 {/* Card Stack Container */}
-                <div className="card-stack">
+                <div className="card-stack-container">
                   {cardData.map((card, index) => {
                     const offset = index - currentCard;
                     const isTopCard = index === currentCard;
@@ -722,18 +720,14 @@ export default function Home() {
                         }`}
                         style={{
                           position: "absolute",
-                          width: "288px",
-                          height: "432px",
                           left: "50%",
                           top: "50%",
-                          marginLeft: "-144px",
-                          marginTop: "-216px",
                           zIndex: isTopCard
                             ? 10
                             : Math.max(0, 5 - Math.abs(offset)),
                           transform: `
-                          translateX(${offset * 8}px)
-                          translateY(${offset * 4}px)
+                          translateX(${offset * parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-offset-x') || '8')}px)
+                          translateY(${offset * parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-offset-y') || '4')}px)
                           rotate(${offset * 3}deg)
                           scale(${isTopCard ? 1 : 0.95})
                         `,

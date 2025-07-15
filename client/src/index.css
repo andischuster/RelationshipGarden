@@ -522,3 +522,214 @@
     position: relative;
   }
 }
+
+/* Responsive Card Sizing - 20% bigger on desktop */
+.card-stack-responsive {
+  /* Mobile: base size */
+  --card-width: 280px;
+  --card-height: 420px;
+  --card-margin-left: -140px;
+  --card-margin-top: -210px;
+  --container-height: 520px;
+  --card-offset-x: 8px;
+  --card-offset-y: 4px;
+}
+
+/* Tablet: 10% bigger */
+@media (min-width: 768px) {
+  .card-stack-responsive {
+    --card-width: 320px;
+    --card-height: 475px;
+    --card-margin-left: -160px;
+    --card-margin-top: -237px;
+    --container-height: 580px;
+    --card-offset-x: 10px;
+    --card-offset-y: 5px;
+  }
+}
+
+/* Desktop: 20% bigger */
+@media (min-width: 1024px) {
+  .card-stack-responsive {
+    --card-width: 360px;
+    --card-height: 540px;
+    --card-margin-left: -180px;
+    --card-margin-top: -270px;
+    --container-height: 640px;
+    --card-offset-x: 12px;
+    --card-offset-y: 6px;
+  }
+}
+
+/* Large Desktop: 25% bigger */
+@media (min-width: 1280px) {
+  .card-stack-responsive {
+    --card-width: 400px;
+    --card-height: 600px;
+    --card-margin-left: -200px;
+    --card-margin-top: -300px;
+    --container-height: 720px;
+    --card-offset-x: 15px;
+    --card-offset-y: 7px;
+  }
+}
+
+/* Apply responsive sizing to card stack */
+.card-stack-responsive .card-stack-container {
+  height: var(--container-height);
+}
+
+.card-stack-responsive .card-stack-container > div {
+  width: var(--card-width);
+  height: var(--card-height);
+  margin-left: var(--card-margin-left);
+  margin-top: var(--card-margin-top);
+}
+
+.card-stack-responsive .card-stack-container > div:nth-child(2) {
+  transform: translateX(var(--card-offset-x)) translateY(var(--card-offset-y));
+}
+
+.card-stack-responsive .card-stack-container > div:nth-child(3) {
+  transform: translateX(calc(var(--card-offset-x) * 2)) translateY(calc(var(--card-offset-y) * 2));
+}
+
+/* Hero Title Responsive */
+.hero-title-responsive {
+  font-size: 3rem; /* 48px - mobile */
+  line-height: 1.1;
+}
+
+@media (min-width: 640px) {
+  .hero-title-responsive {
+    font-size: 4rem; /* 64px - sm */
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-title-responsive {
+    font-size: 5rem; /* 80px - md */
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-title-responsive {
+    font-size: 6.5rem; /* 104px - lg (20% bigger) */
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-title-responsive {
+    font-size: 8rem; /* 128px - xl (20% bigger) */
+  }
+}
+
+/* Activity Generator Responsive */
+.activity-generator-responsive {
+  padding: 1.5rem; /* 24px - mobile */
+  max-width: 100%;
+}
+
+@media (min-width: 640px) {
+  .activity-generator-responsive {
+    padding: 2rem; /* 32px - sm */
+    max-width: 28rem; /* 448px - sm */
+  }
+}
+
+@media (min-width: 768px) {
+  .activity-generator-responsive {
+    padding: 2.5rem; /* 40px - md */
+    max-width: 32rem; /* 512px - md */
+  }
+}
+
+@media (min-width: 1024px) {
+  .activity-generator-responsive {
+    padding: 3rem; /* 48px - lg (20% bigger) */
+    max-width: 38rem; /* 608px - lg (20% bigger) */
+  }
+}
+
+@media (min-width: 1280px) {
+  .activity-generator-responsive {
+    padding: 3.5rem; /* 56px - xl (20% bigger) */
+    max-width: 42rem; /* 672px - xl (20% bigger) */
+  }
+}
+
+/* Button Responsive */
+.button-responsive {
+  padding: 0.75rem 1.5rem; /* 12px 24px - mobile */
+  font-size: 1rem; /* 16px - mobile */
+}
+
+@media (min-width: 768px) {
+  .button-responsive {
+    padding: 1rem 2rem; /* 16px 32px - md */
+    font-size: 1.125rem; /* 18px - md */
+  }
+}
+
+@media (min-width: 1024px) {
+  .button-responsive {
+    padding: 1.25rem 2.5rem; /* 20px 40px - lg (20% bigger) */
+    font-size: 1.25rem; /* 20px - lg (20% bigger) */
+  }
+}
+
+/* Text Responsive */
+.text-responsive {
+  font-size: 1rem; /* 16px - mobile */
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .text-responsive {
+    font-size: 1.125rem; /* 18px - md */
+  }
+}
+
+@media (min-width: 1024px) {
+  .text-responsive {
+    font-size: 1.25rem; /* 20px - lg (20% bigger) */
+    line-height: 1.6;
+  }
+}
+
+/* Card Content Responsive */
+.card-content-responsive {
+  padding: 1.5rem; /* 24px - mobile */
+}
+
+@media (min-width: 768px) {
+  .card-content-responsive {
+    padding: 2rem; /* 32px - md */
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-content-responsive {
+    padding: 2.5rem; /* 40px - lg (20% bigger) */
+  }
+}
+
+/* Input Responsive */
+.input-responsive {
+  padding: 0.75rem; /* 12px - mobile */
+  font-size: 1rem; /* 16px - mobile */
+}
+
+@media (min-width: 768px) {
+  .input-responsive {
+    padding: 1rem; /* 16px - md */
+    font-size: 1.125rem; /* 18px - md */
+  }
+}
+
+@media (min-width: 1024px) {
+  .input-responsive {
+    padding: 1.25rem; /* 20px - lg (20% bigger) */
+    font-size: 1.25rem; /* 20px - lg (20% bigger) */
+  }
+}

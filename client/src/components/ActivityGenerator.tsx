@@ -228,7 +228,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
           <div className="space-y-6">
             <div className="text-center space-y-2">
               <Heart className="w-12 h-12 mx-auto text-black stroke-[3px]" />
-              <h3 className="text-2xl font-bold text-black">Let's Start Your Journey</h3>
+              <h3 className="text-responsive font-bold text-black">Let's Start Your Journey</h3>
               <p className="text-black/70">Tell us what you'd like to improve or experience in your relationship</p>
             </div>
 
@@ -237,7 +237,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
                 placeholder="Share what you'd like to improve or experience together..."
                 value={state.partner1Input}
                 onChange={(e) => setState(prev => ({ ...prev, partner1Input: e.target.value }))}
-                className="min-h-[100px] resize-none border-4 border-black bg-transparent text-black placeholder:text-black/50"
+                className="input-responsive min-h-[100px] resize-none border-4 border-black bg-transparent text-black placeholder:text-black/50"
                 maxLength={500}
               />
               <div className="text-sm text-black/70 text-right">
@@ -247,7 +247,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
 
             <Button
               onClick={handlePartner1Submit}
-              className="w-full bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
+              className="button-responsive w-full bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
               size="lg"
             >
               Continue
@@ -260,7 +260,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
           <div className="space-y-6">
             <div className="text-center space-y-2">
               <Heart className="w-12 h-12 mx-auto text-black stroke-[3px]" />
-              <h3 className="text-2xl font-bold text-black">Almost There!</h3>
+              <h3 className="text-responsive font-bold text-black">Almost There!</h3>
               <p className="text-black/70">What would your partner like to improve or experience?</p>
             </div>
 
@@ -269,7 +269,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
                 placeholder="What would your partner want to improve or experience together..."
                 value={state.partner2Input}
                 onChange={(e) => setState(prev => ({ ...prev, partner2Input: e.target.value }))}
-                className="min-h-[100px] resize-none border-4 border-black bg-transparent text-black placeholder:text-black/50"
+                className="input-responsive min-h-[100px] resize-none border-4 border-black bg-transparent text-black placeholder:text-black/50"
                 maxLength={500}
               />
               <div className="text-sm text-black/70 text-right">
@@ -280,13 +280,13 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
             <div className="flex gap-3">
               <Button
                 onClick={() => setState(prev => ({ ...prev, currentStep: 'partner1' }))}
-                className="flex-1 bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
+                className="button-responsive flex-1 bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
               >
                 Back
               </Button>
               <Button
                 onClick={handlePartner2Submit}
-                className="flex-1 bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
+                className="button-responsive flex-1 bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
                 size="lg"
               >
                 Generate Activity
@@ -300,7 +300,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
           <div className="space-y-6 text-center">
             <div className="space-y-4">
               <Sparkles className="w-16 h-16 mx-auto text-black animate-pulse stroke-[3px]" />
-              <h3 className="text-2xl font-bold text-black">Creating Your Perfect Activity</h3>
+              <h3 className="text-responsive font-bold text-black">Creating Your Perfect Activity</h3>
               <p className="text-black/70">We're crafting something special just for you both...</p>
             </div>
 
@@ -317,7 +317,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
           <div className="space-y-6">
             <div className="text-center space-y-2">
               <Sparkles className="w-12 h-12 mx-auto text-black stroke-[3px]" />
-              <h3 className="text-2xl font-bold text-black">Your Perfect Activity</h3>
+              <h3 className="text-responsive font-bold text-black">Your Perfect Activity</h3>
               <p className="text-black/70">Designed just for you both</p>
             </div>
 
@@ -360,7 +360,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
 
             <Button
               onClick={() => setState(prev => ({ ...prev, currentStep: 'email' }))}
-              className="w-full bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
+              className="button-responsive w-full bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
               size="lg"
             >
               Send This Activity to Your Email
@@ -373,7 +373,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
           <div className="space-y-6">
             <div className="text-center space-y-2">
               <Heart className="w-12 h-12 mx-auto text-black stroke-[3px]" />
-              <h3 className="text-2xl font-bold text-black">Save Your Activity</h3>
+              <h3 className="text-responsive font-bold text-black">Save Your Activity</h3>
               <p className="text-black/70">We'll send your personalized activity to your email</p>
             </div>
 
@@ -383,21 +383,21 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
                 placeholder="your@email.com"
                 value={state.email}
                 onChange={(e) => setState(prev => ({ ...prev, email: e.target.value }))}
-                className="text-center border-4 border-black bg-transparent text-black placeholder:text-black/50"
+                className="input-responsive text-center border-4 border-black bg-transparent text-black placeholder:text-black/50"
               />
             </div>
 
             <div className="flex gap-3">
               <Button
                 onClick={() => setState(prev => ({ ...prev, currentStep: 'result' }))}
-                className="flex-1 bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
+                className="button-responsive flex-1 bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
               >
                 Back
               </Button>
               <Button
                 onClick={handleEmailSubmit}
                 disabled={emailCaptureMutation.isPending}
-                className="flex-1 bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
+                className="button-responsive flex-1 bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
                 size="lg"
               >
                 {emailCaptureMutation.isPending ? (
@@ -421,7 +421,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
                 </div>
                 <Button
                   onClick={onClose}
-                  className="bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
+                  className="button-responsive bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold"
                 >
                   Explore Our Card Game
                 </Button>
@@ -438,14 +438,14 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
   
 
   return (
-    <div className="activity-generator-container">
+    <div className="activity-generator-responsive">
       <div className={`card-flip-container ${state.isFlipped ? 'flipped' : ''}`}>
         <div className="card-flip-inner">
           {/* Front of card - Original content */}
           <div className="card-front">
-            <Card className="p-8 bg-soft-brown border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <Card className="card-content-responsive bg-soft-brown border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <div className="text-center space-y-6">
-                <h2 className="text-3xl font-bold text-black">
+                <h2 className="text-responsive font-bold text-black">
                   Start to Grow Together for Free
                 </h2>
                 <p className="text-black/70">
@@ -453,7 +453,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
                 </p>
                 <Button
                   onClick={handleFlip}
-                  className="bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold px-8 py-6 text-lg rounded-2xl"
+                  className="button-responsive bg-transparent border-4 border-black text-black hover:bg-black hover:text-white transition-colors font-bold rounded-2xl"
                   size="lg"
                 >
                   Begin Your Journey
@@ -464,7 +464,7 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
 
           {/* Back of card - Activity Generator */}
           <div className="card-back">
-            <Card className="p-8 bg-soft-brown border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <Card className="card-content-responsive bg-soft-brown border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               {renderStep()}
             </Card>
           </div>
