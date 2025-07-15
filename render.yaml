@@ -3,6 +3,7 @@ services:
     name: relationship-garden
     env: node
     plan: free
+    rootDir: src
     buildCommand: npm install && npm run build
     startCommand: npm run start
     envVars:
