@@ -7,14 +7,26 @@ import {
 import { googleFormsService } from "./google-forms";
 import { GoogleGenAI } from "@google/genai";
 import OpenAI from "openai";
+import { trace, SpanStatusCode } from "@opentelemetry/api";
+import { SemanticConventions as SC } from "@arizeai/openinference-semantic-conventions";
 
-// Initialize Gemini client
-const genai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+// Initialize clients lazily to ensure environment variables are loaded
+let genai: GoogleGenAI;
+let openai: OpenAI;
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "",
-});
+// Initialize tracer for manual instrumentation
+const tracer = trace.getTracer('relationship-garden-api', '1.0.0');
+
+function initializeClients() {
+  if (!genai) {
+    genai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+  }
+  if (!openai) {
+    openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY || "",
+    });
+  }
+}
 
 export async function registerRoutes(app: Express): Promise<void> {
   // put application routes here
@@ -27,6 +39,19 @@ export async function registerRoutes(app: Express): Promise<void> {
   app.get("/api/test", (req, res) => {
     console.log("🧪 Test endpoint hit");
     res.json({ message: "API routes are working", timestamp: new Date().toISOString() });
+  });
+
+  // Debug endpoint to check environment variables
+  app.get("/api/debug/env", (req, res) => {
+    console.log("🔍 Debug endpoint hit");
+    res.json({
+      openai_key_configured: !!process.env.OPENAI_API_KEY,
+      openai_key_length: process.env.OPENAI_API_KEY?.length || 0,
+      gemini_key_configured: !!process.env.GEMINI_API_KEY,
+      gemini_key_length: process.env.GEMINI_API_KEY?.length || 0,
+      database_url: process.env.DATABASE_URL,
+      node_env: process.env.NODE_ENV,
+    });
   });
 
   app.post("/api/preorders", async (req, res) => {
@@ -148,10 +173,10 @@ export async function registerRoutes(app: Express): Promise<void> {
       }
     } catch (error) {
       console.error("💥 Error generating activity:", error);
-      console.error("💥 Full error stack:", error.stack);
+      console.error("💥 Full error stack:", (error as Error).stack);
       res.status(500).json({ 
         error: "Failed to generate activity",
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        details: process.env.NODE_ENV === 'development' ? (error as Error).message : undefined
       });
     }
   });
@@ -212,6 +237,8 @@ async function generateActivity(partner1Input: string, partner2Input: string) {
 }
 
 async function generateWithGemini(partner1Input: string, partner2Input: string) {
+  initializeClients();
+  
   const prompt = `You are a relationship counseling expert creating personalized activities for couples. Based on the following inputs from two partners, create a unique relationship activity that addresses their specific interests and needs.
 
 Partner 1 shared: "${partner1Input}"
@@ -234,47 +261,95 @@ Please create a personalized relationship activity that considers both partners'
 Make the activity specific to their inputs - reference their interests, concerns, or goals when relevant. Keep the tone warm, supportive, and relationship-focused.`;
 
   console.log("📤 Sending request to Gemini...");
+  console.log("🔑 Gemini API Key configured:", !!process.env.GEMINI_API_KEY);
+  console.log("🔑 Gemini API Key preview:", process.env.GEMINI_API_KEY ? process.env.GEMINI_API_KEY.substring(0, 10) + "..." : "Not set");
+  
   const startTime = Date.now();
   
-  const response = await genai.models.generateContent({
-    model: "gemini-2.5-flash",
-    config: {
-      systemInstruction:
-        "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only.",
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: "object",
-        properties: {
-          title: { type: "string" },
-          description: { type: "string" },
-          conversationPrompts: {
-            type: "array",
-            items: { type: "string" },
-          },
-          category: { type: "string" },
-          estimatedTime: { type: "string" },
-        },
-        required: [
-          "title",
-          "description",
-          "conversationPrompts",
-          "category",
-          "estimatedTime",
-        ],
+  // Create a span for the Gemini API call with OpenInference semantic attributes
+  const response = await tracer.startActiveSpan(
+    "gemini-activity-generation",
+    {
+      attributes: {
+        "openinference.span.kind": "LLM",
+        "llm.model_name": "gemini-2.5-flash",
+        "llm.provider": "google",
+        "llm.system": "gemini",
+        "input.value": prompt,
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": prompt,
+        "session.id": `activity-generation-${Date.now()}`,
+        "user.id": "relationship-garden-user",
       },
     },
-    contents: prompt,
-  });
+    async (span) => {
+      try {
+        const response = await genai.models.generateContent({
+          model: "gemini-2.5-flash",
+          config: {
+            systemInstruction:
+              "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only.",
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: "object",
+              properties: {
+                title: { type: "string" },
+                description: { type: "string" },
+                conversationPrompts: {
+                  type: "array",
+                  items: { type: "string" },
+                },
+                category: { type: "string" },
+                estimatedTime: { type: "string" },
+              },
+              required: [
+                "title",
+                "description",
+                "conversationPrompts",
+                "category",
+                "estimatedTime",
+              ],
+            },
+          },
+          contents: prompt,
+        });
 
-  const duration = Date.now() - startTime;
-  console.log(`📥 Gemini response received in ${duration}ms`);
+        const duration = Date.now() - startTime;
+        console.log(`📥 Gemini response received in ${duration}ms`);
+
+        const responseContent = response.text;
+        if (!responseContent) {
+          throw new Error("No response content from Gemini");
+        }
+
+        console.log("📄 Raw Gemini response:", responseContent.substring(0, 200) + "...");
+
+        // Set output attributes on the span
+        span.setAttributes({
+          "output.value": responseContent,
+          "llm.output_messages.0.message.role": "assistant",
+          "llm.output_messages.0.message.content": responseContent,
+          "llm.token_count.total": responseContent.length, // Approximate token count
+          "llm.latency": duration,
+        });
+        
+        span.setStatus({ code: SpanStatusCode.OK });
+        
+        return response;
+      } catch (error) {
+        span.recordException(error as Error);
+        span.setStatus({ code: SpanStatusCode.ERROR, message: (error as Error).message });
+        throw error;
+      } finally {
+        span.end();
+      }
+    }
+  );
 
   const responseContent = response.text;
   if (!responseContent) {
     throw new Error("No response content from Gemini");
   }
-
-  console.log("📄 Raw Gemini response:", responseContent.substring(0, 200) + "...");
 
   // Parse the JSON response
   const activity = JSON.parse(responseContent);
@@ -302,6 +377,8 @@ Make the activity specific to their inputs - reference their interests, concerns
 }
 
 async function generateWithOpenAI(partner1Input: string, partner2Input: string) {
+  initializeClients();
+  
   const prompt = `You are a relationship counseling expert creating personalized activities for couples. Based on the following inputs from two partners, create a unique relationship activity that addresses their specific interests and needs.
 
 Partner 1 shared: "${partner1Input}"
@@ -324,7 +401,8 @@ Please create a personalized relationship activity that considers both partners'
 Make the activity specific to their inputs - reference their interests, concerns, or goals when relevant. Keep the tone warm, supportive, and relationship-focused.`;
 
   console.log("📤 Sending request to OpenAI...");
-  console.log("🔑 API Key configured:", !!process.env.OPENAI_API_KEY);
+  console.log("🔑 OpenAI API Key configured:", !!process.env.OPENAI_API_KEY);
+  console.log("🔑 OpenAI API Key preview:", process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 10) + "..." : "Not set");
   
   if (!process.env.OPENAI_API_KEY) {
     throw new Error("OpenAI API key not configured");
@@ -332,31 +410,80 @@ Make the activity specific to their inputs - reference their interests, concerns
 
   const startTime = Date.now();
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: [
-      {
-        role: "system",
-        content: "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only."
+  // Create a span for the OpenAI API call with OpenInference semantic attributes
+  const response = await tracer.startActiveSpan(
+    "openai-activity-generation",
+    {
+      attributes: {
+        "openinference.span.kind": "LLM",
+        "llm.model_name": "gpt-3.5-turbo",
+        "llm.provider": "openai",
+        "llm.system": "openai",
+        "input.value": prompt,
+        "llm.input_messages.0.message.role": "system",
+        "llm.input_messages.0.message.content": "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only.",
+        "llm.input_messages.1.message.role": "user",
+        "llm.input_messages.1.message.content": prompt,
+        "session.id": `activity-generation-${Date.now()}`,
+        "user.id": "relationship-garden-user",
       },
-      {
-        role: "user",
-        content: prompt
-      }
-    ],
-    response_format: { type: "json_object" },
-    temperature: 0.7,
-  });
+    },
+    async (span) => {
+      try {
+        const response = await openai.chat.completions.create({
+          model: "gpt-3.5-turbo",
+          messages: [
+            {
+              role: "system",
+              content: "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only."
+            },
+            {
+              role: "user",
+              content: prompt
+            }
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.7,
+        });
 
-  const duration = Date.now() - startTime;
-  console.log(`📥 OpenAI response received in ${duration}ms`);
+        const duration = Date.now() - startTime;
+        console.log(`📥 OpenAI response received in ${duration}ms`);
+
+        const responseContent = response.choices[0]?.message?.content;
+        if (!responseContent) {
+          throw new Error("No response content from OpenAI");
+        }
+
+        console.log("📄 Raw OpenAI response:", responseContent.substring(0, 200) + "...");
+
+        // Set output attributes on the span
+        span.setAttributes({
+          "output.value": responseContent,
+          "llm.output_messages.0.message.role": "assistant",
+          "llm.output_messages.0.message.content": responseContent,
+          "llm.token_count.prompt": response.usage?.prompt_tokens || 0,
+          "llm.token_count.completion": response.usage?.completion_tokens || 0,
+          "llm.token_count.total": response.usage?.total_tokens || 0,
+          "llm.latency": duration,
+        });
+        
+        span.setStatus({ code: SpanStatusCode.OK });
+        
+        return response;
+      } catch (error) {
+        span.recordException(error as Error);
+        span.setStatus({ code: SpanStatusCode.ERROR, message: (error as Error).message });
+        throw error;
+      } finally {
+        span.end();
+      }
+    }
+  );
 
   const responseContent = response.choices[0]?.message?.content;
   if (!responseContent) {
     throw new Error("No response content from OpenAI");
   }
-
-  console.log("📄 Raw OpenAI response:", responseContent.substring(0, 200) + "...");
 
   // Parse the JSON response
   const activity = JSON.parse(responseContent);

@@ -1,3 +1,6 @@
+// Import tracing first to initialize OpenTelemetry
+import "./tracing";
+
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
@@ -51,7 +54,7 @@ app.use((req, res, next) => {
   });
 
   // Setup Vite after API routes to avoid conflicts
-  const port = process.env.PORT || 5000;
+  const port = Number(process.env.PORT) || 5000;
   const server = app.listen(port, "0.0.0.0", () => {
     log(`serving on port ${port}`);
   });
