@@ -1,22 +1,28 @@
 import { StateGraph, START, END } from "@langchain/langgraph";
 import { GoogleGenAI } from "@google/genai";
-import OpenAI from "openai";
+// OpenAI removed – using Gemini only
 import { trace, context, SpanStatusCode } from "@opentelemetry/api";
 import { SemanticConventions as SC } from "@arizeai/openinference-semantic-conventions";
 
 // Initialize tracer for LangGraph instrumentation
 const tracer = trace.getTracer('langgraph-relationship-workflow', '1.0.0');
 
+const ROOT_NODE_ID = "relationship_workflow";
+
 // Helper to add graph node metadata for Arize visualization
-function annotateGraphNode(span: ReturnType<typeof trace.getTracer> extends infer T ? any : any, nodeId: string) {
+function annotateGraphNode(
+  span: ReturnType<typeof trace.getTracer> extends infer T ? any : any,
+  nodeId: string,
+  parentNodeId?: string
+) {
   try {
     span.setAttribute("graph.node.id", nodeId);
-    const parentSpan = trace.getSpan(context.active());
-    if (parentSpan) {
-      span.setAttribute("graph.node.parent_id", parentSpan.spanContext().spanId);
+    span.setAttribute("graph.node.display_name", nodeId.replace(/_/g, " "));
+    if (parentNodeId) {
+      span.setAttribute("graph.node.parent_id", parentNodeId);
     }
   } catch (_) {
-    // swallow errors to avoid breaking workflow
+    /* swallow */
   }
 }
 
@@ -46,15 +52,13 @@ export interface WorkflowState {
 
 // AI Clients (initialized lazily)
 let genai: GoogleGenAI;
-let openai: OpenAI;
+// OpenAI client removed
 
 function initializeClients() {
   if (!genai) {
     genai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
   }
-  if (!openai) {
-    openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
-  }
+  // OpenAI client removed
 }
 
 // Step 1: Analyze Partner Inputs
@@ -73,7 +77,7 @@ async function analyzeInputs(state: WorkflowState): Promise<Partial<WorkflowStat
       },
     },
     async (span) => {
-      annotateGraphNode(span, "analyze_inputs");
+      annotateGraphNode(span, "analyze_inputs", ROOT_NODE_ID);
       try {
         initializeClients();
         
@@ -138,7 +142,7 @@ async function assessCompatibility(state: WorkflowState): Promise<Partial<Workfl
       },
     },
     async (span) => {
-      annotateGraphNode(span, "assess_compatibility");
+      annotateGraphNode(span, "assess_compatibility", ROOT_NODE_ID);
       try {
         if (!state.inputAnalysis) {
           throw new Error("No input analysis available");
@@ -200,15 +204,15 @@ async function generateActivity(state: WorkflowState): Promise<Partial<WorkflowS
     {
       attributes: {
         "openinference.span.kind": "LLM",
-        "llm.model_name": "gpt-4",
-        "llm.provider": "openai",
+        "llm.model_name": "gemini-2.5-flash",
+        "llm.provider": "google",
         "workflow.step": "generate_activity",
         "input.activity_type": state.activityType || "unknown",
         "input.compatibility_score": state.compatibilityScore || 0,
       },
     },
     async (span) => {
-      annotateGraphNode(span, "generate_activity");
+      annotateGraphNode(span, "generate_activity", ROOT_NODE_ID);
       try {
         initializeClients();
         
@@ -236,23 +240,19 @@ Generate a JSON activity with this structure:
   "activityType": "${state.activityType}"
 }`;
 
-        const response = await openai.chat.completions.create({
-          model: "gpt-4",
-          messages: [
-            { role: "system", content: "You are an expert relationship counselor. Return only valid JSON." },
-            { role: "user", content: prompt }
-          ],
-          response_format: { type: "json_object" },
-          temperature: 0.7,
+        const response = await genai.models.generateContent({
+          model: "gemini-2.5-flash",
+          config: { responseMimeType: "application/json" },
+          contents: prompt,
         });
 
-        const rawActivity = JSON.parse(response.choices[0]?.message?.content || "{}");
+        const rawActivity = JSON.parse(response.text || "{}");
         
         span.setAttributes({
           "output.activity_title": rawActivity.title || "",
           "output.activity_category": rawActivity.category || "",
           "output.difficulty_level": rawActivity.difficultyLevel || "",
-          "llm.token_count.total": response.usage?.total_tokens || 0,
+          "llm.token_count.total": (response.text || "").length,
         });
         
         span.setStatus({ code: SpanStatusCode.OK });
@@ -284,7 +284,7 @@ async function personalizeActivity(state: WorkflowState): Promise<Partial<Workfl
       },
     },
     async (span) => {
-      annotateGraphNode(span, "personalize_activity");
+      annotateGraphNode(span, "personalize_activity", ROOT_NODE_ID);
       try {
         initializeClients();
         
@@ -346,7 +346,7 @@ async function validateActivity(state: WorkflowState): Promise<Partial<WorkflowS
       },
     },
     async (span) => {
-      annotateGraphNode(span, "validate_activity");
+      annotateGraphNode(span, "validate_activity", ROOT_NODE_ID);
       try {
         if (!state.personalizedActivity) {
           throw new Error("No activity to validate");
@@ -518,6 +518,7 @@ export async function generateActivityWithLangGraph(
       },
     },
     async (span) => {
+      annotateGraphNode(span, ROOT_NODE_ID);
       try {
         const workflow = createRelationshipWorkflow();
         const initialState: WorkflowState = {

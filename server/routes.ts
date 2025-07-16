@@ -6,14 +6,14 @@ import {
 } from "@shared/schema";
 import { googleFormsService } from "./google-forms";
 import { GoogleGenAI } from "@google/genai";
-import OpenAI from "openai";
+// OpenAI removed – using Gemini only
 import { trace, SpanStatusCode } from "@opentelemetry/api";
 import { SemanticConventions as SC } from "@arizeai/openinference-semantic-conventions";
 import { generateActivityWithLangGraph } from "./langgraph-workflow";
 
 // Initialize clients lazily to ensure environment variables are loaded
 let genai: GoogleGenAI;
-let openai: OpenAI;
+// OpenAI client removed
 
 // Initialize tracer for manual instrumentation
 const tracer = trace.getTracer('relationship-garden-api', '1.0.0');
@@ -22,11 +22,7 @@ function initializeClients() {
   if (!genai) {
     genai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
   }
-  if (!openai) {
-    openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY || "",
-    });
-  }
+  // OpenAI client removed
 }
 
 export async function registerRoutes(app: Express): Promise<void> {
@@ -307,20 +303,8 @@ async function generateActivity(partner1Input: string, partner2Input: string) {
       return activity;
     } catch (geminiError) {
       console.error("❌ Gemini API failed:", geminiError);
-      console.log("🔄 Falling back to OpenAI...");
-      
-      // Try OpenAI as fallback
-      try {
-        const activity = await generateWithOpenAI(partner1Input, partner2Input);
-        console.log("✅ OpenAI API successful");
-        return activity;
-      } catch (openaiError) {
-        console.error("❌ OpenAI API also failed:", openaiError);
-        console.log("🔄 Using static fallback...");
-        
-        // Final fallback to static content
-        return generateStaticFallback(partner1Input, partner2Input);
-      }
+      console.log("🔄 Using static fallback...");
+      return generateStaticFallback(partner1Input, partner2Input);
     }
   }
 }
@@ -465,139 +449,7 @@ Make the activity specific to their inputs - reference their interests, concerns
   return activity;
 }
 
-async function generateWithOpenAI(partner1Input: string, partner2Input: string) {
-  initializeClients();
-  
-  const prompt = `You are a relationship counseling expert creating personalized activities for couples. Based on the following inputs from two partners, create a unique relationship activity that addresses their specific interests and needs.
-
-Partner 1 shared: "${partner1Input}"
-Partner 2 shared: "${partner2Input}"
-
-Please create a personalized relationship activity that considers both partners' inputs. Return your response as a JSON object with this exact structure:
-
-{
-  "title": "A creative, engaging title for the activity (23 characters max)",
-  "description": "A short description of the activity that incorporates elements from both partners' inputs (25 words max)",
-  "conversationPrompts": [
-    "Thoughtful question based on their shared interests that helps them connect deeper. (short succinct, 10 words max)",
-    "Another meaningful question to deepen their connection. (short succinct, 10 words max)",
-    "A final question to help them grow together. (short succinct, 10 words max)"
-  ],
-  "category": "One of: communication, intimacy, fun, or growth",
-  "estimatedTime": "A time estimate like '30 minutes' or '1 hour'"
-}
-
-Make the activity specific to their inputs - reference their interests, concerns, or goals when relevant. Keep the tone warm, supportive, and relationship-focused.`;
-
-  console.log("📤 Sending request to OpenAI...");
-  console.log("🔑 OpenAI API Key configured:", !!process.env.OPENAI_API_KEY);
-  console.log("🔑 OpenAI API Key preview:", process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 10) + "..." : "Not set");
-  
-  if (!process.env.OPENAI_API_KEY) {
-    throw new Error("OpenAI API key not configured");
-  }
-
-  const startTime = Date.now();
-
-  // Create a span for the OpenAI API call with OpenInference semantic attributes
-  const response = await tracer.startActiveSpan(
-    "openai-activity-generation",
-    {
-      attributes: {
-        "openinference.span.kind": "LLM",
-        "llm.model_name": "gpt-3.5-turbo",
-        "llm.provider": "openai",
-        "llm.system": "openai",
-        "input.value": prompt,
-        "llm.input_messages.0.message.role": "system",
-        "llm.input_messages.0.message.content": "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only.",
-        "llm.input_messages.1.message.role": "user",
-        "llm.input_messages.1.message.content": prompt,
-        "session.id": `activity-generation-${Date.now()}`,
-        "user.id": "relationship-garden-user",
-      },
-    },
-    async (span) => {
-      try {
-        const response = await openai.chat.completions.create({
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "system",
-              content: "You are a relationship counseling expert who creates personalized activities for couples. Always respond with valid JSON only."
-            },
-            {
-              role: "user",
-              content: prompt
-            }
-          ],
-          response_format: { type: "json_object" },
-          temperature: 0.7,
-        });
-
-        const duration = Date.now() - startTime;
-        console.log(`📥 OpenAI response received in ${duration}ms`);
-
-        const responseContent = response.choices[0]?.message?.content;
-        if (!responseContent) {
-          throw new Error("No response content from OpenAI");
-        }
-
-        console.log("📄 Raw OpenAI response:", responseContent.substring(0, 200) + "...");
-
-        // Set output attributes on the span
-        span.setAttributes({
-          "output.value": responseContent,
-          "llm.output_messages.0.message.role": "assistant",
-          "llm.output_messages.0.message.content": responseContent,
-          "llm.token_count.prompt": response.usage?.prompt_tokens || 0,
-          "llm.token_count.completion": response.usage?.completion_tokens || 0,
-          "llm.token_count.total": response.usage?.total_tokens || 0,
-          "llm.latency": duration,
-        });
-        
-        span.setStatus({ code: SpanStatusCode.OK });
-        
-        return response;
-      } catch (error) {
-        span.recordException(error as Error);
-        span.setStatus({ code: SpanStatusCode.ERROR, message: (error as Error).message });
-        throw error;
-      } finally {
-        span.end();
-      }
-    }
-  );
-
-  const responseContent = response.choices[0]?.message?.content;
-  if (!responseContent) {
-    throw new Error("No response content from OpenAI");
-  }
-
-  // Parse the JSON response
-  const activity = JSON.parse(responseContent);
-  console.log("📊 Parsed activity structure:", {
-    hasTitle: !!activity.title,
-    hasDescription: !!activity.description,
-    hasPrompts: !!activity.conversationPrompts,
-    hasCategory: !!activity.category,
-    hasEstimatedTime: !!activity.estimatedTime,
-    promptCount: activity.conversationPrompts?.length || 0
-  });
-
-  // Validate the response has required fields
-  if (
-    !activity.title ||
-    !activity.description ||
-    !activity.conversationPrompts ||
-    !activity.estimatedTime ||
-    !activity.category
-  ) {
-    throw new Error("Invalid activity structure from OpenAI - missing required fields");
-  }
-
-  return activity;
-}
+// OpenAI fallback disabled – function removed
 
 function generateStaticFallback(partner1Input: string, partner2Input: string) {
   console.log("🛡️ Using static fallback activity");
