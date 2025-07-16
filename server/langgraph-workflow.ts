@@ -7,6 +7,19 @@ import { SemanticConventions as SC } from "@arizeai/openinference-semantic-conve
 // Initialize tracer for LangGraph instrumentation
 const tracer = trace.getTracer('langgraph-relationship-workflow', '1.0.0');
 
+// Helper to add graph node metadata for Arize visualization
+function annotateGraphNode(span: ReturnType<typeof trace.getTracer> extends infer T ? any : any, nodeId: string) {
+  try {
+    span.setAttribute("graph.node.id", nodeId);
+    const parentSpan = trace.getSpan(context.active());
+    if (parentSpan) {
+      span.setAttribute("graph.node.parent_id", parentSpan.spanContext().spanId);
+    }
+  } catch (_) {
+    // swallow errors to avoid breaking workflow
+  }
+}
+
 // Define the state interface for our workflow
 export interface WorkflowState {
   partner1Input: string;
@@ -60,6 +73,7 @@ async function analyzeInputs(state: WorkflowState): Promise<Partial<WorkflowStat
       },
     },
     async (span) => {
+      annotateGraphNode(span, "analyze_inputs");
       try {
         initializeClients();
         
@@ -124,6 +138,7 @@ async function assessCompatibility(state: WorkflowState): Promise<Partial<Workfl
       },
     },
     async (span) => {
+      annotateGraphNode(span, "assess_compatibility");
       try {
         if (!state.inputAnalysis) {
           throw new Error("No input analysis available");
@@ -193,6 +208,7 @@ async function generateActivity(state: WorkflowState): Promise<Partial<WorkflowS
       },
     },
     async (span) => {
+      annotateGraphNode(span, "generate_activity");
       try {
         initializeClients();
         
@@ -268,6 +284,7 @@ async function personalizeActivity(state: WorkflowState): Promise<Partial<Workfl
       },
     },
     async (span) => {
+      annotateGraphNode(span, "personalize_activity");
       try {
         initializeClients();
         
@@ -329,6 +346,7 @@ async function validateActivity(state: WorkflowState): Promise<Partial<WorkflowS
       },
     },
     async (span) => {
+      annotateGraphNode(span, "validate_activity");
       try {
         if (!state.personalizedActivity) {
           throw new Error("No activity to validate");
