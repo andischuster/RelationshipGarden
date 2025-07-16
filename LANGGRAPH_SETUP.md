@@ -24,20 +24,17 @@ Your relationship activity generator now has a sophisticated LangGraph workflow 
 
 ### Step 1: Install Dependencies
 ```bash
-npm install @langchain/core @langchain/openai @langchain/google-genai langgraph @langchain/community
+npm install --legacy-peer-deps
 ```
 
-### Step 2: Install Node-Fetch (for testing)
-```bash
-npm install node-fetch
-```
+Note: We use `--legacy-peer-deps` to handle any peer dependency conflicts with the `langgraph` package.
 
-### Step 3: Build the Project
+### Step 2: Build the Project
 ```bash
 npm run build
 ```
 
-### Step 4: Start the Development Server
+### Step 3: Start the Development Server
 ```bash
 npm run dev
 ```
