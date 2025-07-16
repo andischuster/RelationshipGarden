@@ -23,7 +23,7 @@ export async function setupVite(app: Express, server: Server) {
   const serverOptions = {
     middlewareMode: true,
     hmr: { server },
-    allowedHosts: true,
+    allowedHosts: true as const,
   };
 
   const vite = await createViteServer({
@@ -68,7 +68,9 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(import.meta.dirname, "public");
+  // Fix: Always resolve to server/public from the project root, 
+  // regardless of where the compiled server is running from
+  const distPath = path.resolve(process.cwd(), "server", "public");
 
   if (!fs.existsSync(distPath)) {
     throw new Error(
