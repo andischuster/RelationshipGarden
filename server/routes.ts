@@ -9,6 +9,7 @@ import { GoogleGenAI } from "@google/genai";
 import OpenAI from "openai";
 import { trace, SpanStatusCode } from "@opentelemetry/api";
 import { SemanticConventions as SC } from "@arizeai/openinference-semantic-conventions";
+import { generateActivityWithLangGraph } from "./langgraph-workflow";
 
 // Initialize clients lazily to ensure environment variables are loaded
 let genai: GoogleGenAI;
@@ -205,33 +206,121 @@ export async function registerRoutes(app: Express): Promise<void> {
       res.status(500).json({ error: "Failed to send activity email" });
     }
   });
+
+  // Advanced LangGraph workflow endpoint with detailed tracing
+  app.post("/api/activities/generate-advanced", async (req, res) => {
+    console.log("🎯 Advanced LangGraph activity generation request received");
+    
+    try {
+      const { partner1Input, partner2Input } = req.body;
+      console.log("📝 Advanced request inputs:", { 
+        partner1Length: partner1Input?.length || 0,
+        partner2Length: partner2Input?.length || 0,
+        partner1Preview: partner1Input?.substring(0, 50) + "...",
+        partner2Preview: partner2Input?.substring(0, 50) + "..."
+      });
+      
+      if (!partner1Input || !partner2Input) {
+        return res.status(400).json({ error: "Both partner inputs are required" });
+      }
+
+      console.log("🚀 Starting LangGraph workflow...");
+      const activity = await generateActivityWithLangGraph(partner1Input, partner2Input);
+      
+      console.log("✅ LangGraph activity generated successfully:", {
+        title: activity.title,
+        category: activity.category,
+        activityType: activity.activityType,
+        difficultyLevel: activity.difficultyLevel
+      });
+
+      // Save to database
+      try {
+        const suggestionData = {
+          partner1Input,
+          partner2Input,
+          generatedActivity: JSON.stringify(activity),
+          conversationPrompts: activity.conversationPrompts,
+          category: activity.category,
+          estimatedTime: activity.estimatedTime,
+          email: null,
+        };
+
+        const savedSuggestion = await storage.createActivitySuggestion(suggestionData);
+        
+        res.json({
+          success: true,
+          activity: {
+            ...activity,
+            id: savedSuggestion.id.toString(),
+          },
+          metadata: {
+            workflow: "langgraph",
+            version: "1.0.0",
+            endpoint: "generate-advanced"
+          }
+        });
+      } catch (dbError) {
+        console.error("💾 Database save failed:", dbError);
+        res.json({
+          success: true,
+          activity: {
+            ...activity,
+            id: Date.now().toString(),
+          },
+          metadata: {
+            workflow: "langgraph",
+            version: "1.0.0",
+            endpoint: "generate-advanced"
+          }
+        });
+      }
+    } catch (error) {
+      console.error("💥 Error in LangGraph workflow:", error);
+      res.status(500).json({ 
+        error: "Failed to generate advanced activity",
+        details: process.env.NODE_ENV === 'development' ? (error as Error).message : undefined
+      });
+    }
+  });
 }
 
-// AI-powered activity generation function with Gemini and OpenAI fallback
+// AI-powered activity generation function with LangGraph workflow and fallbacks
 async function generateActivity(partner1Input: string, partner2Input: string) {
   console.log("🤖 Starting AI activity generation...");
   
-  // Try Gemini first
+  // Try LangGraph workflow first
   try {
-    console.log("🔮 Attempting Gemini API call...");
-    const activity = await generateWithGemini(partner1Input, partner2Input);
-    console.log("✅ Gemini API successful");
+    console.log("🔮 Attempting LangGraph workflow...");
+    const activity = await generateActivityWithLangGraph(partner1Input, partner2Input);
+    console.log("✅ LangGraph workflow successful");
     return activity;
-  } catch (geminiError) {
-    console.error("❌ Gemini API failed:", geminiError);
-    console.log("🔄 Falling back to OpenAI...");
+  } catch (langgraphError) {
+    console.error("❌ LangGraph workflow failed:", langgraphError);
+    console.log("🔄 Falling back to simple AI generation...");
     
-    // Try OpenAI as fallback
+    // Try Gemini as fallback
     try {
-      const activity = await generateWithOpenAI(partner1Input, partner2Input);
-      console.log("✅ OpenAI API successful");
+      console.log("🔮 Attempting Gemini API call...");
+      const activity = await generateWithGemini(partner1Input, partner2Input);
+      console.log("✅ Gemini API successful");
       return activity;
-    } catch (openaiError) {
-      console.error("❌ OpenAI API also failed:", openaiError);
-      console.log("🔄 Using static fallback...");
+    } catch (geminiError) {
+      console.error("❌ Gemini API failed:", geminiError);
+      console.log("🔄 Falling back to OpenAI...");
       
-      // Final fallback to static content
-      return generateStaticFallback(partner1Input, partner2Input);
+      // Try OpenAI as fallback
+      try {
+        const activity = await generateWithOpenAI(partner1Input, partner2Input);
+        console.log("✅ OpenAI API successful");
+        return activity;
+      } catch (openaiError) {
+        console.error("❌ OpenAI API also failed:", openaiError);
+        console.log("🔄 Using static fallback...");
+        
+        // Final fallback to static content
+        return generateStaticFallback(partner1Input, partner2Input);
+      }
     }
   }
 }
