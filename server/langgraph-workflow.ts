@@ -1,4 +1,4 @@
-import { StateGraph, START, END } from "langgraph";
+import { StateGraph, START, END } from "@langchain/langgraph";
 import { GoogleGenAI } from "@google/genai";
 import OpenAI from "openai";
 import { trace, context, SpanStatusCode } from "@opentelemetry/api";
