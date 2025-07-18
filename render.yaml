@@ -8,4 +8,12 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ARIZE_API_KEY
+        value: ak-a35da5a8-45e4-44fc-97b2-9a271a334f97-sPAppaT-ftCFvHTrexHTOYsDUm_vuZK1
+      - key: ARIZE_SPACE_ID
+        value: U3BhY2U6MjM1MzY6d2g5Tg==
+      - key: ARIZE_PROJECT_NAME
+        value: relationship-garden
     healthCheckPath: / 
