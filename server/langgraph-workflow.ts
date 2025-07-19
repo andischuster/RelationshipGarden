@@ -304,16 +304,17 @@ Create ONE personalized activity that bridges their interests. Return valid JSON
   );
 }
 
-// LangGraph Node 3: Validation
-async function validateActivity(activity: any, langfuseTrace?: any) {
+// LangGraph Node 3: Validation & Ranking
+async function validateActivity(activity: any, analysis: any, langfuseTrace?: any) {
   const inputData = {
     activity,
-    task: "Validate generated activity structure and content"
+    analysis,
+    task: "Validate generated activity and rank conversation prompts by compatibility"
   };
 
   return await executeLangGraphNode(
     "validate_activity",
-    "Validate Generated Activity",
+    "Validate & Rank Activity",
     3,
     inputData,
          async (span) => {
@@ -321,7 +322,7 @@ async function validateActivity(activity: any, langfuseTrace?: any) {
        const langfuseSpan = langfuseTrace?.span({
          name: "validate_activity",
          input: inputData,
-         metadata: { node_type: "validation", step: 3 },
+         metadata: { node_type: "validation_ranking", step: 3 },
        });
        
        const validations = {
@@ -339,33 +340,110 @@ async function validateActivity(activity: any, langfuseTrace?: any) {
                      validations.hasConversationPrompts && 
                      validations.promptsCount === 3 &&
                      validations.hasCategory;
+
+      // Rank conversation prompts based on compatibility score
+      let rankedPrompts = [];
+      let topPrompt = null;
       
-      // Set validation details as attributes
-      span.setAttributes({
-        "validation.passed": isValid,
-        "validation.title_present": validations.hasTitle,
-        "validation.title_length": validations.titleLength,
-        "validation.prompts_count": validations.promptsCount,
-        "validation.has_category": validations.hasCategory,
-        "validation.details": JSON.stringify(validations),
-      });
+      if (activity.conversationPrompts && activity.conversationPrompts.length > 0) {
+        // Create scoring logic based on compatibility and content analysis
+        const compatibilityScore = analysis.compatibilityScore || 50;
+        const commonWords = analysis.commonWords || [];
+        
+                 // Score each prompt based on:
+         // 1. Compatibility score influence
+         // 2. Whether it contains themes relevant to both partners
+         // 3. Question complexity and depth
+         rankedPrompts = activity.conversationPrompts.map((prompt: string, index: number) => {
+           let score = 50; // Base score
+           
+           // Compatibility influence (30% of score)
+           score += (compatibilityScore - 50) * 0.3;
+           
+           // Common interests bonus (20% of score)
+           const promptLower = prompt.toLowerCase();
+           commonWords.forEach((word: string) => {
+             if (promptLower.includes(word.toLowerCase())) {
+               score += 4; // Bonus for each common interest mentioned
+             }
+           });
+           
+           // Question depth and engagement bonus (25% of score)
+           if (promptLower.includes('how') || promptLower.includes('why') || promptLower.includes('what')) {
+             score += 5; // Open-ended questions get bonus
+           }
+           if (promptLower.includes('together') || promptLower.includes('we') || promptLower.includes('our')) {
+             score += 8; // Relationship-focused questions get higher bonus
+           }
+           if (promptLower.includes('feel') || promptLower.includes('think') || promptLower.includes('appreciate')) {
+             score += 6; // Emotional depth questions get bonus
+           }
+           
+           // Length bonus for thoughtful questions (15% of score)
+           if (prompt.length > 40 && prompt.length < 100) {
+             score += 3; // Sweet spot for question length
+           }
+           
+           // Variety bonus (10% of score) - prefer middle questions if similar scores
+           if (index === 1) score += 2; // Slight preference for middle option
+           
+           return {
+             prompt,
+             score: Math.round(score * 10) / 10, // Round to 1 decimal
+             originalIndex: index
+           };
+         }).sort((a: any, b: any) => b.score - a.score); // Sort by highest score first
+        
+        topPrompt = rankedPrompts[0];
+      }
+      
+             // Set validation and ranking details as attributes
+       const commonWords = analysis.commonWords || [];
+       span.setAttributes({
+         "validation.passed": isValid,
+         "validation.title_present": validations.hasTitle,
+         "validation.title_length": validations.titleLength,
+         "validation.prompts_count": validations.promptsCount,
+         "validation.has_category": validations.hasCategory,
+         "validation.details": JSON.stringify(validations),
+         // Ranking attributes
+         "ranking.compatibility_score": analysis.compatibilityScore || 0,
+         "ranking.common_words_count": commonWords.length,
+         "ranking.top_prompt_score": topPrompt?.score || 0,
+         "ranking.top_prompt_index": topPrompt?.originalIndex || 0,
+         "ranking.all_scores": JSON.stringify(rankedPrompts.map((p: any) => ({ index: p.originalIndex, score: p.score }))),
+       });
       
       const result = { 
         isValid, 
         activity, 
         validations,
+                 ranking: {
+           rankedPrompts,
+           topPrompt: topPrompt?.prompt || (activity.conversationPrompts ? activity.conversationPrompts[0] : null),
+           topPromptScore: topPrompt?.score || 0,
+           compatibilityInfluence: analysis.compatibilityScore || 50,
+           commonInterestsCount: (analysis.commonWords || []).length,
+         },
         validatedAt: new Date().toISOString()
       };
       
-             console.log(`✅ Validation ${isValid ? 'PASSED' : 'FAILED'}: ${Object.entries(validations).filter(([k,v]) => v).length}/${Object.keys(validations).length} checks`);
+             const passedChecks = Object.entries(validations).filter(([k,v]) => v).length;
+             const totalChecks = Object.keys(validations).length;
+             console.log(`✅ Validation ${isValid ? 'PASSED' : 'FAILED'}: ${passedChecks}/${totalChecks} checks`);
+             if (topPrompt) {
+               console.log(`🎯 Top conversation prompt (score: ${topPrompt.score}): "${topPrompt.prompt}"`);
+             }
        
        // Update Langfuse span with validation results
        langfuseSpan?.update({
          output: result,
          metadata: {
            validation_passed: isValid,
-           checks_passed: Object.entries(validations).filter(([k,v]) => v).length,
-           total_checks: Object.keys(validations).length,
+           checks_passed: passedChecks,
+           total_checks: totalChecks,
+           top_prompt_score: topPrompt?.score || 0,
+           ranking_success: !!topPrompt,
          },
        });
        langfuseSpan?.end();
@@ -443,10 +521,30 @@ export async function generateActivityWithLangGraph(
            });
          }
          
-         // Step 3: Validate
-         const validation = await validateActivity(activity, langfuseTrace);
+         // Step 3: Validate and rank conversation prompts
+         const validation = await validateActivity(activity, analysis, langfuseTrace);
         
-        const finalActivity = validation.isValid ? activity : getFallbackActivity();
+        // Create final activity with ranking information
+        let finalActivity = validation.isValid ? activity : getFallbackActivity();
+        
+        // Add top conversation prompt to the final activity
+        if (validation.ranking && validation.ranking.topPrompt) {
+          finalActivity = {
+            ...finalActivity,
+            topConversationPrompt: validation.ranking.topPrompt,
+            topPromptScore: validation.ranking.topPromptScore,
+            compatibilityScore: Math.round(analysis.compatibilityScore),
+            rankingDetails: {
+              allPrompts: validation.ranking.rankedPrompts?.map((p: any) => ({
+                prompt: p.prompt,
+                score: p.score,
+                rank: validation.ranking.rankedPrompts.indexOf(p) + 1
+              })) || [],
+              compatibilityInfluence: validation.ranking.compatibilityInfluence,
+              commonInterestsCount: validation.ranking.commonInterestsCount
+            }
+          };
+        }
         
         // Set OpenInference output format
         rootSpan.setAttributes({
