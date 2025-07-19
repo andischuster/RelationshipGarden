@@ -25,6 +25,9 @@ interface ActivitySuggestion {
   conversationPrompts: string[];
   estimatedTime: string;
   category: 'communication' | 'intimacy' | 'fun' | 'growth';
+  topConversationPrompt?: string;
+  topPromptScore?: number;
+  compatibilityScore?: number;
 }
 
 interface ActivityGeneratorProps {
@@ -346,14 +349,30 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
                 </div>
               </div>
 
-              {state.generatedActivity.conversationPrompts.length > 0 && (
+              {(state.generatedActivity.topConversationPrompt || state.generatedActivity.conversationPrompts.length > 0) && (
                 <div className="bg-transparent p-4 rounded-xl border-4 border-black">
-                  <h5 className="font-semibold text-black mb-2">Conversation Starters:</h5>
-                  <ul className="space-y-1 text-sm">
-                    {state.generatedActivity.conversationPrompts.map((prompt, index) => (
-                      <li key={index} className="text-black/80">• {prompt}</li>
-                    ))}
-                  </ul>
+                  <h5 className="font-semibold text-black mb-2">
+                    {state.generatedActivity.topConversationPrompt ? 
+                      "Top Conversation Starter:" : 
+                      "Conversation Starters:"
+                    }
+                    {state.generatedActivity.topPromptScore && (
+                      <span className="text-xs text-black/60 ml-2">
+                        (Score: {state.generatedActivity.topPromptScore})
+                      </span>
+                    )}
+                  </h5>
+                  {state.generatedActivity.topConversationPrompt ? (
+                    <div className="text-sm text-black/80 font-medium">
+                      • {state.generatedActivity.topConversationPrompt}
+                    </div>
+                  ) : (
+                    <ul className="space-y-1 text-sm">
+                      {state.generatedActivity.conversationPrompts.map((prompt, index) => (
+                        <li key={index} className="text-black/80">• {prompt}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               )}
             </div>
