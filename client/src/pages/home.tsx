@@ -530,15 +530,7 @@ export default function Home() {
                 ?.length > 0) && (
               <div className="mb-3">
                 <h5 className="font-black text-black mb-1 text-lg px-4">
-                  {activityGeneratorState.generatedActivity.topConversationPrompt ? 
-                    "Top Conversation Starter" : 
-                    "Conversation Starter"
-                  }
-                  {activityGeneratorState.generatedActivity.topPromptScore && (
-                    <span className="text-xs text-black/60 ml-2">
-                      (Score: {activityGeneratorState.generatedActivity.topPromptScore})
-                    </span>
-                  )}
+                  Conversation Starter
                 </h5>
                 <p className="text-base font-medium text-black/80 italic">
                   "

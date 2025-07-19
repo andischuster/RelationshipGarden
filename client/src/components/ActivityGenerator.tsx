@@ -353,14 +353,9 @@ export default function ActivityGenerator({ onClose }: ActivityGeneratorProps) {
                 <div className="bg-transparent p-4 rounded-xl border-4 border-black">
                   <h5 className="font-semibold text-black mb-2">
                     {state.generatedActivity.topConversationPrompt ? 
-                      "Top Conversation Starter:" : 
+                      "Conversation Starter:" : 
                       "Conversation Starters:"
                     }
-                    {state.generatedActivity.topPromptScore && (
-                      <span className="text-xs text-black/60 ml-2">
-                        (Score: {state.generatedActivity.topPromptScore})
-                      </span>
-                    )}
                   </h5>
                   {state.generatedActivity.topConversationPrompt ? (
                     <div className="text-sm text-black/80 font-medium">
