@@ -179,9 +179,43 @@ if (process.env.ARIZE_API_KEY && process.env.ARIZE_SPACE_ID) {
         },
         '@opentelemetry/instrumentation-http': {
           enabled: true,
+          requestHook: (span, request) => {
+            // Only trace API endpoints, not static files
+            const req = request as any;
+            const url = req.url || req.path || '';
+            if (url.includes('/api/')) {
+              span.setAttributes({
+                'http.request.traced': true,
+                'http.request.important': true,
+              });
+            } else {
+              // Mark static file requests
+              span.setAttributes({
+                'http.request.traced': false,
+                'http.request.static': true,
+              });
+            }
+          },
+          responseHook: (span, response) => {
+            // Only keep detailed data for API responses  
+            const spanAttribs = (span as any).attributes || {};
+            const url = spanAttribs['http.url'] || spanAttribs['http.target'] || '';
+            if (!url.includes('/api/')) {
+              // Minimize attributes for non-API requests
+              span.setAttributes({
+                'http.response.minimal': true,
+              });
+            }
+          },
         },
         '@opentelemetry/instrumentation-fs': {
           enabled: false, // Disable file system instrumentation to reduce noise
+        },
+        '@opentelemetry/instrumentation-dns': {
+          enabled: false, // Disable DNS instrumentation to reduce noise
+        },
+        '@opentelemetry/instrumentation-net': {
+          enabled: false, // Disable network instrumentation to reduce noise
         },
       }),
     ],
