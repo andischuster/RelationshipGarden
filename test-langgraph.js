@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-// Simple test script for LangGraph integration
-const fetch = require('node-fetch');
+// Test script to verify LangGraph workflow and Arize tracing integration
+import fetch from 'node-fetch';
 
 async function testLangGraphEndpoint() {
-  console.log('🧪 Testing LangGraph integration...\n');
+  console.log('🧪 Testing LangGraph endpoint...');
   
   const testData = {
     partner1Input: "I love hiking and outdoor adventures, exploring nature trails and camping under the stars.",

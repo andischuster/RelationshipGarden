@@ -4,7 +4,8 @@ import { OTLPTraceExporter as GrpcOTLPTraceExporter } from '@opentelemetry/expor
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { SEMRESATTRS_PROJECT_NAME } from '@arizeai/openinference-semantic-conventions';
-import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
+import { diag, DiagConsoleLogger, DiagLogLevel, Span } from '@opentelemetry/api';
+import { BatchSpanProcessor, SpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { Metadata } from '@grpc/grpc-js';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
@@ -179,43 +180,46 @@ if (process.env.ARIZE_API_KEY && process.env.ARIZE_SPACE_ID) {
         },
         '@opentelemetry/instrumentation-http': {
           enabled: true,
+          // Completely ignore non-API requests
+          ignoreIncomingRequestHook: (req) => {
+            const url = req.url || '';
+            const method = req.method || '';
+            
+            // Ignore all non-API requests
+            if (!url.includes('/api/')) {
+              return true; // Skip tracing
+            }
+            
+            // Ignore GET requests to API endpoints that aren't important
+            if (method === 'GET' && !url.includes('/api/activities/')) {
+              return true; // Skip tracing
+            }
+            
+            return false; // Trace this request
+          },
           requestHook: (span, request) => {
-            // Only trace API endpoints, not static files
             const req = request as any;
             const url = req.url || req.path || '';
-            if (url.includes('/api/')) {
-              span.setAttributes({
-                'http.request.traced': true,
-                'http.request.important': true,
-              });
-            } else {
-              // Mark static file requests
-              span.setAttributes({
-                'http.request.traced': false,
-                'http.request.static': true,
-              });
-            }
-          },
-          responseHook: (span, response) => {
-            // Only keep detailed data for API responses  
-            const spanAttribs = (span as any).attributes || {};
-            const url = spanAttribs['http.url'] || spanAttribs['http.target'] || '';
-            if (!url.includes('/api/')) {
-              // Minimize attributes for non-API requests
-              span.setAttributes({
-                'http.response.minimal': true,
-              });
-            }
+            const method = req.method || '';
+            
+            // Add metadata for API requests that we're tracing
+            span.setAttributes({
+              'http.request.api_endpoint': true,
+              'http.request.important': method === 'POST' && url.includes('/api/activities/'),
+            });
           },
         },
         '@opentelemetry/instrumentation-fs': {
-          enabled: false, // Disable file system instrumentation to reduce noise
+          enabled: false, // Disable file system instrumentation
         },
         '@opentelemetry/instrumentation-dns': {
-          enabled: false, // Disable DNS instrumentation to reduce noise
+          enabled: false, // Disable DNS instrumentation
         },
         '@opentelemetry/instrumentation-net': {
-          enabled: false, // Disable network instrumentation to reduce noise
+          enabled: false, // Disable network instrumentation
+        },
+        '@opentelemetry/instrumentation-undici': {
+          enabled: false, // Disable HTTP client instrumentation
         },
       }),
     ],

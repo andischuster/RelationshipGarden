@@ -62,15 +62,32 @@ export class DatabaseStorage implements IStorage {
 
   // Activity Suggestions
   async createActivitySuggestion(suggestion: InsertActivitySuggestion): Promise<ActivitySuggestion> {
+    // Convert arrays to JSON strings for SQLite
+    const sqliteValues = {
+      ...suggestion,
+      conversationPrompts: JSON.stringify(suggestion.conversationPrompts),
+    };
+    
     const [activitySuggestion] = await db
       .insert(activitySuggestions)
-      .values(suggestion)
+      .values(sqliteValues)
       .returning();
-    return activitySuggestion;
+    
+    // Convert JSON strings back to arrays for return
+    return {
+      ...activitySuggestion,
+      conversationPrompts: JSON.parse(activitySuggestion.conversationPrompts),
+    };
   }
 
   async getActivitySuggestionsByEmail(email: string): Promise<ActivitySuggestion[]> {
-    return await db.select().from(activitySuggestions).where(eq(activitySuggestions.email, email));
+    const suggestions = await db.select().from(activitySuggestions).where(eq(activitySuggestions.email, email));
+    
+    // Convert JSON strings back to arrays for all suggestions
+    return suggestions.map(suggestion => ({
+      ...suggestion,
+      conversationPrompts: JSON.parse(suggestion.conversationPrompts),
+    }));
   }
 }
 

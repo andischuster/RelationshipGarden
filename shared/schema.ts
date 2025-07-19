@@ -1,35 +1,36 @@
-import { pgTable, text, serial, timestamp, integer } from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const preorders = pgTable("preorders", {
-  id: serial("id").primaryKey(),
+export const preorders = sqliteTable("preorders", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   email: text("email").notNull().unique(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
 });
 
-export const activityTemplates = pgTable("activity_templates", {
-  id: serial("id").primaryKey(),
+export const activityTemplates = sqliteTable("activity_templates", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   title: text("title").notNull(),
   description: text("description").notNull(),
   category: text("category").notNull(), // communication, intimacy, fun, growth
-  tags: text("tags").array().notNull(),
-  conversationPrompts: text("conversation_prompts").array().notNull(),
+  tags: text("tags").notNull(), // JSON string array
+  conversationPrompts: text("conversation_prompts").notNull(), // JSON string array
   estimatedTime: text("estimated_time").notNull(),
   difficultyLevel: text("difficulty_level").notNull(), // easy, medium, deep
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
 });
 
-export const activitySuggestions = pgTable("activity_suggestions", {
-  id: serial("id").primaryKey(),
+export const activitySuggestions = sqliteTable("activity_suggestions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   partner1Input: text("partner1_input").notNull(),
   partner2Input: text("partner2_input").notNull(),
   generatedActivity: text("generated_activity").notNull(),
-  conversationPrompts: text("conversation_prompts").array().notNull(),
+  conversationPrompts: text("conversation_prompts").notNull(), // JSON string array
   category: text("category").notNull(),
   estimatedTime: text("estimated_time").notNull(),
   email: text("email"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
 });
 
 export const insertPreorderSchema = createInsertSchema(preorders).pick({
