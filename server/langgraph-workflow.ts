@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { trace, SpanStatusCode, context, SpanKind } from "@opentelemetry/api";
-import { initializeLangfuse, getLangfuseClient } from "./langfuse-config";
+import { initializeLangfuse, getLangfuseClient } from "./langfuse-config.ts";
 
 // Initialize tracer for activity generation instrumentation
 const tracer = trace.getTracer('relationship-activity-generator', '1.0.0');

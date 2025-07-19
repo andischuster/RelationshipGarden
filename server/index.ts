@@ -2,7 +2,7 @@
 import "./tracing";
 
 // Initialize Langfuse
-import { initializeLangfuse } from "./langfuse-config";
+import { initializeLangfuse } from "./langfuse-config.ts";
 
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
