@@ -95,17 +95,29 @@ Extract key themes, interests, and potential compatibility factors. Return JSON:
   "potentialChallenges": ["challenge1", "challenge2", ...]
 }`;
 
-        const response = await genai.models.generateContent({
-          model: "gemini-2.5-flash",
-          config: { responseMimeType: "application/json" },
-          contents: prompt,
-        });
+        let analysis;
+        try {
+          const response = await genai.models.generateContent({
+            model: "gemini-2.5-flash",
+            config: { responseMimeType: "application/json" },
+            contents: prompt,
+          });
 
-        const responseText = response.text;
-        if (!responseText) {
-          throw new Error("No response from Gemini API");
+          const responseText = response.text;
+          if (!responseText) {
+            throw new Error("No response from Gemini API");
+          }
+          analysis = JSON.parse(responseText);
+        } catch (apiError: any) {
+          console.warn("⚠️  Gemini API failed, using fallback analysis:", apiError.message);
+          // Fallback analysis based on basic text processing
+          analysis = {
+            partner1Themes: [state.partner1Input.split(' ').slice(0, 3).join(' ')],
+            partner2Themes: [state.partner2Input.split(' ').slice(0, 3).join(' ')],
+            commonInterests: ["spending time together", "communication"],
+            potentialChallenges: ["finding common ground"]
+          };
         }
-        const analysis = JSON.parse(responseText);
         
         span.setAttributes({
           "output.partner1_themes_count": analysis.partner1Themes?.length || 0,
